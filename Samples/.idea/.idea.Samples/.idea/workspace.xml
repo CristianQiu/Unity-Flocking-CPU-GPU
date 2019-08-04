@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9fe32797-d74f-4ee2-9007-9a9c60fb5c15" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Editor Default Resources.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Materials/Fish.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Materials/Fish.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Materials/RedFish.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Materials/RedFish.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scenes/BoidExampleCompute.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scenes/BoidExampleCompute.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoidManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoidManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-210">
+              <caret line="31" column="27" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
+              <folding>
+                <marker date="1564911163435" expanded="true" signature="6:88" ph="..." />
+                <marker date="1564911163435" expanded="true" signature="90:228" ph="/// Some practising with coroutines and compressed states code ... " />
+                <marker date="1564911163435" expanded="true" signature="280:3681" ph="{...}" />
+                <marker date="1564911163435" expanded="true" signature="310:347" ph="{...}" />
+                <marker date="1564911163435" expanded="true" signature="871:1138" ph="{...}" />
+                <marker date="1564911163435" expanded="true" signature="1144:1286" ph="/// Coroutine that starts the actual process of tweening and keeps it running ... " />
+                <marker date="1564911163435" expanded="true" signature="1325:1506" ph="{...}" />
+                <marker date="1564911163435" expanded="true" signature="1352:1500" ph="{...}" />
+                <marker date="1564911163435" expanded="true" signature="1512:1603" ph="/// Do the actual tweening ... " />
+                <marker date="1564911163435" expanded="true" signature="1635:3007" ph="{...}" />
+                <marker date="1564911163435" expanded="true" signature="1735:3001" ph="{...}" />
+                <marker date="1564911163435" expanded="true" signature="1962:2145" ph="/* it could be alot more randomized for each different cycle, and independant interpolations too ... */" />
+                <marker date="1564911163435" expanded="true" signature="2172:2808" ph="{...}" />
+                <marker date="1564911163435" expanded="true" signature="3013:3192" ph="/// Set the lens params ... " />
+                <marker date="1564911163435" expanded="true" signature="3264:3394" ph="{...}" />
+                <marker date="1564911163435" expanded="true" signature="3400:3493" ph="/// https://gist.github.com/cjddmut/d789b9eb78216998e95c ... " />
+                <marker date="1564911163435" expanded="true" signature="3569:3679" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ShaderUtils.cginc" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoidManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidTarget.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidObstacle.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/Boid.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ConcurrentDictOfLists.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/DictionaryOfLists.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Shaders/Wiggle.shader" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoids.compute" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ShaderUtils.cginc" />
+        <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Shaders/Wiggle.shader" />
+        <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ConcurrentDictOfLists.cs" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="580" />
+    <option name="y" value="200" />
+    <option name="width" value="1400" />
+    <option name="height" value="1000" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="UnityExplorer" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="AssemblyExplorer" />
+      <pane id="UnityExplorer">
+        <subPane>
+          <expand>
+            <path>
+              <item name="" type="e068e287:UnityExplorerRootNode" />
+              <item name="Assets" type="8711f2a6:AssetsRoot" />
+            </path>
+            <path>
+              <item name="" type="e068e287:UnityExplorerRootNode" />
+              <item name="Packages" type="4e2708dd:PackagesRoot" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <option name="show-hidden-items" value="false" />
+        <option name="show-project-names" value="true" />
+      </pane>
+      <pane id="FileSystemExplorer" />
+      <pane id="SolutionExplorer">
+        <option name="show-all-files" value="false" />
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Discover.Launch.Via.Unity" value="true" />
+    <property name="Rider.DefaultBreakpoints.AreToggled" value="true" />
+    <property name="Rider.ProjectViewActivator.IsNotFirstRun" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="editor.config.ad.shown" value="true" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor &amp; Play">
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" pid="1256">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" value="1256" />
+      <option name="userSelectedPid" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="userSelectedPid" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9fe32797-d74f-4ee2-9007-9a9c60fb5c15" name="Default Changelist" comment="" />
+      <created>1564450743355</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1564450743355</updated>
+      <workItem from="1564450747761" duration="1711000" />
+      <workItem from="1564915058649" duration="1140000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="2851000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11958681" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3995381" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="NuGet" order="7" sideWeight="0.49980134" weight="0.3299923" />
+      <window_info anchor="bottom" id="Performance Profiler" order="8" />
+      <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Unity" order="11" />
+      <window_info anchor="bottom" id="Unit Tests" order="12" />
+      <window_info anchor="bottom" id="Terminal" order="13" />
+      <window_info anchor="bottom" id="Event Log" order="14" sideWeight="0.50019866" side_tool="true" weight="0.3299923" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Errors In Solution" order="3" />
+      <window_info anchor="right" id="Unit Tests Coverage" order="4" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" suspend="NONE" type="DotNet Exception Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="UNITY_DEBUG_RUN_CONFIGURATION">
+        <watch expression="boidsDictConcurrent" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/Boid.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <marker date="1564832108511" expanded="false" signature="6:43" ph="..." />
+            <marker date="1564832108511" expanded="true" signature="63:2292" ph="{...}" />
+            <marker date="1564832108511" expanded="true" signature="100:2290" ph="{...}" />
+            <marker date="1564832108511" expanded="false" signature="115:356" ph="Private attributes" />
+            <marker date="1564832108511" expanded="false" signature="366:926" ph="Properties" />
+            <marker date="1564832108511" expanded="true" signature="422:535" ph="{...}" />
+            <marker date="1564832108511" expanded="true" signature="572:681" ph="{...}" />
+            <marker date="1564832108511" expanded="true" signature="708:793" ph="{...}" />
+            <marker date="1564832108511" expanded="true" signature="821:906" ph="{...}" />
+            <marker date="1564832108511" expanded="false" signature="936:2284" ph="Methods" />
+            <marker date="1564832108511" expanded="true" signature="961:1203" ph="/// Constructor ... " />
+            <marker date="1564832108511" expanded="true" signature="1293:1477" ph="{...}" />
+            <marker date="1564832108511" expanded="true" signature="1487:1602" ph="/// Interface method to provide a hash ... " />
+            <marker date="1564832108511" expanded="true" signature="1628:2264" ph="{...}" />
+            <marker date="1564832108511" expanded="true" signature="1764:2156" ph="/* https://github.com/Unity-Technologies/Unity.Mathematics/blob/master/src/Unity.Mathematics/int3.gen.cs ... */" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidObstacle.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <marker date="1564812236330" expanded="true" signature="38:223" ph="{...}" />
+            <marker date="1564812236330" expanded="true" signature="88:221" ph="{...}" />
+            <marker date="1564812236330" expanded="true" signature="130:215" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidSpawner.cs">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidTarget.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-90">
+          <caret line="32" column="1" selection-start-line="32" selection-start-column="1" selection-end-line="32" selection-end-column="1" />
+          <folding>
+            <marker date="1564812241404" expanded="true" signature="38:644" ph="{...}" />
+            <marker date="1564812241404" expanded="true" signature="45:114" ph="/// Need this for multithreading ... " />
+            <marker date="1564812241404" expanded="true" signature="172:462" ph="{...}" />
+            <marker date="1564812241404" expanded="true" signature="307:365" ph="{...}" />
+            <marker date="1564812241404" expanded="true" signature="398:456" ph="{...}" />
+            <marker date="1564812241404" expanded="true" signature="509:642" ph="{...}" />
+            <marker date="1564812241404" expanded="true" signature="551:636" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ShaderUtils.cginc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoids.compute">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoidManager.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <marker date="1564909892828" expanded="true" signature="42:6752" ph="{...}" />
+            <marker date="1564909892828" expanded="true" signature="96:6750" ph="{...}" />
+            <marker date="1564909892828" expanded="true" signature="111:256" ph="Defs" />
+            <marker date="1564909892828" expanded="true" signature="152:236" ph="{...}" />
+            <marker date="1564909892828" expanded="false" signature="266:1005" ph="Public Attributes" />
+            <marker date="1564909892828" expanded="false" signature="1015:1558" ph="Private Attributes" />
+            <marker date="1564909892828" expanded="false" signature="1568:3318" ph="MonoBehaviour Methods" />
+            <marker date="1564909892828" expanded="true" signature="1627:1733" ph="{...}" />
+            <marker date="1564909892828" expanded="true" signature="1764:2963" ph="{...}" />
+            <marker date="1564909892828" expanded="true" signature="2058:2114" ph="/* sw.Start(); ... */" />
+            <marker date="1564909892828" expanded="true" signature="2201:2718" ph="/* for (int i = 0; i &lt; 100000; i++) ... */" />
+            <marker date="1564909892828" expanded="true" signature="2997:3298" ph="{...}" />
+            <marker date="1564909892828" expanded="false" signature="3328:6744" ph="Methods" />
+            <marker date="1564909892828" expanded="true" signature="3353:3419" ph="/// Initialize arrays ... " />
+            <marker date="1564909892828" expanded="true" signature="3459:3631" ph="{...}" />
+            <marker date="1564909892828" expanded="true" signature="3641:3705" ph="/// Spawn the boids ... " />
+            <marker date="1564909892828" expanded="true" signature="3739:4105" ph="{...}" />
+            <marker date="1564909892828" expanded="true" signature="3796:4095" ph="{...}" />
+            <marker date="1564909892828" expanded="true" signature="3970:4050" ph="{...}" />
+            <marker date="1564909892828" expanded="true" signature="4115:4199" ph="/// Set up compute shader related stuff ... " />
+            <marker date="1564909892828" expanded="true" signature="4235:6166" ph="{...}" />
+            <marker date="1564909892828" expanded="true" signature="6176:6325" ph="/// Update the position of the targets and obstacles so that the buffer in the GPU uses the correct data ... " />
+            <marker date="1564909892828" expanded="true" signature="6386:6724" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidManager.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="589">
+          <caret line="360" selection-start-line="360" selection-end-line="360" />
+          <folding>
+            <marker date="1564813771974" expanded="false" signature="6:96" ph="..." />
+            <marker date="1564813771974" expanded="true" signature="116:14005" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="163:14003" ph="{...}" />
+            <marker date="1564813771974" expanded="false" signature="178:310" ph="Defs" />
+            <marker date="1564813771974" expanded="true" signature="219:290" ph="{...}" />
+            <marker date="1564813771974" expanded="false" signature="320:1031" ph="Public Attributes" />
+            <marker date="1564813771974" expanded="false" signature="1041:1728" ph="Private Attributes" />
+            <marker date="1564813771974" expanded="false" signature="1738:3530" ph="MonoBehaviour Methods" />
+            <marker date="1564813771974" expanded="true" signature="1797:2221" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="2252:3009" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="2476:2788" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="3039:3510" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="3078:3500" ph="{...}" />
+            <marker date="1564813771974" expanded="false" signature="3540:6167" ph="Methods" />
+            <marker date="1564813771974" expanded="true" signature="3565:3637" ph="/// Create the TRS matrices ... " />
+            <marker date="1564813771974" expanded="true" signature="3675:4502" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="3935:4243" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="4070:4191" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="4345:4454" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="4512:4576" ph="/// Spawn the boids ... " />
+            <marker date="1564813771974" expanded="true" signature="4610:5235" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="4674:5225" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="5245:5537" ph="/// Find the nearest position of interest of the boids, from a given pos ... " />
+            <marker date="1564813771974" expanded="true" signature="5665:6147" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="5828:6091" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="5957:6077" ph="{...}" />
+            <marker date="1564813771974" expanded="false" signature="6177:10254" ph="Single Thread Methods" />
+            <marker date="1564813771974" expanded="true" signature="6216:6288" ph="/// Update the boids system ... " />
+            <marker date="1564813771974" expanded="true" signature="6335:6468" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="6478:6583" ph="/// Hash the boids and store them in the dictionary of lists ... " />
+            <marker date="1564813771974" expanded="true" signature="6635:6810" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="6699:6800" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="6820:6890" ph="/// Do the boids steering ... " />
+            <marker date="1564813771974" expanded="true" signature="6936:10234" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="7026:10224" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="7348:7730" ph="/* each list has the boids that are within the same cell ... */" />
+            <marker date="1564813771974" expanded="true" signature="7787:7950" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="7968:8237" ph="/* it seems Unity does this just finding the nearest to the first element found in a cell, if I understood correc ... */" />
+            <marker date="1564813771974" expanded="true" signature="8605:10167" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="10264:13997" ph="Multithread Methods" />
+            <marker date="1564813771974" expanded="true" signature="10301:10387" ph="/// Update the boids using multithreading ... " />
+            <marker date="1564813771974" expanded="true" signature="10433:10574" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="10584:10747" ph="/// Function that will be executed in parallel to add the boids to the dictionary ... " />
+            <marker date="1564813771974" expanded="true" signature="10794:10854" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="10864:10969" ph="/// Hash the boids and store them in the dictionary of lists ... " />
+            <marker date="1564813771974" expanded="true" signature="11020:11113" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="11123:11277" ph="/// Function that will be executed in parallel to calculate steerings ... " />
+            <marker date="1564813771974" expanded="true" signature="11351:13716" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="11679:11822" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="12175:13657" ph="{...}" />
+            <marker date="1564813771974" expanded="true" signature="13726:13815" ph="/// Calculate steerings using multithreading ... " />
+            <marker date="1564813771974" expanded="true" signature="13860:13977" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Shaders/Wiggle.shader">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="642">
+          <caret line="89" column="9" lean-forward="true" selection-start-line="89" selection-start-column="9" selection-end-line="89" selection-end-column="9" />
+          <folding>
+            <marker date="1564898212147" expanded="true" signature="108:3726" ph="{...}" />
+            <marker date="1564898212147" expanded="true" signature="126:518" ph="{...}" />
+            <marker date="1564898212147" expanded="true" signature="538:3704" ph="{...}" />
+            <marker date="1564898212147" expanded="true" signature="606:3696" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ConcurrentDictOfLists.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="68" column="20" lean-forward="true" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="20" />
+          <folding>
+            <marker date="1564812278902" expanded="false" signature="6:70" ph="..." />
+            <marker date="1564812278902" expanded="true" signature="90:2776" ph="{...}" />
+            <marker date="1564812278902" expanded="true" signature="155:2774" ph="{...}" />
+            <marker date="1564812278902" expanded="false" signature="170:754" ph="Private Attributes" />
+            <marker date="1564812278902" expanded="true" signature="372:658" ph="/* from Microsoft: The higher the concurrencyLevel, the higher the theoretical number of operations ... */" />
+            <marker date="1564812278902" expanded="true" signature="764:893" ph="Properties" />
+            <marker date="1564812278902" expanded="false" signature="903:1491" ph="Initialization" />
+            <marker date="1564812278902" expanded="true" signature="935:1035" ph="/// Default constructor ... " />
+            <marker date="1564812278902" expanded="true" signature="1098:1119" ph="{...}" />
+            <marker date="1564812278902" expanded="true" signature="1129:1244" ph="/// Constructor ... " />
+            <marker date="1564812278902" expanded="true" signature="1306:1471" ph="{...}" />
+            <marker date="1564812278902" expanded="true" signature="1501:2768" ph="Methods" />
+            <marker date="1564812278902" expanded="true" signature="1526:1637" ph="/// Return a list to the pool ... " />
+            <marker date="1564812278902" expanded="true" signature="1677:1786" ph="{...}" />
+            <marker date="1564812278902" expanded="true" signature="1796:1896" ph="/// Add an item ... " />
+            <marker date="1564812278902" expanded="true" signature="1928:2590" ph="{...}" />
+            <marker date="1564812278902" expanded="true" signature="2080:2496" ph="{...}" />
+            <marker date="1564812278902" expanded="true" signature="2293:2482" ph="{...}" />
+            <marker date="1564812278902" expanded="true" signature="2600:2669" ph="/// Clear the dictionary ... " />
+            <marker date="1564812278902" expanded="true" signature="2697:2748" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/DictionaryOfLists.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <marker date="1564812341757" expanded="true" signature="62:82" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="138:1668" ph="{...}" />
+            <marker date="1564812341757" expanded="false" signature="145:331" ph="Private Attributes" />
+            <marker date="1564812341757" expanded="false" signature="337:448" ph="Properties" />
+            <marker date="1564812341757" expanded="false" signature="454:938" ph="Initialization" />
+            <marker date="1564812341757" expanded="true" signature="482:570" ph="/// Default constructor ... " />
+            <marker date="1564812341757" expanded="true" signature="625:638" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="644:747" ph="/// Constructor ... " />
+            <marker date="1564812341757" expanded="true" signature="801:922" ph="{...}" />
+            <marker date="1564812341757" expanded="false" signature="944:1666" ph="Methods" />
+            <marker date="1564812341757" expanded="true" signature="965:1064" ph="/// Return a list to the pool ... " />
+            <marker date="1564812341757" expanded="true" signature="1100:1138" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="1144:1232" ph="/// Add an item ... " />
+            <marker date="1564812341757" expanded="true" signature="1260:1520" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="1395:1489" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="1526:1587" ph="/// Clear the dictionary ... " />
+            <marker date="1564812341757" expanded="true" signature="1611:1650" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-210">
+          <caret line="31" column="27" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
+          <folding>
+            <marker date="1564911163435" expanded="true" signature="6:88" ph="..." />
+            <marker date="1564911163435" expanded="true" signature="90:228" ph="/// Some practising with coroutines and compressed states code ... " />
+            <marker date="1564911163435" expanded="true" signature="280:3681" ph="{...}" />
+            <marker date="1564911163435" expanded="true" signature="310:347" ph="{...}" />
+            <marker date="1564911163435" expanded="true" signature="871:1138" ph="{...}" />
+            <marker date="1564911163435" expanded="true" signature="1144:1286" ph="/// Coroutine that starts the actual process of tweening and keeps it running ... " />
+            <marker date="1564911163435" expanded="true" signature="1325:1506" ph="{...}" />
+            <marker date="1564911163435" expanded="true" signature="1352:1500" ph="{...}" />
+            <marker date="1564911163435" expanded="true" signature="1512:1603" ph="/// Do the actual tweening ... " />
+            <marker date="1564911163435" expanded="true" signature="1635:3007" ph="{...}" />
+            <marker date="1564911163435" expanded="true" signature="1735:3001" ph="{...}" />
+            <marker date="1564911163435" expanded="true" signature="1962:2145" ph="/* it could be alot more randomized for each different cycle, and independant interpolations too ... */" />
+            <marker date="1564911163435" expanded="true" signature="2172:2808" ph="{...}" />
+            <marker date="1564911163435" expanded="true" signature="3013:3192" ph="/// Set the lens params ... " />
+            <marker date="1564911163435" expanded="true" signature="3264:3394" ph="{...}" />
+            <marker date="1564911163435" expanded="true" signature="3400:3493" ph="/// https://gist.github.com/cjddmut/d789b9eb78216998e95c ... " />
+            <marker date="1564911163435" expanded="true" signature="3569:3679" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

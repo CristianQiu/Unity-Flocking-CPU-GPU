@@ -1,0 +1,82 @@
+﻿#define THREADSX 256
+#define THREADSY 1
+#define THREADSZ 1
+
+#include "ShaderUtils.cginc"
+
+#pragma kernel ComputeBoids
+
+struct Boid
+{
+    float3 pos;
+    float3 fwd;
+};
+
+uint frame;
+float dt;
+
+uint totalBoids;
+uint totalTargets;
+uint totalObstacles;
+
+float separationWeight;
+float alignmentWeight;
+float targetWeight;
+float obstacleAversionDistance;
+float moveSpeed;
+
+RWStructuredBuffer<Boid> boidBuffer;
+StructuredBuffer<float3> targetsBuffer;
+StructuredBuffer<float3> obstaclesBuffer;
+
+// When doing dispatch from C# you can also set up a given number of THREAD GROUPS in each dimension
+// Each THREAD GROUP will have this given number of THREADS
+[numthreads(THREADSX,THREADSY,THREADSZ)]
+void ComputeBoids (uint3 id : SV_DispatchThreadID)
+{
+    Boid thisBoid = boidBuffer[id.x];
+
+    float3 pos = float3(0.0, 0.0, 0.0);
+    float3 fwd = float3(0.0, 0.0, 0.0);
+    uint boidsInRange = 1;
+
+    // I'm brute forcing this because I want to make the most simple version work
+    for (uint i = frame; i < totalBoids; i += 2)
+    {
+        Boid otherBoid = boidBuffer[i];
+
+        float dist = distance(thisBoid.pos, otherBoid.pos);
+        if (dist <= 8.0)
+        {
+            pos += otherBoid.pos;
+            fwd += otherBoid.fwd;
+            boidsInRange++;
+        }
+    }
+
+    pos -= thisBoid.pos;
+    fwd -= thisBoid.fwd;
+
+    float3 posNorm = pos / boidsInRange;
+
+    float3 nearestObstaclePos = float3(0.0, 0.0, 0.0);
+    float nearestObstacleDist = FindDistToNearestFromPos(obstaclesBuffer, totalObstacles, posNorm, nearestObstaclePos);
+
+    float3 nearestTargetPos = float3(0.0, 0.0, 0.0);
+    FindDistToNearestFromPos(targetsBuffer, totalTargets, posNorm, nearestTargetPos);
+
+    float3 obstacleSteering = thisBoid.pos - nearestObstaclePos;
+    float3 avoidObstacleHeading = (nearestObstaclePos + normalize(obstacleSteering) * obstacleAversionDistance) - thisBoid.pos;
+    float3 targetHeading = targetWeight * normalize(nearestTargetPos - thisBoid.pos);
+    float nearestObstacleDistanceFromRadius = nearestObstacleDist - obstacleAversionDistance;
+
+    float3 alignmentResult = alignmentWeight * normalize((fwd / boidsInRange) - thisBoid.fwd);
+    float3 separationResult = separationWeight * normalize((thisBoid.pos * boidsInRange) - pos);
+
+    float3 normalHeading = normalize(alignmentResult + separationResult + targetHeading);
+    float3 targetForward = nearestObstacleDistanceFromRadius < 0.0 ? avoidObstacleHeading : normalHeading;
+    float3 nextHeading = normalize(thisBoid.fwd + dt * (targetForward - thisBoid.fwd));
+
+    boidBuffer[id.x].pos = float3(thisBoid.pos + (nextHeading * moveSpeed * dt));
+    boidBuffer[id.x].fwd = nextHeading;
+}
