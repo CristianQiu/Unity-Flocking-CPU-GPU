@@ -51,7 +51,7 @@ namespace BoidsOOP
         private DictionaryOfLists<Boid> boidsDict = new DictionaryOfLists<Boid>();
 
         private List<Matrix4x4[]> matrices = null;
-        private ConcurrentDictOfLists<Boid> boidsDictConcurrent = new ConcurrentDictOfLists<Boid>();
+        private ConcurrentDictOfLists<Boid> boidsDictConcurrent = null;
         private ParallelOptions parallelOpts = new ParallelOptions();
 
         private Action<Boid> parallelAddToDictFunc = null;
@@ -71,6 +71,7 @@ namespace BoidsOOP
             parallelSteeringFunc = ParallelSteering;
 
             ConcurrencyLevel = SystemInfo.processorCount;
+            boidsDictConcurrent = new ConcurrentDictOfLists<Boid>(ConcurrencyLevel);
             parallelOpts.MaxDegreeOfParallelism = ConcurrencyLevel;
             Debug.Log("System has " + SystemInfo.processorCount + " hardware threads, setting concurrency level...");
         }
@@ -124,7 +125,7 @@ namespace BoidsOOP
         {
             matrices = new List<Matrix4x4[]>(64);
 
-            int numBatches = Mathf.FloorToInt((float)numBoidsSpawned / (float)MaxBatchSize);
+            int numBatches = Mathf.FloorToInt((float) numBoidsSpawned / (float) MaxBatchSize);
             int rest = numBoidsSpawned - (numBatches * MaxBatchSize);
 
             for (int i = 0; i < numBatches; i++)
@@ -158,7 +159,7 @@ namespace BoidsOOP
         {
             for (int i = 0; i < numBoidsSpawned; i++)
             {
-                int outerIndex = Mathf.FloorToInt((float)i / (float)MaxBatchSize);
+                int outerIndex = Mathf.FloorToInt((float) i / (float) MaxBatchSize);
                 int innerIndex = i % MaxBatchSize;
 
                 Vector3 pos = UnityEngine.Random.insideUnitSphere * radius;

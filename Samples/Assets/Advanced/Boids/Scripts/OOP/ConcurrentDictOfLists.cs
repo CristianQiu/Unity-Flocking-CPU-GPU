@@ -8,7 +8,6 @@ namespace BoidsOOP
         #region Private Attributes
 
         private const int DefaultCapacity = 4096;
-        private static int ConcurrencyLevel = BoidManager.ConcurrencyLevel;
 
         private ConcurrentDictionary<int, List<T>> dictLists = null;
         private ListPool<T> listPool = null;
@@ -26,8 +25,9 @@ namespace BoidsOOP
         /// <summary>
         /// Default constructor
         /// </summary>
+        /// <param name="concurrencyLevel"></param>
         /// <returns></returns>
-        public ConcurrentDictOfLists() : this(DefaultCapacity)
+        public ConcurrentDictOfLists(int concurrencyLevel) : this(DefaultCapacity, concurrencyLevel)
         {
 
         }
@@ -36,9 +36,10 @@ namespace BoidsOOP
         /// Constructor
         /// </summary>
         /// <param name="initialDictCapacity"></param>
-        public ConcurrentDictOfLists(int initialDictCapacity)
+        /// <param name="concurrencyLevel"></param>
+        public ConcurrentDictOfLists(int initialDictCapacity, int concurrencyLevel)
         {
-            dictLists = new ConcurrentDictionary<int, List<T>>(ConcurrencyLevel, initialDictCapacity);
+            dictLists = new ConcurrentDictionary<int, List<T>>(concurrencyLevel, initialDictCapacity);
             listPool = new ListPool<T>();
         }
 

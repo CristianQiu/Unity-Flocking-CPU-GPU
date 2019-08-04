@@ -44,6 +44,9 @@ namespace BoidsCompute
         private const int BoidStructSize = 24;
         private const int Vector3StructSize = 12;
 
+        private static readonly int dtId = Shader.PropertyToID("dt");
+        private static readonly int frameId = Shader.PropertyToID("frame");
+
         private int kernel = -1;
         private ComputeBuffer argsBuffer = null;
         private ComputeBuffer boidBuffer = null;
@@ -72,8 +75,8 @@ namespace BoidsCompute
             //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
 
             BufferUpdateObstaclesAndTargetsNewPos();
-            computeShader.SetFloat("dt", Time.deltaTime);
-            computeShader.SetInt("frame", frame);
+            computeShader.SetFloat(dtId, Time.deltaTime);
+            computeShader.SetInt(frameId, frame);
 
             // sw.Start();
             // boidBuffer.GetData(boids);
