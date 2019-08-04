@@ -9,14 +9,18 @@ namespace BoidsOOP
     {
         protected Vector3 pos = Vector3.zero;
 
-        public abstract Vector3 Pos { get; set; }
+        public Vector3 Pos
+        {
+            get { return pos;}
+            set { pos = value; }
+        }
 
-        protected void Start()
+        protected virtual void Start()
         {
             pos = transform.position;
         }
 
-        protected void Update()
+        protected virtual void Update()
         {
             pos = transform.position;
         }
@@ -24,10 +28,6 @@ namespace BoidsOOP
 
     public class BoidTarget : BoidInterestPos
     {
-        public override Vector3 Pos
-        {
-            get { return pos; }
-            set { pos = value; }
-        }
+        
     }
 }

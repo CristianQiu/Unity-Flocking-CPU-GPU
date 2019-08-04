@@ -54,7 +54,7 @@ namespace BoidsOOP
         private ConcurrentDictOfLists<Boid> boidsDictConcurrent = new ConcurrentDictOfLists<Boid>();
         private ParallelOptions parallelOpts = new ParallelOptions();
 
-        private Action<Boid> parallelHashFunc = null;
+        private Action<Boid> parallelAddToDictFunc = null;
         private Action<KeyValuePair<int, List<Boid>>> parallelSteeringFunc = null;
 
         private float dt = 0.0f;
@@ -67,7 +67,7 @@ namespace BoidsOOP
         {
             CreateMatrices();
             SpawnBoids();
-            parallelHashFunc = ParallelAddToDict;
+            parallelAddToDictFunc = ParallelAddToDict;
             parallelSteeringFunc = ParallelSteering;
 
             ConcurrencyLevel = SystemInfo.processorCount;
@@ -124,7 +124,7 @@ namespace BoidsOOP
         {
             matrices = new List<Matrix4x4[]>(64);
 
-            int numBatches = Mathf.FloorToInt(numBoidsSpawned / MaxBatchSize);
+            int numBatches = Mathf.FloorToInt((float)numBoidsSpawned / (float)MaxBatchSize);
             int rest = numBoidsSpawned - (numBatches * MaxBatchSize);
 
             for (int i = 0; i < numBatches; i++)
@@ -158,7 +158,7 @@ namespace BoidsOOP
         {
             for (int i = 0; i < numBoidsSpawned; i++)
             {
-                int outerIndex = Mathf.FloorToInt(i / MaxBatchSize);
+                int outerIndex = Mathf.FloorToInt((float)i / (float)MaxBatchSize);
                 int innerIndex = i % MaxBatchSize;
 
                 Vector3 pos = UnityEngine.Random.insideUnitSphere * radius;
@@ -275,7 +275,7 @@ namespace BoidsOOP
                     Vector3 targetForward = nearestObstacleDistanceFromRadius < 0.0 ? avoidObstacleHeading : normalHeading;
                     Vector3 nextHeading = Vector3.Normalize(fwd + dt * (targetForward - fwd));
 
-                    Vector3 nextPos = pos + (nextHeading * moveSpeed * dt);
+                    Vector3 nextPos = pos + (nextHeading * (moveSpeed * dt));
 
                     b.Pos = nextPos;
                     b.Fwd = nextHeading;
@@ -318,7 +318,7 @@ namespace BoidsOOP
         /// </summary>
         private void StoreHashedBoidsMultithread()
         {
-            Parallel.ForEach(boidsList, parallelOpts, parallelHashFunc);
+            Parallel.ForEach(boidsList, parallelOpts, parallelAddToDictFunc);
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace BoidsOOP
                 Vector3 targetForward = nearestObstacleDistanceFromRadius < 0.0 ? avoidObstacleHeading : normalHeading;
 
                 Vector3 nextHeading = Vector3.Normalize(fwd + dt * (targetForward - fwd));
-                Vector3 nextPos = pos + (nextHeading * moveSpeed * dt);
+                Vector3 nextPos = pos + (nextHeading * (moveSpeed * dt));
 
                 b.Fwd = nextHeading;
                 b.Pos = nextPos;

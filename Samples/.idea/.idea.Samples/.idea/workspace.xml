@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9fe32797-d74f-4ee2-9007-9a9c60fb5c15" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Editor Default Resources.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Materials/Fish.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Materials/Fish.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Materials/RedFish.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Materials/RedFish.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scenes/BoidExampleCompute.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scenes/BoidExampleCompute.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoidManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoidManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoids.compute" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoids.compute" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidObstacle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidObstacle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ConcurrentDictOfLists.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ConcurrentDictOfLists.cs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,30 +17,72 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoidManager.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-210">
-              <caret line="31" column="27" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
+            <state relative-caret-position="-450">
               <folding>
-                <marker date="1564911163435" expanded="true" signature="6:88" ph="..." />
-                <marker date="1564911163435" expanded="true" signature="90:228" ph="/// Some practising with coroutines and compressed states code ... " />
-                <marker date="1564911163435" expanded="true" signature="280:3681" ph="{...}" />
-                <marker date="1564911163435" expanded="true" signature="310:347" ph="{...}" />
-                <marker date="1564911163435" expanded="true" signature="871:1138" ph="{...}" />
-                <marker date="1564911163435" expanded="true" signature="1144:1286" ph="/// Coroutine that starts the actual process of tweening and keeps it running ... " />
-                <marker date="1564911163435" expanded="true" signature="1325:1506" ph="{...}" />
-                <marker date="1564911163435" expanded="true" signature="1352:1500" ph="{...}" />
-                <marker date="1564911163435" expanded="true" signature="1512:1603" ph="/// Do the actual tweening ... " />
-                <marker date="1564911163435" expanded="true" signature="1635:3007" ph="{...}" />
-                <marker date="1564911163435" expanded="true" signature="1735:3001" ph="{...}" />
-                <marker date="1564911163435" expanded="true" signature="1962:2145" ph="/* it could be alot more randomized for each different cycle, and independant interpolations too ... */" />
-                <marker date="1564911163435" expanded="true" signature="2172:2808" ph="{...}" />
-                <marker date="1564911163435" expanded="true" signature="3013:3192" ph="/// Set the lens params ... " />
-                <marker date="1564911163435" expanded="true" signature="3264:3394" ph="{...}" />
-                <marker date="1564911163435" expanded="true" signature="3400:3493" ph="/// https://gist.github.com/cjddmut/d789b9eb78216998e95c ... " />
-                <marker date="1564911163435" expanded="true" signature="3569:3679" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="42:6752" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="96:6750" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="111:256" ph="Defs" />
+                <marker date="1564909892828" expanded="true" signature="152:236" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="266:1005" ph="Public Attributes" />
+                <marker date="1564909892828" expanded="true" signature="1015:1558" ph="Private Attributes" />
+                <marker date="1564909892828" expanded="true" signature="1568:3318" ph="MonoBehaviour Methods" />
+                <marker date="1564909892828" expanded="true" signature="1627:1733" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="1764:2963" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="2058:2114" ph="/* sw.Start(); ... */" />
+                <marker date="1564909892828" expanded="true" signature="2201:2718" ph="/* for (int i = 0; i &lt; 100000; i++) ... */" />
+                <marker date="1564909892828" expanded="true" signature="2997:3298" ph="{...}" />
+                <marker date="1564909892828" expanded="false" signature="3328:6744" ph="Methods" />
+                <marker date="1564909892828" expanded="true" signature="3353:3419" ph="/// Initialize arrays ... " />
+                <marker date="1564909892828" expanded="true" signature="3459:3631" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="3641:3705" ph="/// Spawn the boids ... " />
+                <marker date="1564909892828" expanded="true" signature="3739:4105" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="3796:4095" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="3970:4050" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="4115:4199" ph="/// Set up compute shader related stuff ... " />
+                <marker date="1564909892828" expanded="true" signature="4235:6166" ph="{...}" />
+                <marker date="1564909892828" expanded="true" signature="6176:6325" ph="/// Update the position of the targets and obstacles so that the buffer in the GPU uses the correct data ... " />
+                <marker date="1564909892828" expanded="true" signature="6386:6724" ph="{...}" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ListPool.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="17" column="17" lean-forward="true" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
+              <folding>
+                <marker date="1564812361822" expanded="false" signature="6:52" ph="..." />
+                <marker date="1564812361822" expanded="true" signature="78:1901" ph="{...}" />
+                <marker date="1564812361822" expanded="true" signature="85:374" ph="Private Attributes" />
+                <marker date="1564812361822" expanded="true" signature="380:1272" ph="Initialization" />
+                <marker date="1564812361822" expanded="true" signature="408:496" ph="/// Default constructor ... " />
+                <marker date="1564812361822" expanded="true" signature="567:580" ph="{...}" />
+                <marker date="1564812361822" expanded="true" signature="586:726" ph="/// Constructor ... " />
+                <marker date="1564812361822" expanded="true" signature="782:836" ph="{...}" />
+                <marker date="1564812361822" expanded="true" signature="842:990" ph="/// Initialize the pool ... " />
+                <marker date="1564812361822" expanded="true" signature="1048:1256" ph="{...}" />
+                <marker date="1564812361822" expanded="true" signature="1151:1250" ph="{...}" />
+                <marker date="1564812361822" expanded="true" signature="1278:1899" ph="Methods" />
+                <marker date="1564812361822" expanded="true" signature="1299:1392" ph="/// Get a list from the pool ... " />
+                <marker date="1564812361822" expanded="true" signature="1417:1712" ph="{...}" />
+                <marker date="1564812361822" expanded="true" signature="1484:1621" ph="{...}" />
+                <marker date="1564812361822" expanded="true" signature="1718:1817" ph="/// Return a list to the pool ... " />
+                <marker date="1564812361822" expanded="true" signature="1849:1883" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoids.compute">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
             </state>
           </provider>
         </entry>
@@ -51,25 +93,37 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ShaderUtils.cginc" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ConcurrentDictOfLists.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Shaders/Wiggle.shader" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/DictionaryOfLists.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoidManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ShaderUtils.cginc" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidTarget.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoids.compute" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoidManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidObstacle.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/Boid.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ConcurrentDictOfLists.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/DictionaryOfLists.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Shaders/Wiggle.shader" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoids.compute" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ListPool.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ShaderUtils.cginc" />
-        <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Shaders/Wiggle.shader" />
+        <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs" />
+        <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidObstacle.cs" />
+        <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidTarget.cs" />
         <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ConcurrentDictOfLists.cs" />
+        <option value="$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoids.compute" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/.idea.Samples/.idea/vcs.xml" />
       </list>
     </option>
   </component>
@@ -85,28 +139,15 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AssemblyExplorer" />
+      <pane id="SolutionExplorer">
+        <option name="show-all-files" value="false" />
+      </pane>
       <pane id="UnityExplorer">
-        <subPane>
-          <expand>
-            <path>
-              <item name="" type="e068e287:UnityExplorerRootNode" />
-              <item name="Assets" type="8711f2a6:AssetsRoot" />
-            </path>
-            <path>
-              <item name="" type="e068e287:UnityExplorerRootNode" />
-              <item name="Packages" type="4e2708dd:PackagesRoot" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
         <option name="show-hidden-items" value="false" />
         <option name="show-project-names" value="true" />
       </pane>
       <pane id="FileSystemExplorer" />
-      <pane id="SolutionExplorer">
-        <option name="show-all-files" value="false" />
-      </pane>
+      <pane id="AssemblyExplorer" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -159,11 +200,12 @@
       <updated>1564450743355</updated>
       <workItem from="1564450747761" duration="1711000" />
       <workItem from="1564915058649" duration="1140000" />
+      <workItem from="1564917495914" duration="906000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2851000" />
+    <option name="totallyTimeSpent" value="3757000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -176,11 +218,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11958681" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12038141" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -196,12 +238,13 @@
       <window_info anchor="bottom" id="Unit Tests" order="12" />
       <window_info anchor="bottom" id="Terminal" order="13" />
       <window_info anchor="bottom" id="Event Log" order="14" sideWeight="0.50019866" side_tool="true" weight="0.3299923" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Database Changes" order="15" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Errors In Solution" order="3" />
       <window_info anchor="right" id="Unit Tests Coverage" order="4" />
+      <window_info anchor="right" id="Database" order="5" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -225,20 +268,61 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidSpawner.cs" />
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Shaders/Wiggle.shader">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="642">
+          <caret line="89" column="9" lean-forward="true" selection-start-line="89" selection-start-column="9" selection-end-line="89" selection-end-column="9" />
+          <folding>
+            <marker date="1564898212147" expanded="true" signature="108:3726" ph="{...}" />
+            <marker date="1564898212147" expanded="true" signature="126:518" ph="{...}" />
+            <marker date="1564898212147" expanded="true" signature="538:3704" ph="{...}" />
+            <marker date="1564898212147" expanded="true" signature="606:3696" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-450">
+          <caret line="12" column="11" lean-forward="true" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+          <folding>
+            <marker date="1564917540941" expanded="true" signature="6:88" ph="..." />
+            <marker date="1564917540941" expanded="true" signature="90:228" ph="/// Some practising with coroutines and compressed states code ... " />
+            <marker date="1564917540941" expanded="true" signature="280:3682" ph="{...}" />
+            <marker date="1564917540941" expanded="true" signature="310:347" ph="{...}" />
+            <marker date="1564917540941" expanded="true" signature="871:1138" ph="{...}" />
+            <marker date="1564917540941" expanded="true" signature="1144:1286" ph="/// Coroutine that starts the actual process of tweening and keeps it running ... " />
+            <marker date="1564917540941" expanded="true" signature="1325:1506" ph="{...}" />
+            <marker date="1564917540941" expanded="true" signature="1352:1500" ph="{...}" />
+            <marker date="1564917540941" expanded="true" signature="1512:1603" ph="/// Do the actual tweening ... " />
+            <marker date="1564917540941" expanded="true" signature="1635:3008" ph="{...}" />
+            <marker date="1564917540941" expanded="true" signature="1735:3002" ph="{...}" />
+            <marker date="1564917540941" expanded="true" signature="1962:2146" ph="/* it could be a lot more randomized for each different cycle, and independant interpolations too ... */" />
+            <marker date="1564917540941" expanded="true" signature="2173:2809" ph="{...}" />
+            <marker date="1564917540941" expanded="true" signature="3014:3193" ph="/// Set the lens params ... " />
+            <marker date="1564917540941" expanded="true" signature="3265:3395" ph="{...}" />
+            <marker date="1564917540941" expanded="true" signature="3401:3494" ph="/// https://gist.github.com/cjddmut/d789b9eb78216998e95c ... " />
+            <marker date="1564917540941" expanded="true" signature="3570:3680" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/Boid.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="769">
+          <caret line="64" column="22" lean-forward="true" selection-start-line="64" selection-start-column="22" selection-end-line="64" selection-end-column="22" />
           <folding>
             <marker date="1564832108511" expanded="false" signature="6:43" ph="..." />
             <marker date="1564832108511" expanded="true" signature="63:2292" ph="{...}" />
             <marker date="1564832108511" expanded="true" signature="100:2290" ph="{...}" />
-            <marker date="1564832108511" expanded="false" signature="115:356" ph="Private attributes" />
-            <marker date="1564832108511" expanded="false" signature="366:926" ph="Properties" />
+            <marker date="1564832108511" expanded="true" signature="115:356" ph="Private attributes" />
+            <marker date="1564832108511" expanded="true" signature="366:926" ph="Properties" />
             <marker date="1564832108511" expanded="true" signature="422:535" ph="{...}" />
             <marker date="1564832108511" expanded="true" signature="572:681" ph="{...}" />
             <marker date="1564832108511" expanded="true" signature="708:793" ph="{...}" />
             <marker date="1564832108511" expanded="true" signature="821:906" ph="{...}" />
-            <marker date="1564832108511" expanded="false" signature="936:2284" ph="Methods" />
+            <marker date="1564832108511" expanded="true" signature="936:2284" ph="Methods" />
             <marker date="1564832108511" expanded="true" signature="961:1203" ph="/// Constructor ... " />
             <marker date="1564832108511" expanded="true" signature="1293:1477" ph="{...}" />
             <marker date="1564832108511" expanded="true" signature="1487:1602" ph="/// Interface method to provide a hash ... " />
@@ -248,57 +332,158 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidObstacle.cs">
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidManager.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="44">
+          <caret line="12" column="9" lean-forward="true" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
           <folding>
-            <marker date="1564812236330" expanded="true" signature="38:223" ph="{...}" />
-            <marker date="1564812236330" expanded="true" signature="88:221" ph="{...}" />
-            <marker date="1564812236330" expanded="true" signature="130:215" ph="{...}" />
+            <marker date="1564918026790" expanded="false" signature="6:96" ph="..." />
+            <marker date="1564918026790" expanded="true" signature="116:14052" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="163:14050" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="178:310" ph="Defs" />
+            <marker date="1564918026790" expanded="true" signature="219:290" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="320:1031" ph="Public Attributes" />
+            <marker date="1564918026790" expanded="true" signature="1041:1733" ph="Private Attributes" />
+            <marker date="1564918026790" expanded="true" signature="1743:3540" ph="MonoBehaviour Methods" />
+            <marker date="1564918026790" expanded="true" signature="1802:2231" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="2262:3019" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="2486:2798" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="3049:3520" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="3088:3510" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="3550:6205" ph="Methods" />
+            <marker date="1564918026790" expanded="true" signature="3575:3647" ph="/// Create the TRS matrices ... " />
+            <marker date="1564918026790" expanded="true" signature="3685:4526" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="3959:4267" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="4094:4215" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="4369:4478" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="4536:4600" ph="/// Spawn the boids ... " />
+            <marker date="1564918026790" expanded="true" signature="4634:5273" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="4698:5263" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="5283:5575" ph="/// Find the nearest position of interest of the boids, from a given pos ... " />
+            <marker date="1564918026790" expanded="true" signature="5703:6185" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="5866:6129" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="5995:6115" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="6215:10294" ph="Single Thread Methods" />
+            <marker date="1564918026790" expanded="true" signature="6254:6326" ph="/// Update the boids system ... " />
+            <marker date="1564918026790" expanded="true" signature="6373:6506" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="6516:6621" ph="/// Hash the boids and store them in the dictionary of lists ... " />
+            <marker date="1564918026790" expanded="true" signature="6673:6848" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="6737:6838" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="6858:6928" ph="/// Do the boids steering ... " />
+            <marker date="1564918026790" expanded="true" signature="6974:10274" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="7064:10264" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="7386:7768" ph="/* each list has the boids that are within the same cell ... */" />
+            <marker date="1564918026790" expanded="true" signature="7825:7988" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="8006:8275" ph="/* it seems Unity does this just finding the nearest to the first element found in a cell, if I understood correc ... */" />
+            <marker date="1564918026790" expanded="true" signature="8643:10207" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="10304:14044" ph="Multithread Methods" />
+            <marker date="1564918026790" expanded="true" signature="10341:10427" ph="/// Update the boids using multithreading ... " />
+            <marker date="1564918026790" expanded="true" signature="10473:10614" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="10624:10787" ph="/// Function that will be executed in parallel to add the boids to the dictionary ... " />
+            <marker date="1564918026790" expanded="true" signature="10834:10894" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="10904:11009" ph="/// Hash the boids and store them in the dictionary of lists ... " />
+            <marker date="1564918026790" expanded="true" signature="11060:11158" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="11168:11322" ph="/// Function that will be executed in parallel to calculate steerings ... " />
+            <marker date="1564918026790" expanded="true" signature="11396:13763" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="11724:11867" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="12220:13704" ph="{...}" />
+            <marker date="1564918026790" expanded="true" signature="13773:13862" ph="/// Calculate steerings using multithreading ... " />
+            <marker date="1564918026790" expanded="true" signature="13907:14024" ph="{...}" />
           </folding>
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidSpawner.cs">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidTarget.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-90">
-          <caret line="32" column="1" selection-start-line="32" selection-start-column="1" selection-end-line="32" selection-end-column="1" />
+        <state relative-caret-position="225">
+          <caret line="15" column="9" lean-forward="true" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
           <folding>
-            <marker date="1564812241404" expanded="true" signature="38:644" ph="{...}" />
-            <marker date="1564812241404" expanded="true" signature="45:114" ph="/// Need this for multithreading ... " />
-            <marker date="1564812241404" expanded="true" signature="172:462" ph="{...}" />
-            <marker date="1564812241404" expanded="true" signature="307:365" ph="{...}" />
-            <marker date="1564812241404" expanded="true" signature="398:456" ph="{...}" />
-            <marker date="1564812241404" expanded="true" signature="509:642" ph="{...}" />
-            <marker date="1564812241404" expanded="true" signature="551:636" ph="{...}" />
+            <marker date="1564918160726" expanded="true" signature="38:609" ph="{...}" />
+            <marker date="1564918160726" expanded="true" signature="45:114" ph="/// Need this for multithreading ... " />
+            <marker date="1564918160726" expanded="true" signature="172:539" ph="{...}" />
+            <marker date="1564918160726" expanded="true" signature="252:336" ph="{...}" />
+            <marker date="1564918160726" expanded="true" signature="376:434" ph="{...}" />
+            <marker date="1564918160726" expanded="true" signature="475:533" ph="{...}" />
+            <marker date="1564918160726" expanded="true" signature="586:607" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ShaderUtils.cginc">
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidObstacle.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        <state relative-caret-position="90">
+          <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+          <folding>
+            <marker date="1564918059456" expanded="true" signature="38:111" ph="{...}" />
+            <marker date="1564918059456" expanded="true" signature="88:109" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoids.compute">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ConcurrentDictOfLists.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-56">
+          <caret line="32" column="9" lean-forward="true" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
+          <folding>
+            <marker date="1564918249849" expanded="false" signature="6:70" ph="..." />
+            <marker date="1564918249849" expanded="true" signature="90:2480" ph="{...}" />
+            <marker date="1564918249849" expanded="true" signature="155:2478" ph="{...}" />
+            <marker date="1564918249849" expanded="true" signature="170:458" ph="Private Attributes" />
+            <marker date="1564918249849" expanded="true" signature="468:597" ph="Properties" />
+            <marker date="1564918249849" expanded="true" signature="607:1195" ph="Initialization" />
+            <marker date="1564918249849" expanded="true" signature="639:739" ph="/// Default constructor ... " />
+            <marker date="1564918249849" expanded="true" signature="802:823" ph="{...}" />
+            <marker date="1564918249849" expanded="true" signature="833:948" ph="/// Constructor ... " />
+            <marker date="1564918249849" expanded="true" signature="1010:1175" ph="{...}" />
+            <marker date="1564918249849" expanded="true" signature="1205:2472" ph="Methods" />
+            <marker date="1564918249849" expanded="true" signature="1230:1341" ph="/// Return a list to the pool ... " />
+            <marker date="1564918249849" expanded="true" signature="1381:1490" ph="{...}" />
+            <marker date="1564918249849" expanded="true" signature="1500:1600" ph="/// Add an item ... " />
+            <marker date="1564918249849" expanded="true" signature="1632:2294" ph="{...}" />
+            <marker date="1564918249849" expanded="true" signature="1784:2200" ph="{...}" />
+            <marker date="1564918249849" expanded="true" signature="1997:2186" ph="{...}" />
+            <marker date="1564918249849" expanded="true" signature="2304:2373" ph="/// Clear the dictionary ... " />
+            <marker date="1564918249849" expanded="true" signature="2401:2452" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/DictionaryOfLists.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-71">
+          <folding>
+            <marker date="1564812341757" expanded="true" signature="62:82" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="138:1668" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="145:331" ph="Private Attributes" />
+            <marker date="1564812341757" expanded="true" signature="337:448" ph="Properties" />
+            <marker date="1564812341757" expanded="true" signature="454:938" ph="Initialization" />
+            <marker date="1564812341757" expanded="true" signature="482:570" ph="/// Default constructor ... " />
+            <marker date="1564812341757" expanded="true" signature="625:638" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="644:747" ph="/// Constructor ... " />
+            <marker date="1564812341757" expanded="true" signature="801:922" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="944:1666" ph="Methods" />
+            <marker date="1564812341757" expanded="true" signature="965:1064" ph="/// Return a list to the pool ... " />
+            <marker date="1564812341757" expanded="true" signature="1100:1138" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="1144:1232" ph="/// Add an item ... " />
+            <marker date="1564812341757" expanded="true" signature="1260:1520" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="1395:1489" ph="{...}" />
+            <marker date="1564812341757" expanded="true" signature="1526:1587" ph="/// Clear the dictionary ... " />
+            <marker date="1564812341757" expanded="true" signature="1611:1650" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoidManager.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="-450">
           <folding>
             <marker date="1564909892828" expanded="true" signature="42:6752" ph="{...}" />
             <marker date="1564909892828" expanded="true" signature="96:6750" ph="{...}" />
             <marker date="1564909892828" expanded="true" signature="111:256" ph="Defs" />
             <marker date="1564909892828" expanded="true" signature="152:236" ph="{...}" />
-            <marker date="1564909892828" expanded="false" signature="266:1005" ph="Public Attributes" />
-            <marker date="1564909892828" expanded="false" signature="1015:1558" ph="Private Attributes" />
-            <marker date="1564909892828" expanded="false" signature="1568:3318" ph="MonoBehaviour Methods" />
+            <marker date="1564909892828" expanded="true" signature="266:1005" ph="Public Attributes" />
+            <marker date="1564909892828" expanded="true" signature="1015:1558" ph="Private Attributes" />
+            <marker date="1564909892828" expanded="true" signature="1568:3318" ph="MonoBehaviour Methods" />
             <marker date="1564909892828" expanded="true" signature="1627:1733" ph="{...}" />
             <marker date="1564909892828" expanded="true" signature="1764:2963" ph="{...}" />
             <marker date="1564909892828" expanded="true" signature="2058:2114" ph="/* sw.Start(); ... */" />
@@ -319,157 +504,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/BoidManager.cs">
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ShaderUtils.cginc">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="589">
-          <caret line="360" selection-start-line="360" selection-end-line="360" />
+        <state relative-caret-position="210">
+          <caret line="14" column="27" lean-forward="true" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ListPool.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="17" column="17" lean-forward="true" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
           <folding>
-            <marker date="1564813771974" expanded="false" signature="6:96" ph="..." />
-            <marker date="1564813771974" expanded="true" signature="116:14005" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="163:14003" ph="{...}" />
-            <marker date="1564813771974" expanded="false" signature="178:310" ph="Defs" />
-            <marker date="1564813771974" expanded="true" signature="219:290" ph="{...}" />
-            <marker date="1564813771974" expanded="false" signature="320:1031" ph="Public Attributes" />
-            <marker date="1564813771974" expanded="false" signature="1041:1728" ph="Private Attributes" />
-            <marker date="1564813771974" expanded="false" signature="1738:3530" ph="MonoBehaviour Methods" />
-            <marker date="1564813771974" expanded="true" signature="1797:2221" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="2252:3009" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="2476:2788" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="3039:3510" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="3078:3500" ph="{...}" />
-            <marker date="1564813771974" expanded="false" signature="3540:6167" ph="Methods" />
-            <marker date="1564813771974" expanded="true" signature="3565:3637" ph="/// Create the TRS matrices ... " />
-            <marker date="1564813771974" expanded="true" signature="3675:4502" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="3935:4243" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="4070:4191" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="4345:4454" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="4512:4576" ph="/// Spawn the boids ... " />
-            <marker date="1564813771974" expanded="true" signature="4610:5235" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="4674:5225" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="5245:5537" ph="/// Find the nearest position of interest of the boids, from a given pos ... " />
-            <marker date="1564813771974" expanded="true" signature="5665:6147" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="5828:6091" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="5957:6077" ph="{...}" />
-            <marker date="1564813771974" expanded="false" signature="6177:10254" ph="Single Thread Methods" />
-            <marker date="1564813771974" expanded="true" signature="6216:6288" ph="/// Update the boids system ... " />
-            <marker date="1564813771974" expanded="true" signature="6335:6468" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="6478:6583" ph="/// Hash the boids and store them in the dictionary of lists ... " />
-            <marker date="1564813771974" expanded="true" signature="6635:6810" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="6699:6800" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="6820:6890" ph="/// Do the boids steering ... " />
-            <marker date="1564813771974" expanded="true" signature="6936:10234" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="7026:10224" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="7348:7730" ph="/* each list has the boids that are within the same cell ... */" />
-            <marker date="1564813771974" expanded="true" signature="7787:7950" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="7968:8237" ph="/* it seems Unity does this just finding the nearest to the first element found in a cell, if I understood correc ... */" />
-            <marker date="1564813771974" expanded="true" signature="8605:10167" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="10264:13997" ph="Multithread Methods" />
-            <marker date="1564813771974" expanded="true" signature="10301:10387" ph="/// Update the boids using multithreading ... " />
-            <marker date="1564813771974" expanded="true" signature="10433:10574" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="10584:10747" ph="/// Function that will be executed in parallel to add the boids to the dictionary ... " />
-            <marker date="1564813771974" expanded="true" signature="10794:10854" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="10864:10969" ph="/// Hash the boids and store them in the dictionary of lists ... " />
-            <marker date="1564813771974" expanded="true" signature="11020:11113" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="11123:11277" ph="/// Function that will be executed in parallel to calculate steerings ... " />
-            <marker date="1564813771974" expanded="true" signature="11351:13716" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="11679:11822" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="12175:13657" ph="{...}" />
-            <marker date="1564813771974" expanded="true" signature="13726:13815" ph="/// Calculate steerings using multithreading ... " />
-            <marker date="1564813771974" expanded="true" signature="13860:13977" ph="{...}" />
+            <marker date="1564812361822" expanded="false" signature="6:52" ph="..." />
+            <marker date="1564812361822" expanded="true" signature="78:1901" ph="{...}" />
+            <marker date="1564812361822" expanded="true" signature="85:374" ph="Private Attributes" />
+            <marker date="1564812361822" expanded="true" signature="380:1272" ph="Initialization" />
+            <marker date="1564812361822" expanded="true" signature="408:496" ph="/// Default constructor ... " />
+            <marker date="1564812361822" expanded="true" signature="567:580" ph="{...}" />
+            <marker date="1564812361822" expanded="true" signature="586:726" ph="/// Constructor ... " />
+            <marker date="1564812361822" expanded="true" signature="782:836" ph="{...}" />
+            <marker date="1564812361822" expanded="true" signature="842:990" ph="/// Initialize the pool ... " />
+            <marker date="1564812361822" expanded="true" signature="1048:1256" ph="{...}" />
+            <marker date="1564812361822" expanded="true" signature="1151:1250" ph="{...}" />
+            <marker date="1564812361822" expanded="true" signature="1278:1899" ph="Methods" />
+            <marker date="1564812361822" expanded="true" signature="1299:1392" ph="/// Get a list from the pool ... " />
+            <marker date="1564812361822" expanded="true" signature="1417:1712" ph="{...}" />
+            <marker date="1564812361822" expanded="true" signature="1484:1621" ph="{...}" />
+            <marker date="1564812361822" expanded="true" signature="1718:1817" ph="/// Return a list to the pool ... " />
+            <marker date="1564812361822" expanded="true" signature="1849:1883" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/SampleAssets/Shaders/Wiggle.shader">
+    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Compute/ComputeBoids.compute">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="642">
-          <caret line="89" column="9" lean-forward="true" selection-start-line="89" selection-start-column="9" selection-end-line="89" selection-end-column="9" />
-          <folding>
-            <marker date="1564898212147" expanded="true" signature="108:3726" ph="{...}" />
-            <marker date="1564898212147" expanded="true" signature="126:518" ph="{...}" />
-            <marker date="1564898212147" expanded="true" signature="538:3704" ph="{...}" />
-            <marker date="1564898212147" expanded="true" signature="606:3696" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/ConcurrentDictOfLists.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="68" column="20" lean-forward="true" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="20" />
-          <folding>
-            <marker date="1564812278902" expanded="false" signature="6:70" ph="..." />
-            <marker date="1564812278902" expanded="true" signature="90:2776" ph="{...}" />
-            <marker date="1564812278902" expanded="true" signature="155:2774" ph="{...}" />
-            <marker date="1564812278902" expanded="false" signature="170:754" ph="Private Attributes" />
-            <marker date="1564812278902" expanded="true" signature="372:658" ph="/* from Microsoft: The higher the concurrencyLevel, the higher the theoretical number of operations ... */" />
-            <marker date="1564812278902" expanded="true" signature="764:893" ph="Properties" />
-            <marker date="1564812278902" expanded="false" signature="903:1491" ph="Initialization" />
-            <marker date="1564812278902" expanded="true" signature="935:1035" ph="/// Default constructor ... " />
-            <marker date="1564812278902" expanded="true" signature="1098:1119" ph="{...}" />
-            <marker date="1564812278902" expanded="true" signature="1129:1244" ph="/// Constructor ... " />
-            <marker date="1564812278902" expanded="true" signature="1306:1471" ph="{...}" />
-            <marker date="1564812278902" expanded="true" signature="1501:2768" ph="Methods" />
-            <marker date="1564812278902" expanded="true" signature="1526:1637" ph="/// Return a list to the pool ... " />
-            <marker date="1564812278902" expanded="true" signature="1677:1786" ph="{...}" />
-            <marker date="1564812278902" expanded="true" signature="1796:1896" ph="/// Add an item ... " />
-            <marker date="1564812278902" expanded="true" signature="1928:2590" ph="{...}" />
-            <marker date="1564812278902" expanded="true" signature="2080:2496" ph="{...}" />
-            <marker date="1564812278902" expanded="true" signature="2293:2482" ph="{...}" />
-            <marker date="1564812278902" expanded="true" signature="2600:2669" ph="/// Clear the dictionary ... " />
-            <marker date="1564812278902" expanded="true" signature="2697:2748" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/OOP/DictionaryOfLists.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <marker date="1564812341757" expanded="true" signature="62:82" ph="{...}" />
-            <marker date="1564812341757" expanded="true" signature="138:1668" ph="{...}" />
-            <marker date="1564812341757" expanded="false" signature="145:331" ph="Private Attributes" />
-            <marker date="1564812341757" expanded="false" signature="337:448" ph="Properties" />
-            <marker date="1564812341757" expanded="false" signature="454:938" ph="Initialization" />
-            <marker date="1564812341757" expanded="true" signature="482:570" ph="/// Default constructor ... " />
-            <marker date="1564812341757" expanded="true" signature="625:638" ph="{...}" />
-            <marker date="1564812341757" expanded="true" signature="644:747" ph="/// Constructor ... " />
-            <marker date="1564812341757" expanded="true" signature="801:922" ph="{...}" />
-            <marker date="1564812341757" expanded="false" signature="944:1666" ph="Methods" />
-            <marker date="1564812341757" expanded="true" signature="965:1064" ph="/// Return a list to the pool ... " />
-            <marker date="1564812341757" expanded="true" signature="1100:1138" ph="{...}" />
-            <marker date="1564812341757" expanded="true" signature="1144:1232" ph="/// Add an item ... " />
-            <marker date="1564812341757" expanded="true" signature="1260:1520" ph="{...}" />
-            <marker date="1564812341757" expanded="true" signature="1395:1489" ph="{...}" />
-            <marker date="1564812341757" expanded="true" signature="1526:1587" ph="/// Clear the dictionary ... " />
-            <marker date="1564812341757" expanded="true" signature="1611:1650" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Advanced/Boids/Scripts/Misc/UnderwaterDistortTween.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-210">
-          <caret line="31" column="27" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
-          <folding>
-            <marker date="1564911163435" expanded="true" signature="6:88" ph="..." />
-            <marker date="1564911163435" expanded="true" signature="90:228" ph="/// Some practising with coroutines and compressed states code ... " />
-            <marker date="1564911163435" expanded="true" signature="280:3681" ph="{...}" />
-            <marker date="1564911163435" expanded="true" signature="310:347" ph="{...}" />
-            <marker date="1564911163435" expanded="true" signature="871:1138" ph="{...}" />
-            <marker date="1564911163435" expanded="true" signature="1144:1286" ph="/// Coroutine that starts the actual process of tweening and keeps it running ... " />
-            <marker date="1564911163435" expanded="true" signature="1325:1506" ph="{...}" />
-            <marker date="1564911163435" expanded="true" signature="1352:1500" ph="{...}" />
-            <marker date="1564911163435" expanded="true" signature="1512:1603" ph="/// Do the actual tweening ... " />
-            <marker date="1564911163435" expanded="true" signature="1635:3007" ph="{...}" />
-            <marker date="1564911163435" expanded="true" signature="1735:3001" ph="{...}" />
-            <marker date="1564911163435" expanded="true" signature="1962:2145" ph="/* it could be alot more randomized for each different cycle, and independant interpolations too ... */" />
-            <marker date="1564911163435" expanded="true" signature="2172:2808" ph="{...}" />
-            <marker date="1564911163435" expanded="true" signature="3013:3192" ph="/// Set the lens params ... " />
-            <marker date="1564911163435" expanded="true" signature="3264:3394" ph="{...}" />
-            <marker date="1564911163435" expanded="true" signature="3400:3493" ph="/// https://gist.github.com/cjddmut/d789b9eb78216998e95c ... " />
-            <marker date="1564911163435" expanded="true" signature="3569:3679" ph="{...}" />
-          </folding>
+        <state relative-caret-position="450">
+          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
         </state>
       </provider>
     </entry>

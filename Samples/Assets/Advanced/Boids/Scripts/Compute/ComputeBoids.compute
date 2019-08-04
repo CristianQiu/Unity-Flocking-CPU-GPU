@@ -29,8 +29,6 @@ RWStructuredBuffer<Boid> boidBuffer;
 StructuredBuffer<float3> targetsBuffer;
 StructuredBuffer<float3> obstaclesBuffer;
 
-// When doing dispatch from C# you can also set up a given number of THREAD GROUPS in each dimension
-// Each THREAD GROUP will have this given number of THREADS
 [numthreads(THREADSX,THREADSY,THREADSZ)]
 void ComputeBoids (uint3 id : SV_DispatchThreadID)
 {
@@ -40,7 +38,6 @@ void ComputeBoids (uint3 id : SV_DispatchThreadID)
     float3 fwd = float3(0.0, 0.0, 0.0);
     uint boidsInRange = 1;
 
-    // I'm brute forcing this because I want to make the most simple version work
     for (uint i = frame; i < totalBoids; i += 2)
     {
         Boid otherBoid = boidBuffer[i];

@@ -8,14 +8,10 @@ namespace BoidsOOP
         #region Private Attributes
 
         private const int DefaultCapacity = 4096;
+        private static int ConcurrencyLevel = BoidManager.ConcurrencyLevel;
 
         private ConcurrentDictionary<int, List<T>> dictLists = null;
         private ListPool<T> listPool = null;
-
-        // from Microsoft: The higher the concurrencyLevel, the higher the theoretical number of operations
-        // that could be performed concurrently on the ConcurrentDictionary. However, global
-        // operations like resizing the dictionary take longer as the concurrencyLevel rises.
-        private static int ConcurrencyLevel = BoidManager.ConcurrencyLevel;
 
         #endregion
 
