@@ -1,6 +1,8 @@
 ﻿#define THREADSX 256
 #define THREADSY 1
-#define THREADSZ 1
+#define THREADSZ 1 // < I recall reading only a certain DX version supported more than one. Can't remember if it was 11 o 12, not going to use it anyways
+
+#define CELL_RADIUS 3
 
 #include "ShaderUtils.cginc"
 
@@ -25,25 +27,58 @@ float targetWeight;
 float obstacleAversionDistance;
 float moveSpeed;
 
+// flock stuff
 RWStructuredBuffer<Boid> boidBuffer;
 StructuredBuffer<float3> targetsBuffer;
 StructuredBuffer<float3> obstaclesBuffer;
 
+// counting sort stuff
+RWStructuredBuffer<uint> cellCount;
+RWStructuredBuffer<uint> finalCount;
+
+// http://on-demand.gputechconf.com/gtc/2014/presentations/S4117-fast-fixed-radius-nearest-neighbor-gpu.pdf
+// https://wickedengine.net/2018/05/21/scalabe-gpu-fluid-simulation/
 [numthreads(THREADSX,THREADSY,THREADSZ)]
 void ComputeBoids (uint3 id : SV_DispatchThreadID)
 {
-    Boid thisBoid = boidBuffer[id.x];
+    // I wonder what happens if I launch two dispatchs from the CPU ? Would them be sequentially executed ?
+    // what about the data here, I guess the state should be saved ?
+    Boid boid = boidBuffer[id.x];
 
-    float3 pos = float3(0.0, 0.0, 0.0);
-    float3 fwd = float3(0.0, 0.0, 0.0);
+    // each boid belongs to a given cell
+    uint cellNum = cellHash(boid.pos, (uint) CELL_RADIUS, totalBoids);
+
+    // count the cells
+    // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
+    // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/groupmemorybarrierwithgroupsync
+    InterlockedAdd(cellCount[cellNum], 1);
+    GroupMemoryBarrierWithGroupSync();
+
+    // do the final count
+    // Warning !!! only one thread is doing this... I have to think if there's another way of doing it using all threads
+    if (id.x == 0)
+    {
+        // 0 ?
+        for (uint i = 1; i < totalBoids; i++)
+        {
+            uint prev = i - 1;
+            uint sum = cellCount[prev] + cellCount[i];
+            finalCount[i] = sum;
+        }
+    }
+
+    GroupMemoryBarrierWithGroupSync();
+
+    float3 pos = boid.pos;
+    float3 fwd = boid.fwd;
     uint boidsInRange = 1;
 
     for (uint i = frame; i < totalBoids; i += 2)
     {
         Boid otherBoid = boidBuffer[i];
 
-        float dist = distance(thisBoid.pos, otherBoid.pos);
-        if (dist <= 8.0)
+        float dist = distance(boid.pos, otherBoid.pos);
+        if (dist <= 8.0 && i != id.x)
         {
             pos += otherBoid.pos;
             fwd += otherBoid.fwd;
@@ -51,8 +86,9 @@ void ComputeBoids (uint3 id : SV_DispatchThreadID)
         }
     }
 
-    pos -= thisBoid.pos;
-    fwd -= thisBoid.fwd;
+    // some boids dissapear, not sure where the problem is
+    pos += float3(0.0001, 0.0001, 0.0001);
+    fwd += float3(0.0001, 0.0001, 0.0001);
 
     float3 posNorm = pos / boidsInRange;
 
@@ -62,18 +98,18 @@ void ComputeBoids (uint3 id : SV_DispatchThreadID)
     float3 nearestTargetPos = float3(0.0, 0.0, 0.0);
     FindDistToNearestFromPos(targetsBuffer, totalTargets, posNorm, nearestTargetPos);
 
-    float3 obstacleSteering = thisBoid.pos - nearestObstaclePos;
-    float3 avoidObstacleHeading = (nearestObstaclePos + normalize(obstacleSteering) * obstacleAversionDistance) - thisBoid.pos;
-    float3 targetHeading = targetWeight * normalize(nearestTargetPos - thisBoid.pos);
+    float3 obstacleSteering = boid.pos - nearestObstaclePos;
+    float3 avoidObstacleHeading = (nearestObstaclePos + normalize(obstacleSteering) * obstacleAversionDistance) - boid.pos;
+    float3 targetHeading = targetWeight * normalize(nearestTargetPos - boid.pos);
     float nearestObstacleDistanceFromRadius = nearestObstacleDist - obstacleAversionDistance;
 
-    float3 alignmentResult = alignmentWeight * normalize((fwd / boidsInRange) - thisBoid.fwd);
-    float3 separationResult = separationWeight * normalize((thisBoid.pos * boidsInRange) - pos);
+    float3 alignmentResult = alignmentWeight * normalize((fwd / boidsInRange) - boid.fwd);
+    float3 separationResult = separationWeight * normalize((boid.pos * boidsInRange) - pos);
 
     float3 normalHeading = normalize(alignmentResult + separationResult + targetHeading);
     float3 targetForward = nearestObstacleDistanceFromRadius < 0.0 ? avoidObstacleHeading : normalHeading;
-    float3 nextHeading = normalize(thisBoid.fwd + dt * (targetForward - thisBoid.fwd));
+    float3 nextHeading = normalize(boid.fwd + dt * (targetForward - boid.fwd));
 
-    boidBuffer[id.x].pos = float3(thisBoid.pos + (nextHeading * moveSpeed * dt));
+    boidBuffer[id.x].pos = float3(boid.pos + (nextHeading * moveSpeed * dt));
     boidBuffer[id.x].fwd = nextHeading;
 }

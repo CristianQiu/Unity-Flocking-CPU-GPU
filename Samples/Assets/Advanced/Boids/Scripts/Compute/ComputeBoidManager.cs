@@ -52,10 +52,12 @@ namespace BoidsCompute
         private ComputeBuffer boidBuffer = null;
         private ComputeBuffer targetsBuffer = null;
         private ComputeBuffer obstaclesBuffer = null;
+        private ComputeBuffer zerosBuffer = null;
 
         private Boid[] boids = null;
         private Vector3[] targetsPos = null;
         private Vector3[] obstaclesPos = null;
+        private uint[] zeros = null;
         private int frame = 0;
 
         #endregion
@@ -64,7 +66,6 @@ namespace BoidsCompute
 
         private void Start()
         {
-            InitializeArrays();
             SpawnBoids();
             SetupCompute();
         }
@@ -72,12 +73,13 @@ namespace BoidsCompute
         private void Update()
         {
             frame %= 2;
-            //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
 
             BufferUpdateObstaclesAndTargetsNewPos();
             computeShader.SetFloat(dtId, Time.deltaTime);
             computeShader.SetInt(frameId, frame);
+            zerosBuffer.SetData(zeros);
 
+            //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             // sw.Start();
             // boidBuffer.GetData(boids);
 
@@ -109,11 +111,13 @@ namespace BoidsCompute
             boidBuffer?.Release();
             targetsBuffer?.Release();
             obstaclesBuffer?.Release();
+            zerosBuffer?.Release();
 
             argsBuffer = null;
             boidBuffer = null;
             targetsBuffer = null;
             obstaclesBuffer = null;
+            zerosBuffer = null;
         }
 
         #endregion
@@ -121,20 +125,12 @@ namespace BoidsCompute
         #region Methods
 
         /// <summary>
-        /// Initialize arrays
-        /// </summary>
-        private void InitializeArrays()
-        {
-            boids = new Boid[numBoids];
-            targetsPos = new Vector3[targets.Length];
-            obstaclesPos = new Vector3[obstacles.Length];
-        }
-
-        /// <summary>
         /// Spawn the boids
         /// </summary>
         private void SpawnBoids()
         {
+            boids = new Boid[numBoids];
+
             for (int i = 0; i < numBoids; i++)
             {
                 Vector3 pos = Random.insideUnitSphere * radius;
@@ -154,6 +150,13 @@ namespace BoidsCompute
         /// </summary>
         private void SetupCompute()
         {
+            obstaclesPos = new Vector3[obstacles.Length];
+            targetsPos = new Vector3[targets.Length];
+
+            zeros = new uint[numBoids];
+            for (int i = 0; i < zeros.Length; i++)
+                zeros[i] = 0;
+
             uint[] args = new uint[5];
             args[0] = (uint) boidMesh.GetIndexCount(0); //  number of triangles in the mesh multiplied by 3
             args[1] = (uint) numBoids;
@@ -169,15 +172,20 @@ namespace BoidsCompute
             boidBuffer.SetData(boids);
 
             targetsBuffer = new ComputeBuffer(targets.Length, Vector3StructSize);
-            targetsBuffer.SetData(targetsPos);
-
             obstaclesBuffer = new ComputeBuffer(obstacles.Length, Vector3StructSize);
-            obstaclesBuffer.SetData(obstaclesPos);
+            BufferUpdateObstaclesAndTargetsNewPos();
 
+            zerosBuffer = new ComputeBuffer(numBoids, 4);
+            zerosBuffer.SetData(zeros);
+
+            // boid stuff
             kernel = computeShader.FindKernel("ComputeBoids");
             computeShader.SetBuffer(kernel, "boidBuffer", boidBuffer);
             computeShader.SetBuffer(kernel, "targetsBuffer", targetsBuffer);
             computeShader.SetBuffer(kernel, "obstaclesBuffer", obstaclesBuffer);
+
+            computeShader.SetBuffer(kernel, "cellCount", zerosBuffer);
+            computeShader.SetBuffer(kernel, "finalCount", zerosBuffer);
 
             computeShader.SetInt("totalBoids", numBoids);
             computeShader.SetInt("totalTargets", targets.Length);
@@ -192,8 +200,6 @@ namespace BoidsCompute
             computeShader.SetFloat("moveSpeed", moveSpeed);
 
             boidMat.SetBuffer("boidBuffer", boidBuffer);
-
-            Shader.WarmupAllShaders();
         }
 
         /// <summary>
