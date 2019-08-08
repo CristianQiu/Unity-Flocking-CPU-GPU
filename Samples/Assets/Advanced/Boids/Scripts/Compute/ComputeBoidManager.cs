@@ -178,14 +178,15 @@ namespace BoidsCompute
             zerosBuffer = new ComputeBuffer(numBoids, 4);
             zerosBuffer.SetData(zeros);
 
-            // boid stuff
             kernel = computeShader.FindKernel("ComputeBoids");
             computeShader.SetBuffer(kernel, "boidBuffer", boidBuffer);
             computeShader.SetBuffer(kernel, "targetsBuffer", targetsBuffer);
             computeShader.SetBuffer(kernel, "obstaclesBuffer", obstaclesBuffer);
 
             computeShader.SetBuffer(kernel, "cellCount", zerosBuffer);
-            computeShader.SetBuffer(kernel, "finalCount", zerosBuffer);
+            computeShader.SetBuffer(kernel, "prefixSum", zerosBuffer);
+            computeShader.SetBuffer(kernel, "sortedCells", zerosBuffer);
+            computeShader.SetBuffer(kernel, "sortedCellsIds", zerosBuffer);
 
             computeShader.SetInt("totalBoids", numBoids);
             computeShader.SetInt("totalTargets", targets.Length);

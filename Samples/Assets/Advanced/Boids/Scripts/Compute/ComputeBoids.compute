@@ -2,12 +2,18 @@
 #define THREADSY 1
 #define THREADSZ 1 // < I recall reading only a certain DX version supported more than one. Can't remember if it was 11 o 12, not going to use it anyways
 
-#define CELL_RADIUS 3
+#define MAX_FLOAT 3.402823466e+38
+#define MAX_UINT 4294967295
 
-#include "ShaderUtils.cginc"
+#define LARGE_PRIME1 73856093
+#define LARGE_PRIME2 19349663
+#define LARGE_PRIME3 83492791
+
+#define CELL_RADIUS 3
 
 #pragma kernel ComputeBoids
 
+// flocking stuff
 struct Boid
 {
     float3 pos;
@@ -27,17 +33,99 @@ float targetWeight;
 float obstacleAversionDistance;
 float moveSpeed;
 
-// flock stuff
 RWStructuredBuffer<Boid> boidBuffer;
 StructuredBuffer<float3> targetsBuffer;
 StructuredBuffer<float3> obstaclesBuffer;
 
 // counting sort stuff
 RWStructuredBuffer<uint> cellCount;
-RWStructuredBuffer<uint> finalCount;
+RWStructuredBuffer<uint> prefixSum;
+RWStructuredBuffer<uint> sortedCells;
+RWStructuredBuffer<uint> sortedCellsIds;
 
-// http://on-demand.gputechconf.com/gtc/2014/presentations/S4117-fast-fixed-radius-nearest-neighbor-gpu.pdf
-// https://wickedengine.net/2018/05/21/scalabe-gpu-fluid-simulation/
+/*
+    Flocking functions
+*/
+float FindDistToNearestFromPos(StructuredBuffer<float3> interestPoints, uint totalInterestPoints, float3 fromPos, out float3 interestPointPos)
+{
+    float dist = MAX_FLOAT;
+
+    for (uint i = 0; i < totalInterestPoints; i++)
+    {
+        float3 interestPoint = interestPoints[i];
+        float newDist = distance(fromPos, interestPoint);
+
+        if (newDist < dist)
+        {
+            interestPointPos = interestPoint;
+            dist = newDist;
+        }
+    }
+
+    return dist;
+}
+
+/*
+    Counting sort functions
+*/
+uint HashPosToCell(float3 pos)
+{
+    int3 floored = (int3) (floor(pos / (float) CELL_RADIUS));
+
+    // what about negative numbers, what's their representation and how all these mults and xors affect them
+    // this is straight from: https://wickedengine.net/2018/05/21/scalabe-gpu-fluid-simulation/
+    uint hash = (uint) (LARGE_PRIME1 * floored.x ^ LARGE_PRIME2 * floored.y ^ LARGE_PRIME3 * floored.z);
+    hash %= totalBoids;
+
+    return hash;
+}
+
+void DoPrefixSum(uint threadId)
+{
+    // this is "prefix sum" and can be implemented in parallel
+    // http://www.cs.ucr.edu/~nael/217-f15/lectures/217-lec12.pdf
+    // the above pdf shows an easy enough approach, which can also be enhanced to improve the work efficiency
+    // that is, all the threads have the same workload approx
+    // WARNING !!! only one thread is doing this
+    if (threadId == 0)
+    {
+        // the first one is the lowest cell number, the amount of numbers equal or lower it's the cell count itself
+        prefixSum[0] = cellCount[0];
+
+        // now start accumulating
+        for (uint i = 1; i < totalBoids; i++)
+        {
+            uint prev = i - 1;
+            uint sum = cellCount[prev] + cellCount[i];
+            prefixSum[i] = sum;
+        }
+    }
+}
+
+/*
+    When we finish sorting cells, prefixSum will have the the very first index of each cell number
+    giving access to all the boids inside a cell (which should be continously ordered)
+*/
+void SortCells(uint threadId, uint cellHash)
+{
+    // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
+    uint origVal = (uint) MAX_UINT;
+    InterlockedAdd(prefixSum[cellHash], -1, origVal);
+
+    // is this thread safe ? I'm pretty sure it is not, guess using the out value from InterlockedAdd is the proper way
+    //uint sortedCellIndex = prefixSum[cellHash];
+    uint sortedCellIndex = origVal - 1;
+
+    sortedCells[sortedCellIndex] = cellHash;
+    sortedCellsIds[sortedCellIndex] = threadId;
+}
+
+/*
+    Kernels
+    References:
+    http://on-demand.gputechconf.com/gtc/2014/presentations/S4117-fast-fixed-radius-nearest-neighbor-gpu.pdf
+    https://wickedengine.net/2018/05/21/scalabe-gpu-fluid-simulation/
+*/
 [numthreads(THREADSX,THREADSY,THREADSZ)]
 void ComputeBoids (uint3 id : SV_DispatchThreadID)
 {
@@ -46,47 +134,64 @@ void ComputeBoids (uint3 id : SV_DispatchThreadID)
     Boid boid = boidBuffer[id.x];
 
     // each boid belongs to a given cell
-    uint cellNum = cellHash(boid.pos, (uint) CELL_RADIUS, totalBoids);
+    uint cellHash = HashPosToCell(boid.pos);
 
     // count the cells
     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
+    InterlockedAdd(cellCount[cellHash], 1);
+
     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/groupmemorybarrierwithgroupsync
-    InterlockedAdd(cellCount[cellNum], 1);
     GroupMemoryBarrierWithGroupSync();
 
-    // do the final count
-    // Warning !!! only one thread is doing this... I have to think if there's another way of doing it using all threads
-    if (id.x == 0)
-    {
-        // 0 ?
-        for (uint i = 1; i < totalBoids; i++)
-        {
-            uint prev = i - 1;
-            uint sum = cellCount[prev] + cellCount[i];
-            finalCount[i] = sum;
-        }
-    }
+    DoPrefixSum(id.x);
 
     GroupMemoryBarrierWithGroupSync();
 
-    float3 pos = boid.pos;
-    float3 fwd = boid.fwd;
+    SortCells(id.x, cellHash);
+
+    GroupMemoryBarrierWithGroupSync();
+
+    float3 pos = float3(0.1, 0.0, 0.0);
+    float3 fwd = float3(0.1, 0.0, 0.0);
     uint boidsInRange = 1;
 
-    for (uint i = frame; i < totalBoids; i += 2)
-    {
-        Boid otherBoid = boidBuffer[i];
+    uint startIndex = prefixSum[cellHash]; // < the start index of the first cell when it is already ordered
+    uint numBoidsInCell = cellCount[cellHash]; // < the range, lets say we have 2 2 2 3 4 5, if the cell is 2, we got 3 boids there, which we have already count
+    uint endIndex = startIndex + numBoidsInCell;
 
-        float dist = distance(boid.pos, otherBoid.pos);
-        if (dist <= 8.0 && i != id.x)
-        {
-            pos += otherBoid.pos;
-            fwd += otherBoid.fwd;
-            boidsInRange++;
-        }
-    }
+    // for (uint i = startIndex; i < endIndex; i++)
+    // {
+    //     uint otherBoidIndex = sorte
+    //     Boid otherBoid = boidBuffer[i];
 
-    // some boids dissapear, not sure where the problem is
+    //     float dist = distance(boid.pos, otherBoid.pos);
+    //     if (dist <= 8.0 && i != id.x)
+    //     {
+    //         pos += otherBoid.pos;
+    //         fwd += otherBoid.fwd;
+    //         boidsInRange++;
+    //     }
+    // }
+
+    // float3 pos = boid.pos;
+    // float3 fwd = boid.fwd;
+    // uint boidsInRange = 1;
+
+    // // must replace this for
+    // for (uint i = frame; i < totalBoids; i += 2)
+    // {
+    //     Boid otherBoid = boidBuffer[i];
+
+    //     float dist = distance(boid.pos, otherBoid.pos);
+    //     if (dist <= 8.0 && i != id.x)
+    //     {
+    //         pos += otherBoid.pos;
+    //         fwd += otherBoid.fwd;
+    //         boidsInRange++;
+    //     }
+    // }
+
+    // boids continuously dissapear otherwise, not sure where the problem is
     pos += float3(0.0001, 0.0001, 0.0001);
     fwd += float3(0.0001, 0.0001, 0.0001);
 
