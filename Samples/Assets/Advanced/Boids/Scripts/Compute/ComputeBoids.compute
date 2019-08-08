@@ -11,6 +11,7 @@
 
 #define CELL_RADIUS 3
 
+#pragma enable_d3d11_debug_symbols
 #pragma kernel ComputeBoids
 
 // flocking stuff
@@ -72,9 +73,9 @@ uint HashPosToCell(float3 pos)
 {
     int3 floored = (int3) (floor(pos / (float) CELL_RADIUS));
 
-    // what about negative numbers, what's their representation and how all these mults and xors affect them
     // this is straight from: https://wickedengine.net/2018/05/21/scalabe-gpu-fluid-simulation/
-    uint hash = (uint) (LARGE_PRIME1 * floored.x ^ LARGE_PRIME2 * floored.y ^ LARGE_PRIME3 * floored.z);
+    // which at the same time I found in: http://www.beosil.com/download/CollisionDetectionHashing_VMV03.pdf
+    uint hash = (uint) ((LARGE_PRIME1 * floored.x) ^ (LARGE_PRIME2 * floored.y) ^ (LARGE_PRIME3 * floored.z));
     hash %= totalBoids;
 
     return hash;
@@ -84,27 +85,24 @@ void DoPrefixSum(uint threadId)
 {
     // this is "prefix sum" and can be implemented in parallel
     // http://www.cs.ucr.edu/~nael/217-f15/lectures/217-lec12.pdf
-    // the above pdf shows an easy enough approach, which can also be enhanced to improve the work efficiency
+    // it shows an easy enough approach, which can also be enhanced to improve the work efficiency
     // that is, all the threads have the same workload approx
-    // WARNING !!! only one thread is doing this
+    // FIXME: only one thread is doing this
     if (threadId == 0)
     {
-        // the first one is the lowest cell number, the amount of numbers equal or lower it's the cell count itself
-        prefixSum[0] = cellCount[0];
+        // WHY GODDAM ON THE *** EARTH THIS DOES NOT COPY IT !!!!!
+        // the first one is the lowest cell number, the amount of numbers equal or lower is the cell count itself
+        prefixSum[0] == cellCount[0];
 
         // now start accumulating
         for (uint i = 1; i < totalBoids; i++)
-        {
-            uint prev = i - 1;
-            uint sum = cellCount[prev] + cellCount[i];
-            prefixSum[i] = sum;
-        }
+            prefixSum[i] = cellCount[i] + prefixSum[i - 1];
     }
 }
 
 /*
     When we finish sorting cells, prefixSum will have the the very first index of each cell number
-    giving access to all the boids inside a cell (which should be continously ordered)
+    giving access to all the boids inside a cell (which should be continuously ordered)
 */
 void SortCells(uint threadId, uint cellHash)
 {
@@ -112,11 +110,11 @@ void SortCells(uint threadId, uint cellHash)
     uint origVal = (uint) MAX_UINT;
     InterlockedAdd(prefixSum[cellHash], -1, origVal);
 
-    // is this thread safe ? I'm pretty sure it is not, guess using the out value from InterlockedAdd is the proper way
-    //uint sortedCellIndex = prefixSum[cellHash];
     uint sortedCellIndex = origVal - 1;
-
     sortedCells[sortedCellIndex] = cellHash;
+
+    // TODO: I think adding the boid info here would improve later the reads
+    // because I do not need to track back the Id to read the boid info and the data layout is continuous
     sortedCellsIds[sortedCellIndex] = threadId;
 }
 
@@ -129,8 +127,15 @@ void SortCells(uint threadId, uint cellHash)
 [numthreads(THREADSX,THREADSY,THREADSZ)]
 void ComputeBoids (uint3 id : SV_DispatchThreadID)
 {
-    // I wonder what happens if I launch two dispatchs from the CPU ? Would them be sequentially executed ?
-    // what about the data here, I guess the state should be saved ?
+    /* I wonder what happens if I launch two dispatchs from the CPU ? Would them be sequentially executed ?
+     what about the data here, I guess the state should be saved ? */
+
+   if (id.x >= totalBoids)
+        return;
+
+    /* I launched 1 threadgroup with 256 threads in X and with 32 boids it seems that 224 threads are writing a 0 as the hash
+     but if I control the id.x to be in 0-31 range there are too many same hashes in the last cell (31).
+     Why if I did break the flow with one return was still adding hashes that I do not want? */
     Boid boid = boidBuffer[id.x];
 
     // each boid belongs to a given cell
@@ -142,36 +147,64 @@ void ComputeBoids (uint3 id : SV_DispatchThreadID)
 
     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/groupmemorybarrierwithgroupsync
     GroupMemoryBarrierWithGroupSync();
-
     DoPrefixSum(id.x);
 
-    GroupMemoryBarrierWithGroupSync();
+//     GroupMemoryBarrierWithGroupSync();
+//     SortCells(id.x, cellHash);
 
-    SortCells(id.x, cellHash);
+//     float3 pos = float3(0.01, 0.01, 0.01);
+//     float3 fwd = float3(0.01, 0.01, 0.01);
+//     uint boidsInRange = 1;
 
-    GroupMemoryBarrierWithGroupSync();
+//     GroupMemoryBarrierWithGroupSync();
 
-    float3 pos = float3(0.1, 0.0, 0.0);
-    float3 fwd = float3(0.1, 0.0, 0.0);
-    uint boidsInRange = 1;
+//     uint startIndex = prefixSum[cellHash]; // < the start index of the first cell when it is already ordered
+//     uint numBoidsInCell = cellCount[cellHash]; // < the range, lets say we have 2 2 2 3 4 5, if the cell is 2, we got 3 boids there, which we already counted
+//     uint endIndex = startIndex + numBoidsInCell;
 
-    uint startIndex = prefixSum[cellHash]; // < the start index of the first cell when it is already ordered
-    uint numBoidsInCell = cellCount[cellHash]; // < the range, lets say we have 2 2 2 3 4 5, if the cell is 2, we got 3 boids there, which we have already count
-    uint endIndex = startIndex + numBoidsInCell;
+//     if (startIndex >= totalBoids || endIndex >= totalBoids)
+//         return;
 
-    // for (uint i = startIndex; i < endIndex; i++)
-    // {
-    //     uint otherBoidIndex = sorte
-    //     Boid otherBoid = boidBuffer[i];
+//     // this is iterating over one cell, which maps to the code implemented in C#
+//     // we could find the 27 adjacent ones calculating and hashing the new position ?
+//     for (uint i = startIndex; i <= endIndex; i++)
+//     {
+//         uint boidIndex = sortedCellsIds[i];
+//         Boid otherBoid = boidBuffer[boidIndex];
 
-    //     float dist = distance(boid.pos, otherBoid.pos);
-    //     if (dist <= 8.0 && i != id.x)
-    //     {
-    //         pos += otherBoid.pos;
-    //         fwd += otherBoid.fwd;
-    //         boidsInRange++;
-    //     }
-    // }
+//         pos += otherBoid.pos;
+//         fwd += otherBoid.fwd;
+//         boidsInRange++;
+//     }
+
+//     // boids continuously dissapear otherwise, not sure where the problem is
+//     pos += float3(0.0001, 0.0001, 0.0001);
+//     fwd += float3(0.0001, 0.0001, 0.0001);
+
+//     float3 posNorm = pos / boidsInRange;
+
+//     float3 nearestObstaclePos = float3(0.0, 0.0, 0.0);
+//     float nearestObstacleDist = FindDistToNearestFromPos(obstaclesBuffer, totalObstacles, posNorm, nearestObstaclePos);
+
+//     float3 nearestTargetPos = float3(0.0, 0.0, 0.0);
+//     FindDistToNearestFromPos(targetsBuffer, totalTargets, posNorm, nearestTargetPos);
+
+//     float3 obstacleSteering = boid.pos - nearestObstaclePos;
+//     float3 avoidObstacleHeading = (nearestObstaclePos + normalize(obstacleSteering) * obstacleAversionDistance) - boid.pos;
+//     float3 targetHeading = targetWeight * normalize(nearestTargetPos - boid.pos);
+//     float nearestObstacleDistanceFromRadius = nearestObstacleDist - obstacleAversionDistance;
+
+//     float3 alignmentResult = alignmentWeight * normalize((fwd / boidsInRange) - boid.fwd);
+//     float3 separationResult = separationWeight * normalize((boid.pos * boidsInRange) - pos);
+
+//     float3 normalHeading = normalize(alignmentResult + separationResult + targetHeading);
+//     float3 targetForward = nearestObstacleDistanceFromRadius < 0.0 ? avoidObstacleHeading : normalHeading;
+//     float3 nextHeading = normalize(boid.fwd + dt * (targetForward - boid.fwd));
+
+//     boidBuffer[id.x].pos = float3(boid.pos + (nextHeading * moveSpeed * dt));
+//     boidBuffer[id.x].fwd = nextHeading;
+}
+
 
     // float3 pos = boid.pos;
     // float3 fwd = boid.fwd;
@@ -190,31 +223,3 @@ void ComputeBoids (uint3 id : SV_DispatchThreadID)
     //         boidsInRange++;
     //     }
     // }
-
-    // boids continuously dissapear otherwise, not sure where the problem is
-    pos += float3(0.0001, 0.0001, 0.0001);
-    fwd += float3(0.0001, 0.0001, 0.0001);
-
-    float3 posNorm = pos / boidsInRange;
-
-    float3 nearestObstaclePos = float3(0.0, 0.0, 0.0);
-    float nearestObstacleDist = FindDistToNearestFromPos(obstaclesBuffer, totalObstacles, posNorm, nearestObstaclePos);
-
-    float3 nearestTargetPos = float3(0.0, 0.0, 0.0);
-    FindDistToNearestFromPos(targetsBuffer, totalTargets, posNorm, nearestTargetPos);
-
-    float3 obstacleSteering = boid.pos - nearestObstaclePos;
-    float3 avoidObstacleHeading = (nearestObstaclePos + normalize(obstacleSteering) * obstacleAversionDistance) - boid.pos;
-    float3 targetHeading = targetWeight * normalize(nearestTargetPos - boid.pos);
-    float nearestObstacleDistanceFromRadius = nearestObstacleDist - obstacleAversionDistance;
-
-    float3 alignmentResult = alignmentWeight * normalize((fwd / boidsInRange) - boid.fwd);
-    float3 separationResult = separationWeight * normalize((boid.pos * boidsInRange) - pos);
-
-    float3 normalHeading = normalize(alignmentResult + separationResult + targetHeading);
-    float3 targetForward = nearestObstacleDistanceFromRadius < 0.0 ? avoidObstacleHeading : normalHeading;
-    float3 nextHeading = normalize(boid.fwd + dt * (targetForward - boid.fwd));
-
-    boidBuffer[id.x].pos = float3(boid.pos + (nextHeading * moveSpeed * dt));
-    boidBuffer[id.x].fwd = nextHeading;
-}

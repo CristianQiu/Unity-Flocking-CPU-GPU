@@ -52,12 +52,21 @@ namespace BoidsCompute
         private ComputeBuffer boidBuffer = null;
         private ComputeBuffer targetsBuffer = null;
         private ComputeBuffer obstaclesBuffer = null;
-        private ComputeBuffer zerosBuffer = null;
+
+        private ComputeBuffer zerosBufferA = null;
+        private ComputeBuffer zerosBufferB = null;
+        private ComputeBuffer zerosBufferC = null;
+        private ComputeBuffer zerosBufferD = null;
 
         private Boid[] boids = null;
         private Vector3[] targetsPos = null;
         private Vector3[] obstaclesPos = null;
-        private uint[] zeros = null;
+
+        private uint[] zerosA = null;
+        private uint[] zerosB = null;
+        private uint[] zerosC = null;
+        private uint[] zerosD = null;
+
         private int frame = 0;
 
         #endregion
@@ -77,7 +86,10 @@ namespace BoidsCompute
             BufferUpdateObstaclesAndTargetsNewPos();
             computeShader.SetFloat(dtId, Time.deltaTime);
             computeShader.SetInt(frameId, frame);
-            zerosBuffer.SetData(zeros);
+            zerosBufferA.SetData(zerosA);
+            zerosBufferB.SetData(zerosB);
+            zerosBufferC.SetData(zerosC);
+            zerosBufferD.SetData(zerosD);
 
             //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             // sw.Start();
@@ -111,13 +123,19 @@ namespace BoidsCompute
             boidBuffer?.Release();
             targetsBuffer?.Release();
             obstaclesBuffer?.Release();
-            zerosBuffer?.Release();
+            zerosBufferA?.Release();
+            zerosBufferB?.Release();
+            zerosBufferC?.Release();
+            zerosBufferD?.Release();
 
             argsBuffer = null;
             boidBuffer = null;
             targetsBuffer = null;
             obstaclesBuffer = null;
-            zerosBuffer = null;
+            zerosBufferA = null;
+            zerosBufferB = null;
+            zerosBufferC = null;
+            zerosBufferD = null;
         }
 
         #endregion
@@ -153,9 +171,16 @@ namespace BoidsCompute
             obstaclesPos = new Vector3[obstacles.Length];
             targetsPos = new Vector3[targets.Length];
 
-            zeros = new uint[numBoids];
-            for (int i = 0; i < zeros.Length; i++)
-                zeros[i] = 0;
+            // I do not know if there's a cleaner way to do this
+            // the only think I know thanks to renderdoc is that I cannot use the same array
+            zerosA = new uint[numBoids];
+            FillArrayWithZeros(zerosA);
+            zerosB = new uint[numBoids];
+            FillArrayWithZeros(zerosB);
+            zerosC = new uint[numBoids];
+            FillArrayWithZeros(zerosC);
+            zerosD = new uint[numBoids];
+            FillArrayWithZeros(zerosD);
 
             uint[] args = new uint[5];
             args[0] = (uint) boidMesh.GetIndexCount(0); //  number of triangles in the mesh multiplied by 3
@@ -164,8 +189,7 @@ namespace BoidsCompute
             args[3] = (uint) boidMesh.GetBaseVertex(0);
             args[4] = (uint) 0;
 
-            // 20: 5 (args[]) x 4 (uint size)
-            argsBuffer = new ComputeBuffer(1, 20, ComputeBufferType.IndirectArguments);
+            argsBuffer = new ComputeBuffer(1, args.Length * sizeof(uint), ComputeBufferType.IndirectArguments);
             argsBuffer.SetData(args);
 
             boidBuffer = new ComputeBuffer(numBoids, BoidStructSize);
@@ -175,18 +199,24 @@ namespace BoidsCompute
             obstaclesBuffer = new ComputeBuffer(obstacles.Length, Vector3StructSize);
             BufferUpdateObstaclesAndTargetsNewPos();
 
-            zerosBuffer = new ComputeBuffer(numBoids, 4);
-            zerosBuffer.SetData(zeros);
+            zerosBufferA = new ComputeBuffer(numBoids, sizeof(uint));
+            zerosBufferA.SetData(zerosA);
+            zerosBufferB = new ComputeBuffer(numBoids, sizeof(uint));
+            zerosBufferB.SetData(zerosB);
+            zerosBufferC = new ComputeBuffer(numBoids, sizeof(uint));
+            zerosBufferC.SetData(zerosC);
+            zerosBufferD = new ComputeBuffer(numBoids, sizeof(uint));
+            zerosBufferD.SetData(zerosD);
 
             kernel = computeShader.FindKernel("ComputeBoids");
             computeShader.SetBuffer(kernel, "boidBuffer", boidBuffer);
             computeShader.SetBuffer(kernel, "targetsBuffer", targetsBuffer);
             computeShader.SetBuffer(kernel, "obstaclesBuffer", obstaclesBuffer);
 
-            computeShader.SetBuffer(kernel, "cellCount", zerosBuffer);
-            computeShader.SetBuffer(kernel, "prefixSum", zerosBuffer);
-            computeShader.SetBuffer(kernel, "sortedCells", zerosBuffer);
-            computeShader.SetBuffer(kernel, "sortedCellsIds", zerosBuffer);
+            computeShader.SetBuffer(kernel, "cellCount", zerosBufferA);
+            computeShader.SetBuffer(kernel, "prefixSum", zerosBufferB);
+            computeShader.SetBuffer(kernel, "sortedCells", zerosBufferC);
+            computeShader.SetBuffer(kernel, "sortedCellsIds", zerosBufferD);
 
             computeShader.SetInt("totalBoids", numBoids);
             computeShader.SetInt("totalTargets", targets.Length);
@@ -216,6 +246,16 @@ namespace BoidsCompute
 
             targetsBuffer.SetData(targetsPos);
             obstaclesBuffer.SetData(obstaclesPos);
+        }
+
+        /// <summary>
+        /// Fill the given array with zeros
+        /// </summary>
+        /// <param name="arr"></param>
+        private static void FillArrayWithZeros(uint[] arr)
+        {
+            for (int i = 0; i < arr.Length; i++)
+                arr[i] = 0;
         }
 
         #endregion
