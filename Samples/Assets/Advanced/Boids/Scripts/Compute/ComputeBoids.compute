@@ -1,6 +1,4 @@
 ﻿#define THREADSX 256
-#define THREADSY 1
-#define THREADSZ 1 // < I recall reading only a certain DX version supported more than one. Can't remember if it was 11 o 12, not going to use it anyways
 
 #define MAX_FLOAT 3.402823466e+38
 #define MAX_UINT 4294967295
@@ -12,6 +10,7 @@
 #define CELL_RADIUS 3
 
 #pragma enable_d3d11_debug_symbols
+#pragma kernel PrefixSum
 #pragma kernel ComputeBoids
 
 // flocking stuff
@@ -90,9 +89,11 @@ void DoPrefixSum(uint threadId)
     // FIXME: only one thread is doing this
     if (threadId == 0)
     {
-        // WHY GODDAM ON THE *** EARTH THIS DOES NOT COPY IT !!!!!
+        // FIXME: THIS IS CAUSING ISSUES, I AM NO LONGER ABLE TO MODIFY CORRECTLY PREFIXSUM ARRAY !
+        // any way this thread is modifying this ""locally"" so other threads do not see changes?
+
         // the first one is the lowest cell number, the amount of numbers equal or lower is the cell count itself
-        prefixSum[0] == cellCount[0];
+        prefixSum[0] = cellCount[0];
 
         // now start accumulating
         for (uint i = 1; i < totalBoids; i++)
@@ -118,24 +119,15 @@ void SortCells(uint threadId, uint cellHash)
     sortedCellsIds[sortedCellIndex] = threadId;
 }
 
-/*
-    Kernels
-    References:
-    http://on-demand.gputechconf.com/gtc/2014/presentations/S4117-fast-fixed-radius-nearest-neighbor-gpu.pdf
-    https://wickedengine.net/2018/05/21/scalabe-gpu-fluid-simulation/
-*/
-[numthreads(THREADSX,THREADSY,THREADSZ)]
-void ComputeBoids (uint3 id : SV_DispatchThreadID)
+[numthreads(THREADSX, 1, 1)]
+void PrefixSum (uint3 id : SV_DispatchThreadID)
 {
-    /* I wonder what happens if I launch two dispatchs from the CPU ? Would them be sequentially executed ?
+     /* I wonder what happens if I launch two dispatchs from the CPU ? Would them be sequentially executed ?
      what about the data here, I guess the state should be saved ? */
 
-   if (id.x >= totalBoids)
+    if (id.x >= totalBoids)
         return;
 
-    /* I launched 1 threadgroup with 256 threads in X and with 32 boids it seems that 224 threads are writing a 0 as the hash
-     but if I control the id.x to be in 0-31 range there are too many same hashes in the last cell (31).
-     Why if I did break the flow with one return was still adding hashes that I do not want? */
     Boid boid = boidBuffer[id.x];
 
     // each boid belongs to a given cell
@@ -145,18 +137,47 @@ void ComputeBoids (uint3 id : SV_DispatchThreadID)
     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
     InterlockedAdd(cellCount[cellHash], 1);
 
-    // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/groupmemorybarrierwithgroupsync
     GroupMemoryBarrierWithGroupSync();
     DoPrefixSum(id.x);
+}
 
-//     GroupMemoryBarrierWithGroupSync();
-//     SortCells(id.x, cellHash);
+/*
+    Kernels
+    References:
+    http://on-demand.gputechconf.com/gtc/2014/presentations/S4117-fast-fixed-radius-nearest-neighbor-gpu.pdf
+    https://wickedengine.net/2018/05/21/scalabe-gpu-fluid-simulation/
+*/
+[numthreads(THREADSX, 1, 1)]
+void ComputeBoids (uint3 id : SV_DispatchThreadID)
+{
+    /* I wonder what happens if I launch two dispatchs from the CPU ? Would them be sequentially executed ?
+     what about the data here, I guess the state should be saved ? */
 
-//     float3 pos = float3(0.01, 0.01, 0.01);
-//     float3 fwd = float3(0.01, 0.01, 0.01);
-//     uint boidsInRange = 1;
+    if (id.x >= totalBoids)
+        return;
 
-//     GroupMemoryBarrierWithGroupSync();
+    Boid boid = boidBuffer[id.x];
+
+    // // each boid belongs to a given cell
+    // uint cellHash = HashPosToCell(boid.pos);
+
+    // // count the cells
+    // // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
+    // InterlockedAdd(cellCount[cellHash], 1);
+
+    // // this only works among same group? what if I have several groups??????????????????
+    // // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/groupmemorybarrierwithgroupsync
+    // GroupMemoryBarrierWithGroupSync();
+    // DoPrefixSum(id.x);
+
+    //GroupMemoryBarrierWithGroupSync();
+    //SortCells(id.x, cellHash);
+
+    float3 pos = float3(0.01, 0.01, 0.01);
+    float3 fwd = float3(0.01, 0.01, 0.01);
+    uint boidsInRange = 1;
+
+    GroupMemoryBarrierWithGroupSync();
 
 //     uint startIndex = prefixSum[cellHash]; // < the start index of the first cell when it is already ordered
 //     uint numBoidsInCell = cellCount[cellHash]; // < the range, lets say we have 2 2 2 3 4 5, if the cell is 2, we got 3 boids there, which we already counted
