@@ -10,7 +10,11 @@
 #define CELL_RADIUS 3
 
 #pragma enable_d3d11_debug_symbols
+
+#pragma kernel CountCells
 #pragma kernel PrefixSum
+#pragma kernel SortCells
+
 #pragma kernel ComputeBoids
 
 // flocking stuff
@@ -37,6 +41,7 @@ RWStructuredBuffer<Boid> boidBuffer;
 StructuredBuffer<float3> targetsBuffer;
 StructuredBuffer<float3> obstaclesBuffer;
 
+// globallycoherent ?
 // counting sort stuff
 RWStructuredBuffer<uint> cellCount;
 RWStructuredBuffer<uint> prefixSum;
@@ -80,51 +85,54 @@ uint HashPosToCell(float3 pos)
     return hash;
 }
 
-void DoPrefixSum(uint threadId)
-{
-    // this is "prefix sum" and can be implemented in parallel
-    // http://www.cs.ucr.edu/~nael/217-f15/lectures/217-lec12.pdf
-    // it shows an easy enough approach, which can also be enhanced to improve the work efficiency
-    // that is, all the threads have the same workload approx
-    // FIXME: only one thread is doing this
-    if (threadId == 0)
-    {
-        // FIXME: THIS IS CAUSING ISSUES, I AM NO LONGER ABLE TO MODIFY CORRECTLY PREFIXSUM ARRAY !
-        // any way this thread is modifying this ""locally"" so other threads do not see changes?
+// void DoPrefixSum(uint threadId)
+// {
+//     // this is "prefix sum" and can be implemented in parallel
+//     // http://www.cs.ucr.edu/~nael/217-f15/lectures/217-lec12.pdf
+//     // it shows an easy enough approach, which can also be enhanced to improve the work efficiency
+//     // that is, all the threads have the same workload approx
+//     // FIXME: only one thread is doing this
+//     if (threadId == 0)
+//     {
+//         // FIXME: THIS IS CAUSING ISSUES, I AM NO LONGER ABLE TO MODIFY CORRECTLY PREFIXSUM ARRAY !
+//         // any way this thread is modifying this ""locally"" so other threads do not see changes?
 
-        // the first one is the lowest cell number, the amount of numbers equal or lower is the cell count itself
-        prefixSum[0] = cellCount[0];
+//         // the first one is the lowest cell number, the amount of numbers equal or lower is the cell count itself
+//         prefixSum[0] = cellCount[0];
 
-        // now start accumulating
-        for (uint i = 1; i < totalBoids; i++)
-            prefixSum[i] = cellCount[i] + prefixSum[i - 1];
-    }
-}
+//         // now start accumulating
+//         for (uint i = 1; i < totalBoids; i++)
+//             prefixSum[i] = cellCount[i] + prefixSum[i - 1];
+//     }
+// }
+
+// /*
+//     When we finish sorting cells, prefixSum will have the the very first index of each cell number
+//     giving access to all the boids inside a cell (which should be continuously ordered)
+// */
+// void SortCells(uint threadId, uint cellHash)
+// {
+//     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
+//     uint origVal = (uint) MAX_UINT;
+//     InterlockedAdd(prefixSum[cellHash], -1, origVal);
+
+//     uint sortedCellIndex = origVal - 1;
+//     sortedCells[sortedCellIndex] = cellHash;
+
+//     // TODO: I think adding the boid info here would improve later the reads
+//     // because I do not need to track back the Id to read the boid info and the data layout is continuous
+//     sortedCellsIds[sortedCellIndex] = threadId;
+// }
 
 /*
-    When we finish sorting cells, prefixSum will have the the very first index of each cell number
-    giving access to all the boids inside a cell (which should be continuously ordered)
+    Kernels
+    References:
+    http://on-demand.gputechconf.com/gtc/2014/presentations/S4117-fast-fixed-radius-nearest-neighbor-gpu.pdf
+    https://wickedengine.net/2018/05/21/scalabe-gpu-fluid-simulation/
 */
-void SortCells(uint threadId, uint cellHash)
-{
-    // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
-    uint origVal = (uint) MAX_UINT;
-    InterlockedAdd(prefixSum[cellHash], -1, origVal);
-
-    uint sortedCellIndex = origVal - 1;
-    sortedCells[sortedCellIndex] = cellHash;
-
-    // TODO: I think adding the boid info here would improve later the reads
-    // because I do not need to track back the Id to read the boid info and the data layout is continuous
-    sortedCellsIds[sortedCellIndex] = threadId;
-}
-
 [numthreads(THREADSX, 1, 1)]
-void PrefixSum (uint3 id : SV_DispatchThreadID)
+void CountCells (uint3 id : SV_DispatchThreadID)
 {
-     /* I wonder what happens if I launch two dispatchs from the CPU ? Would them be sequentially executed ?
-     what about the data here, I guess the state should be saved ? */
-
     if (id.x >= totalBoids)
         return;
 
@@ -136,17 +144,44 @@ void PrefixSum (uint3 id : SV_DispatchThreadID)
     // count the cells
     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
     InterlockedAdd(cellCount[cellHash], 1);
-
-    GroupMemoryBarrierWithGroupSync();
-    DoPrefixSum(id.x);
 }
 
-/*
-    Kernels
-    References:
-    http://on-demand.gputechconf.com/gtc/2014/presentations/S4117-fast-fixed-radius-nearest-neighbor-gpu.pdf
-    https://wickedengine.net/2018/05/21/scalabe-gpu-fluid-simulation/
-*/
+[numthreads(THREADSX, 1, 1)]
+void PrefixSum (uint3 id : SV_DispatchThreadID)
+{
+    // this is "prefix sum" and can be implemented in parallel
+    // http://www.cs.ucr.edu/~nael/217-f15/lectures/217-lec12.pdf
+    // it shows an easy enough approach, which can also be enhanced to improve the work efficiency
+    // that is, all the threads have the same workload approx
+    // FIXME: only one thread is doing this
+    if (id.x == 0)
+    {
+        // the first one is the lowest cell number, the amount of numbers equal or lower is the cell count itself
+        prefixSum[0] = cellCount[0];
+
+        // now start accumulating
+        for (uint i = 1; i < totalBoids; i++)
+            prefixSum[i] = cellCount[i] + prefixSum[i - 1];
+    }
+}
+
+[numthreads(THREADSX, 1, 1)]
+void SortCells (uint3 id : SV_DispatchThreadID)
+{
+    Boid boid = boidBuffer[id.x];
+    uint cellHash = HashPosToCell(boid.pos);
+
+    // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
+    uint origVal = (uint) MAX_UINT;
+    InterlockedAdd(prefixSum[cellHash], -1, origVal);
+
+    uint sortedCellIndex = origVal - 1;
+    sortedCells[sortedCellIndex] = cellHash;
+
+    // TODO: I think adding the boid info here would improve later the reads because I do not need to track back the Id to read the boid info and the data layout is continuous
+    sortedCellsIds[sortedCellIndex] = id.x;
+}
+
 [numthreads(THREADSX, 1, 1)]
 void ComputeBoids (uint3 id : SV_DispatchThreadID)
 {
@@ -225,22 +260,3 @@ void ComputeBoids (uint3 id : SV_DispatchThreadID)
 //     boidBuffer[id.x].pos = float3(boid.pos + (nextHeading * moveSpeed * dt));
 //     boidBuffer[id.x].fwd = nextHeading;
 }
-
-
-    // float3 pos = boid.pos;
-    // float3 fwd = boid.fwd;
-    // uint boidsInRange = 1;
-
-    // // must replace this for
-    // for (uint i = frame; i < totalBoids; i += 2)
-    // {
-    //     Boid otherBoid = boidBuffer[i];
-
-    //     float dist = distance(boid.pos, otherBoid.pos);
-    //     if (dist <= 8.0 && i != id.x)
-    //     {
-    //         pos += otherBoid.pos;
-    //         fwd += otherBoid.fwd;
-    //         boidsInRange++;
-    //     }
-    // }

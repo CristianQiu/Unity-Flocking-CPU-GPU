@@ -48,7 +48,7 @@ namespace BoidsCompute
         private static readonly int frameId = Shader.PropertyToID("frame");
 
         private int computeBoidsKernel = -1;
-        private int prefixSumKernel = -1;
+        private int countCellsKernel = -1;
         private ComputeBuffer argsBuffer = null;
         private ComputeBuffer boidBuffer = null;
         private ComputeBuffer targetsBuffer = null;
@@ -87,6 +87,8 @@ namespace BoidsCompute
             BufferUpdateObstaclesAndTargetsNewPos();
             computeShader.SetFloat(dtId, Time.deltaTime);
             computeShader.SetInt(frameId, frame);
+
+            // DispatchIndirect ?
             zerosBufferA.SetData(zerosA);
             zerosBufferB.SetData(zerosB);
             zerosBufferC.SetData(zerosC);
@@ -96,8 +98,7 @@ namespace BoidsCompute
             // sw.Start();
             // boidBuffer.GetData(boids);
 
-            computeShader.Dispatch(prefixSumKernel, (numBoids / 256) + 1, 1, 1);
-
+            computeShader.Dispatch(countCellsKernel, (numBoids / 256) + 1, 1, 1);
             computeShader.Dispatch(computeBoidsKernel, (numBoids / 256) + 1, 1, 1);
 
             // for (int i = 0; i < 100000; i++)
@@ -126,6 +127,7 @@ namespace BoidsCompute
             boidBuffer?.Release();
             targetsBuffer?.Release();
             obstaclesBuffer?.Release();
+
             zerosBufferA?.Release();
             zerosBufferB?.Release();
             zerosBufferC?.Release();
@@ -135,6 +137,7 @@ namespace BoidsCompute
             boidBuffer = null;
             targetsBuffer = null;
             obstaclesBuffer = null;
+
             zerosBufferA = null;
             zerosBufferB = null;
             zerosBufferC = null;
@@ -211,19 +214,18 @@ namespace BoidsCompute
             zerosBufferD = new ComputeBuffer(numBoids, sizeof(uint));
             zerosBufferD.SetData(zerosD);
 
+            countCellsKernel = computeShader.FindKernel("CountCells");
             computeBoidsKernel = computeShader.FindKernel("ComputeBoids");
-            prefixSumKernel = computeShader.FindKernel("PrefixSum");
 
-            computeShader.SetBuffer(prefixSumKernel, "boidBuffer", boidBuffer);
-            computeShader.SetBuffer(prefixSumKernel, "targetsBuffer", targetsBuffer);
-            computeShader.SetBuffer(prefixSumKernel, "obstaclesBuffer", obstaclesBuffer);
+            computeShader.SetBuffer(countCellsKernel, "boidBuffer", boidBuffer);
+            computeShader.SetBuffer(countCellsKernel, "targetsBuffer", targetsBuffer);
+            computeShader.SetBuffer(countCellsKernel, "obstaclesBuffer", obstaclesBuffer);
 
-            computeShader.SetBuffer(prefixSumKernel, "cellCount", zerosBufferA);
-            computeShader.SetBuffer(prefixSumKernel, "prefixSum", zerosBufferB);
-            computeShader.SetBuffer(prefixSumKernel, "sortedCells", zerosBufferC);
-            computeShader.SetBuffer(prefixSumKernel, "sortedCellsIds", zerosBufferD);
-
-            // ---
+            //ComputeBuffer cb = new ComputeBuffer(0, 0, ComputeBufferType.)
+            computeShader.SetBuffer(countCellsKernel, "cellCount", zerosBufferA);
+            //computeShader.SetBuffer(countCellsKernel, "prefixSum", zerosBufferB);
+            //computeShader.SetBuffer(countCellsKernel, "sortedCells", zerosBufferC);
+            //computeShader.SetBuffer(countCellsKernel, "sortedCellsIds", zerosBufferD);
 
             computeShader.SetBuffer(computeBoidsKernel, "boidBuffer", boidBuffer);
             computeShader.SetBuffer(computeBoidsKernel, "targetsBuffer", targetsBuffer);
