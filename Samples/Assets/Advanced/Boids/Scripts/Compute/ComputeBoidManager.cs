@@ -53,6 +53,11 @@ namespace BoidsCompute
         private const int Vector3StructSize = 12;
 
         private static readonly int dtId = Shader.PropertyToID("dt");
+        private static readonly int separationWeightId = Shader.PropertyToID("separationWeight");
+        private static readonly int alignmentWeightId = Shader.PropertyToID("alignmentWeight");
+        private static readonly int targetWeightId = Shader.PropertyToID("targetWeight");
+        private static readonly int obstacleAversionDistanceId = Shader.PropertyToID("obstacleAversionDistance");
+        private static readonly int moveSpeedId = Shader.PropertyToID("moveSpeed");
 
         private int computeBoidsKernel = -1;
         private int computeCellsKernel = -1;
@@ -81,15 +86,9 @@ namespace BoidsCompute
 
         private void Update()
         {
-            BufferUpdateObstaclesAndTargetsNewPos();
-            computeShader.SetFloat(dtId, Time.deltaTime);
             cellsBuffer.SetData(cells);
-
-            computeShader.SetFloat("separationWeight", separationWeight);
-            computeShader.SetFloat("alignmentWeight", alignmentWeight);
-            computeShader.SetFloat("targetWeight", targetWeight);
-            computeShader.SetFloat("obstacleAversionDistance", obstacleAversionDistance);
-            computeShader.SetFloat("moveSpeed", moveSpeed);
+            BufferUpdateObstaclesAndTargetsNewPos();
+            UpdateCBufferParams();
 
             // dispatches are executed sequentially and serve as a global synchronization point, which cannot be done inside a single kernel
             // only a barrier for one thread group is allowed
@@ -192,19 +191,13 @@ namespace BoidsCompute
             computeShader.SetBuffer(computeBoidsKernel, "targetsBuffer", targetsBuffer);
             computeShader.SetBuffer(computeBoidsKernel, "obstaclesBuffer", obstaclesBuffer);
 
+            boidMat.SetBuffer("boidBuffer", boidBuffer);
+
             computeShader.SetInt("totalBoids", numBoids);
             computeShader.SetInt("totalTargets", targets.Length);
             computeShader.SetInt("totalObstacles", obstacles.Length);
 
-            computeShader.SetFloat("dt", Time.deltaTime);
-
-            computeShader.SetFloat("separationWeight", separationWeight);
-            computeShader.SetFloat("alignmentWeight", alignmentWeight);
-            computeShader.SetFloat("targetWeight", targetWeight);
-            computeShader.SetFloat("obstacleAversionDistance", obstacleAversionDistance);
-            computeShader.SetFloat("moveSpeed", moveSpeed);
-
-            boidMat.SetBuffer("boidBuffer", boidBuffer);
+            UpdateCBufferParams();
         }
 
         /// <summary>
@@ -220,6 +213,19 @@ namespace BoidsCompute
 
             targetsBuffer.SetData(targetsPos);
             obstaclesBuffer.SetData(obstaclesPos);
+        }
+
+        /// <summary>
+        /// Update the constant buffer parameters from the compute shader
+        /// </summary>
+        private void UpdateCBufferParams()
+        {
+            computeShader.SetFloat(dtId, Time.deltaTime);
+            computeShader.SetFloat(separationWeightId, separationWeight);
+            computeShader.SetFloat(alignmentWeightId, alignmentWeight);
+            computeShader.SetFloat(targetWeightId, targetWeight);
+            computeShader.SetFloat(obstacleAversionDistanceId, obstacleAversionDistance);
+            computeShader.SetFloat(moveSpeedId, moveSpeed);
         }
 
         #endregion
