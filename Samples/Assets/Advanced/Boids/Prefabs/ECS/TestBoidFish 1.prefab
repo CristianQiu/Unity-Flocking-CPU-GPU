@@ -79,10 +79,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SerializedData:
     CellRadius: 8
-    SeparationWeight: 1
+    SeparationWeight: 1.4
     AlignmentWeight: 1
     TargetWeight: 2
-    ObstacleAversionDistance: 30
+    ObstacleAversionDistance: 40
     MoveSpeed: 20
 --- !u!114 &5960292710943834345
 MonoBehaviour:

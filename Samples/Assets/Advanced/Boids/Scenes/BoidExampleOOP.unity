@@ -2037,10 +2037,10 @@ MonoBehaviour:
   radius: 75
   boidMesh: {fileID: 4300000, guid: 49a87e3402ce60f4eba9b0498164bdd5, type: 3}
   boidMat: {fileID: 2100000, guid: a775bbb190ee2594d99a10542e99e940, type: 2}
-  separationWeight: 1
+  separationWeight: 1.4
   alignmentWeight: 1
   targetWeight: 2
-  obstacleAversionDistance: 30
+  obstacleAversionDistance: 40
   moveSpeed: 25
   obstacles:
   - {fileID: 1359442719}

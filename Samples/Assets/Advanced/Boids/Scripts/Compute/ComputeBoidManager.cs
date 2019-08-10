@@ -85,6 +85,12 @@ namespace BoidsCompute
             computeShader.SetFloat(dtId, Time.deltaTime);
             cellsBuffer.SetData(cells);
 
+            computeShader.SetFloat("separationWeight", separationWeight);
+            computeShader.SetFloat("alignmentWeight", alignmentWeight);
+            computeShader.SetFloat("targetWeight", targetWeight);
+            computeShader.SetFloat("obstacleAversionDistance", obstacleAversionDistance);
+            computeShader.SetFloat("moveSpeed", moveSpeed);
+
             // dispatches are executed sequentially and serve as a global synchronization point, which cannot be done inside a single kernel
             // only a barrier for one thread group is allowed
             computeShader.Dispatch(computeCellsKernel, (numBoids / 256) + 1, 1, 1);

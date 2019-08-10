@@ -213,7 +213,7 @@ PrefabInstance:
     - target: {fileID: 5948633663735151104, guid: 20c507618b46f614cb6432bc817a31c0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 5948633663735151104, guid: 20c507618b46f614cb6432bc817a31c0,
         type: 3}
@@ -2111,7 +2111,7 @@ MonoBehaviour:
   - {fileID: 1963936519}
   obstacles:
   - {fileID: 1359442715}
-  separationWeight: 1
+  separationWeight: 1.4
   alignmentWeight: 1
   targetWeight: 2
   obstacleAversionDistance: 40
