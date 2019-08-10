@@ -3,28 +3,37 @@
 #define MAX_FLOAT 3.402823466e+38
 #define MAX_UINT 4294967295
 
+// Avoid overflow: maximum int (2.146.483.647) / maximum (expected) boids per cell / maximum world position of a boid in x y or z
+// for 100k boids per cell and 150 of abs value its about 140 (tunned down a bit for extra safety)
+// we want it to be as close as possible to the limit
+#define FLOAT_INT_POSK 130
+#define FLOAT_INT_FWDK 4200 // 4292: Similar to pos but aimed to forwards
+
 #define LARGE_PRIME1 73856093
 #define LARGE_PRIME2 19349663
 #define LARGE_PRIME3 83492791
 
-#define CELL_RADIUS 3
+#define CELL_RADIUS 8
 
+// RenderDoc needs this, otherwise it wouldn't capture anything. Praise RenderDoc for its awesomeness ! \|/
 #pragma enable_d3d11_debug_symbols
 
-#pragma kernel CountCells
-#pragma kernel PrefixSum
-#pragma kernel SortCells
-
+#pragma kernel ComputeCells
 #pragma kernel ComputeBoids
 
-// flocking stuff
 struct Boid
 {
     float3 pos;
     float3 fwd;
 };
 
-uint frame;
+struct Cell
+{
+    uint boidsInside;
+    int3 pos;
+    int3 fwd;
+};
+
 float dt;
 
 uint totalBoids;
@@ -38,19 +47,11 @@ float obstacleAversionDistance;
 float moveSpeed;
 
 RWStructuredBuffer<Boid> boidBuffer;
+RWStructuredBuffer<Cell> cellsBuffer;
+
 StructuredBuffer<float3> targetsBuffer;
 StructuredBuffer<float3> obstaclesBuffer;
 
-// globallycoherent ?
-// counting sort stuff
-RWStructuredBuffer<uint> cellCount;
-RWStructuredBuffer<uint> prefixSum;
-RWStructuredBuffer<uint> sortedCells;
-RWStructuredBuffer<uint> sortedCellsIds;
-
-/*
-    Flocking functions
-*/
 float FindDistToNearestFromPos(StructuredBuffer<float3> interestPoints, uint totalInterestPoints, float3 fromPos, out float3 interestPointPos)
 {
     float dist = MAX_FLOAT;
@@ -70,9 +71,6 @@ float FindDistToNearestFromPos(StructuredBuffer<float3> interestPoints, uint tot
     return dist;
 }
 
-/*
-    Counting sort functions
-*/
 uint HashPosToCell(float3 pos)
 {
     int3 floored = (int3) (floor(pos / (float) CELL_RADIUS));
@@ -85,178 +83,86 @@ uint HashPosToCell(float3 pos)
     return hash;
 }
 
-// void DoPrefixSum(uint threadId)
-// {
-//     // this is "prefix sum" and can be implemented in parallel
-//     // http://www.cs.ucr.edu/~nael/217-f15/lectures/217-lec12.pdf
-//     // it shows an easy enough approach, which can also be enhanced to improve the work efficiency
-//     // that is, all the threads have the same workload approx
-//     // FIXME: only one thread is doing this
-//     if (threadId == 0)
-//     {
-//         // FIXME: THIS IS CAUSING ISSUES, I AM NO LONGER ABLE TO MODIFY CORRECTLY PREFIXSUM ARRAY !
-//         // any way this thread is modifying this ""locally"" so other threads do not see changes?
-
-//         // the first one is the lowest cell number, the amount of numbers equal or lower is the cell count itself
-//         prefixSum[0] = cellCount[0];
-
-//         // now start accumulating
-//         for (uint i = 1; i < totalBoids; i++)
-//             prefixSum[i] = cellCount[i] + prefixSum[i - 1];
-//     }
-// }
-
-// /*
-//     When we finish sorting cells, prefixSum will have the the very first index of each cell number
-//     giving access to all the boids inside a cell (which should be continuously ordered)
-// */
-// void SortCells(uint threadId, uint cellHash)
-// {
-//     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
-//     uint origVal = (uint) MAX_UINT;
-//     InterlockedAdd(prefixSum[cellHash], -1, origVal);
-
-//     uint sortedCellIndex = origVal - 1;
-//     sortedCells[sortedCellIndex] = cellHash;
-
-//     // TODO: I think adding the boid info here would improve later the reads
-//     // because I do not need to track back the Id to read the boid info and the data layout is continuous
-//     sortedCellsIds[sortedCellIndex] = threadId;
-// }
-
-/*
-    Kernels
-    References:
-    http://on-demand.gputechconf.com/gtc/2014/presentations/S4117-fast-fixed-radius-nearest-neighbor-gpu.pdf
-    https://wickedengine.net/2018/05/21/scalabe-gpu-fluid-simulation/
-*/
 [numthreads(THREADSX, 1, 1)]
-void CountCells (uint3 id : SV_DispatchThreadID)
+void ComputeCells (uint3 id : SV_DispatchThreadID)
 {
+    // too many threads running for the number of boids
     if (id.x >= totalBoids)
         return;
 
     Boid boid = boidBuffer[id.x];
-
-    // each boid belongs to a given cell
     uint cellHash = HashPosToCell(boid.pos);
 
-    // count the cells
+    int posX = round(boid.pos.x * (float) FLOAT_INT_POSK);
+    int posY = round(boid.pos.y * (float) FLOAT_INT_POSK);
+    int posZ = round(boid.pos.z * (float) FLOAT_INT_POSK);
+
+    int fwdX = round(boid.fwd.x * (float) FLOAT_INT_FWDK);
+    int fwdY = round(boid.fwd.y * (float) FLOAT_INT_FWDK);
+    int fwdZ = round(boid.fwd.z * (float) FLOAT_INT_FWDK);
+
+    // We store accumulated pos, fwds and boids for each given cell
+
+    // InterlockedAdd only supports uint or int, which is why we convert floats to ints
     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
-    InterlockedAdd(cellCount[cellHash], 1);
-}
+    InterlockedAdd(cellsBuffer[cellHash].boidsInside, 1);
 
-[numthreads(THREADSX, 1, 1)]
-void PrefixSum (uint3 id : SV_DispatchThreadID)
-{
-    // this is "prefix sum" and can be implemented in parallel
-    // http://www.cs.ucr.edu/~nael/217-f15/lectures/217-lec12.pdf
-    // it shows an easy enough approach, which can also be enhanced to improve the work efficiency
-    // that is, all the threads have the same workload approx
-    // FIXME: only one thread is doing this
-    if (id.x == 0)
-    {
-        // the first one is the lowest cell number, the amount of numbers equal or lower is the cell count itself
-        prefixSum[0] = cellCount[0];
+    // don't know if isolated ints would be more performant than grouped ones in int3
+    // there's most likely no difference at all but I haven't tested it
+    InterlockedAdd(cellsBuffer[cellHash].pos.x, posX);
+    InterlockedAdd(cellsBuffer[cellHash].pos.y, posY);
+    InterlockedAdd(cellsBuffer[cellHash].pos.z, posZ);
 
-        // now start accumulating
-        for (uint i = 1; i < totalBoids; i++)
-            prefixSum[i] = cellCount[i] + prefixSum[i - 1];
-    }
-}
-
-[numthreads(THREADSX, 1, 1)]
-void SortCells (uint3 id : SV_DispatchThreadID)
-{
-    Boid boid = boidBuffer[id.x];
-    uint cellHash = HashPosToCell(boid.pos);
-
-    // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
-    uint origVal = (uint) MAX_UINT;
-    InterlockedAdd(prefixSum[cellHash], -1, origVal);
-
-    uint sortedCellIndex = origVal - 1;
-    sortedCells[sortedCellIndex] = cellHash;
-
-    // TODO: I think adding the boid info here would improve later the reads because I do not need to track back the Id to read the boid info and the data layout is continuous
-    sortedCellsIds[sortedCellIndex] = id.x;
+    InterlockedAdd(cellsBuffer[cellHash].fwd.x, fwdX);
+    InterlockedAdd(cellsBuffer[cellHash].fwd.y, fwdY);
+    InterlockedAdd(cellsBuffer[cellHash].fwd.z, fwdZ);
 }
 
 [numthreads(THREADSX, 1, 1)]
 void ComputeBoids (uint3 id : SV_DispatchThreadID)
 {
-    /* I wonder what happens if I launch two dispatchs from the CPU ? Would them be sequentially executed ?
-     what about the data here, I guess the state should be saved ? */
-
     if (id.x >= totalBoids)
         return;
 
     Boid boid = boidBuffer[id.x];
 
-    // // each boid belongs to a given cell
-    // uint cellHash = HashPosToCell(boid.pos);
+    // could actually store it on first kernel but does not look like a heavy operation
+    uint cellHash = HashPosToCell(boid.pos);
 
-    // // count the cells
-    // // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
-    // InterlockedAdd(cellCount[cellHash], 1);
+    // convert back to float
+    float posX = (float) cellsBuffer[cellHash].pos.x / (float) FLOAT_INT_POSK;
+    float posY = (float) cellsBuffer[cellHash].pos.y / (float) FLOAT_INT_POSK;
+    float posZ = (float) cellsBuffer[cellHash].pos.z / (float) FLOAT_INT_POSK;
 
-    // // this only works among same group? what if I have several groups??????????????????
-    // // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/groupmemorybarrierwithgroupsync
-    // GroupMemoryBarrierWithGroupSync();
-    // DoPrefixSum(id.x);
+    float fwdX = (float) cellsBuffer[cellHash].fwd.x / (float) FLOAT_INT_FWDK;
+    float fwdY = (float) cellsBuffer[cellHash].fwd.y / (float) FLOAT_INT_FWDK;
+    float fwdZ = (float) cellsBuffer[cellHash].fwd.z / (float) FLOAT_INT_FWDK;
 
-    //GroupMemoryBarrierWithGroupSync();
-    //SortCells(id.x, cellHash);
+    float3 pos = float3(posX, posY, posZ);
+    float3 fwd = float3(fwdX, fwdY, fwdZ);
+    uint boidsInRange = cellsBuffer[cellHash].boidsInside;
 
-    float3 pos = float3(0.01, 0.01, 0.01);
-    float3 fwd = float3(0.01, 0.01, 0.01);
-    uint boidsInRange = 1;
+    // translated code from C# and Unity's implementation
+    float3 posNorm = pos / (float) boidsInRange;
 
-    GroupMemoryBarrierWithGroupSync();
+    float3 nearestObstaclePos = float3(0.0, 0.0, 0.0);
+    float nearestObstacleDist = FindDistToNearestFromPos(obstaclesBuffer, totalObstacles, posNorm, nearestObstaclePos);
 
-//     uint startIndex = prefixSum[cellHash]; // < the start index of the first cell when it is already ordered
-//     uint numBoidsInCell = cellCount[cellHash]; // < the range, lets say we have 2 2 2 3 4 5, if the cell is 2, we got 3 boids there, which we already counted
-//     uint endIndex = startIndex + numBoidsInCell;
+    float3 nearestTargetPos = float3(0.0, 0.0, 0.0);
+    FindDistToNearestFromPos(targetsBuffer, totalTargets, posNorm, nearestTargetPos);
 
-//     if (startIndex >= totalBoids || endIndex >= totalBoids)
-//         return;
+    float3 obstacleSteering = boid.pos - nearestObstaclePos;
+    float3 avoidObstacleHeading = (nearestObstaclePos + normalize(obstacleSteering) * obstacleAversionDistance) - boid.pos;
+    float3 targetHeading = targetWeight * normalize(nearestTargetPos - boid.pos);
+    float nearestObstacleDistanceFromRadius = nearestObstacleDist - obstacleAversionDistance;
 
-//     // this is iterating over one cell, which maps to the code implemented in C#
-//     // we could find the 27 adjacent ones calculating and hashing the new position ?
-//     for (uint i = startIndex; i <= endIndex; i++)
-//     {
-//         uint boidIndex = sortedCellsIds[i];
-//         Boid otherBoid = boidBuffer[boidIndex];
+    float3 alignmentResult = alignmentWeight * normalize((fwd / boidsInRange) - boid.fwd);
+    float3 separationResult = separationWeight * normalize((boid.pos * boidsInRange) - pos);
 
-//         pos += otherBoid.pos;
-//         fwd += otherBoid.fwd;
-//         boidsInRange++;
-//     }
+    float3 normalHeading = normalize(alignmentResult + separationResult + targetHeading);
+    float3 targetForward = nearestObstacleDistanceFromRadius < 0.0 ? avoidObstacleHeading : normalHeading;
+    float3 nextHeading = normalize(boid.fwd + dt * (targetForward - boid.fwd));
 
-//     // boids continuously dissapear otherwise, not sure where the problem is
-//     pos += float3(0.0001, 0.0001, 0.0001);
-//     fwd += float3(0.0001, 0.0001, 0.0001);
-
-//     float3 posNorm = pos / boidsInRange;
-
-//     float3 nearestObstaclePos = float3(0.0, 0.0, 0.0);
-//     float nearestObstacleDist = FindDistToNearestFromPos(obstaclesBuffer, totalObstacles, posNorm, nearestObstaclePos);
-
-//     float3 nearestTargetPos = float3(0.0, 0.0, 0.0);
-//     FindDistToNearestFromPos(targetsBuffer, totalTargets, posNorm, nearestTargetPos);
-
-//     float3 obstacleSteering = boid.pos - nearestObstaclePos;
-//     float3 avoidObstacleHeading = (nearestObstaclePos + normalize(obstacleSteering) * obstacleAversionDistance) - boid.pos;
-//     float3 targetHeading = targetWeight * normalize(nearestTargetPos - boid.pos);
-//     float nearestObstacleDistanceFromRadius = nearestObstacleDist - obstacleAversionDistance;
-
-//     float3 alignmentResult = alignmentWeight * normalize((fwd / boidsInRange) - boid.fwd);
-//     float3 separationResult = separationWeight * normalize((boid.pos * boidsInRange) - pos);
-
-//     float3 normalHeading = normalize(alignmentResult + separationResult + targetHeading);
-//     float3 targetForward = nearestObstacleDistanceFromRadius < 0.0 ? avoidObstacleHeading : normalHeading;
-//     float3 nextHeading = normalize(boid.fwd + dt * (targetForward - boid.fwd));
-
-//     boidBuffer[id.x].pos = float3(boid.pos + (nextHeading * moveSpeed * dt));
-//     boidBuffer[id.x].fwd = nextHeading;
+    boidBuffer[id.x].pos = float3(boid.pos + (nextHeading * moveSpeed * dt));
+    boidBuffer[id.x].fwd = nextHeading;
 }

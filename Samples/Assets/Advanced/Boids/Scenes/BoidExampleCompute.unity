@@ -2103,7 +2103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boidMesh: {fileID: 4300000, guid: 49a87e3402ce60f4eba9b0498164bdd5, type: 3}
   boidMat: {fileID: 2100000, guid: a775bbb190ee2594d99a10542e99e940, type: 2}
-  numBoids: 512
+  numBoids: 800000
   radius: 75
   spawnPoint: {fileID: 893754152}
   targets:
@@ -2114,7 +2114,7 @@ MonoBehaviour:
   separationWeight: 1
   alignmentWeight: 1
   targetWeight: 2
-  obstacleAversionDistance: 30
+  obstacleAversionDistance: 80
   moveSpeed: 25
   computeShader: {fileID: 7200000, guid: 990f7fb8d0a61024f85f2c2a67ac8bcc, type: 3}
 --- !u!4 &730865970

@@ -12,6 +12,13 @@ namespace BoidsCompute
             public Vector3 fwd;
         }
 
+        private struct Cell
+        {
+            public int boidsInside;
+            public Vector3Int pos;
+            public Vector3Int fwd;
+        }
+
         #endregion
 
         #region Public Attributes
@@ -42,33 +49,24 @@ namespace BoidsCompute
         #region Private Attributes
 
         private const int BoidStructSize = 24;
+        private const int CellStructSize = 28;
         private const int Vector3StructSize = 12;
 
         private static readonly int dtId = Shader.PropertyToID("dt");
-        private static readonly int frameId = Shader.PropertyToID("frame");
 
         private int computeBoidsKernel = -1;
-        private int countCellsKernel = -1;
+        private int computeCellsKernel = -1;
+
         private ComputeBuffer argsBuffer = null;
         private ComputeBuffer boidBuffer = null;
+        private ComputeBuffer cellsBuffer = null;
         private ComputeBuffer targetsBuffer = null;
         private ComputeBuffer obstaclesBuffer = null;
 
-        private ComputeBuffer zerosBufferA = null;
-        private ComputeBuffer zerosBufferB = null;
-        private ComputeBuffer zerosBufferC = null;
-        private ComputeBuffer zerosBufferD = null;
-
         private Boid[] boids = null;
+        private Cell[] cells = null;
         private Vector3[] targetsPos = null;
         private Vector3[] obstaclesPos = null;
-
-        private uint[] zerosA = null;
-        private uint[] zerosB = null;
-        private uint[] zerosC = null;
-        private uint[] zerosD = null;
-
-        private int frame = 0;
 
         #endregion
 
@@ -77,28 +75,22 @@ namespace BoidsCompute
         private void Start()
         {
             SpawnBoids();
+            CreateCells();
             SetupCompute();
         }
 
         private void Update()
         {
-            frame %= 2;
-
             BufferUpdateObstaclesAndTargetsNewPos();
             computeShader.SetFloat(dtId, Time.deltaTime);
-            computeShader.SetInt(frameId, frame);
 
-            // DispatchIndirect ?
-            zerosBufferA.SetData(zerosA);
-            zerosBufferB.SetData(zerosB);
-            zerosBufferC.SetData(zerosC);
-            zerosBufferD.SetData(zerosD);
-
-            //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            // System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             // sw.Start();
             // boidBuffer.GetData(boids);
 
-            computeShader.Dispatch(countCellsKernel, (numBoids / 256) + 1, 1, 1);
+            cellsBuffer.SetData(cells);
+
+            computeShader.Dispatch(computeCellsKernel, (numBoids / 256) + 1, 1, 1);
             computeShader.Dispatch(computeBoidsKernel, (numBoids / 256) + 1, 1, 1);
 
             // for (int i = 0; i < 100000; i++)
@@ -117,31 +109,15 @@ namespace BoidsCompute
             // https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html
             Graphics.DrawMeshInstancedIndirect(boidMesh, 0, boidMat, new Bounds(transform.position, Vector3.one * 100.0f), argsBuffer,
                 0, null, UnityEngine.Rendering.ShadowCastingMode.Off, false);
-
-            frame++;
         }
 
         private void OnDestroy()
         {
             argsBuffer?.Release();
             boidBuffer?.Release();
+            cellsBuffer?.Release();
             targetsBuffer?.Release();
             obstaclesBuffer?.Release();
-
-            zerosBufferA?.Release();
-            zerosBufferB?.Release();
-            zerosBufferC?.Release();
-            zerosBufferD?.Release();
-
-            argsBuffer = null;
-            boidBuffer = null;
-            targetsBuffer = null;
-            obstaclesBuffer = null;
-
-            zerosBufferA = null;
-            zerosBufferB = null;
-            zerosBufferC = null;
-            zerosBufferD = null;
         }
 
         #endregion
@@ -170,23 +146,30 @@ namespace BoidsCompute
         }
 
         /// <summary>
+        /// Create the cells array
+        /// </summary>
+        private void CreateCells()
+        {
+            cells = new Cell[numBoids];
+
+            for (int i = 0; i < numBoids; i++)
+            {
+                cells[i] = new Cell
+                {
+                    boidsInside = 0,
+                    pos = Vector3Int.zero,
+                    fwd = Vector3Int.zero,
+                };
+            }
+        }
+
+        /// <summary>
         /// Set up compute shader related stuff
         /// </summary>
         private void SetupCompute()
         {
             obstaclesPos = new Vector3[obstacles.Length];
             targetsPos = new Vector3[targets.Length];
-
-            // I do not know if there's a cleaner way to do this
-            // the only think I know thanks to renderdoc is that I cannot use the same array
-            zerosA = new uint[numBoids];
-            FillArrayWithZeros(zerosA);
-            zerosB = new uint[numBoids];
-            FillArrayWithZeros(zerosB);
-            zerosC = new uint[numBoids];
-            FillArrayWithZeros(zerosC);
-            zerosD = new uint[numBoids];
-            FillArrayWithZeros(zerosD);
 
             uint[] args = new uint[5];
             args[0] = (uint) boidMesh.GetIndexCount(0); //  number of triangles in the mesh multiplied by 3
@@ -198,6 +181,9 @@ namespace BoidsCompute
             argsBuffer = new ComputeBuffer(1, args.Length * sizeof(uint), ComputeBufferType.IndirectArguments);
             argsBuffer.SetData(args);
 
+            cellsBuffer = new ComputeBuffer(numBoids, CellStructSize);
+            cellsBuffer.SetData(cells);
+
             boidBuffer = new ComputeBuffer(numBoids, BoidStructSize);
             boidBuffer.SetData(boids);
 
@@ -205,36 +191,16 @@ namespace BoidsCompute
             obstaclesBuffer = new ComputeBuffer(obstacles.Length, Vector3StructSize);
             BufferUpdateObstaclesAndTargetsNewPos();
 
-            zerosBufferA = new ComputeBuffer(numBoids, sizeof(uint));
-            zerosBufferA.SetData(zerosA);
-            zerosBufferB = new ComputeBuffer(numBoids, sizeof(uint));
-            zerosBufferB.SetData(zerosB);
-            zerosBufferC = new ComputeBuffer(numBoids, sizeof(uint));
-            zerosBufferC.SetData(zerosC);
-            zerosBufferD = new ComputeBuffer(numBoids, sizeof(uint));
-            zerosBufferD.SetData(zerosD);
-
-            countCellsKernel = computeShader.FindKernel("CountCells");
+            computeCellsKernel = computeShader.FindKernel("ComputeCells");
             computeBoidsKernel = computeShader.FindKernel("ComputeBoids");
 
-            computeShader.SetBuffer(countCellsKernel, "boidBuffer", boidBuffer);
-            computeShader.SetBuffer(countCellsKernel, "targetsBuffer", targetsBuffer);
-            computeShader.SetBuffer(countCellsKernel, "obstaclesBuffer", obstaclesBuffer);
-
-            //ComputeBuffer cb = new ComputeBuffer(0, 0, ComputeBufferType.)
-            computeShader.SetBuffer(countCellsKernel, "cellCount", zerosBufferA);
-            //computeShader.SetBuffer(countCellsKernel, "prefixSum", zerosBufferB);
-            //computeShader.SetBuffer(countCellsKernel, "sortedCells", zerosBufferC);
-            //computeShader.SetBuffer(countCellsKernel, "sortedCellsIds", zerosBufferD);
+            computeShader.SetBuffer(computeCellsKernel, "boidBuffer", boidBuffer);
+            computeShader.SetBuffer(computeCellsKernel, "cellsBuffer", cellsBuffer);
 
             computeShader.SetBuffer(computeBoidsKernel, "boidBuffer", boidBuffer);
+            computeShader.SetBuffer(computeBoidsKernel, "cellsBuffer", cellsBuffer);
             computeShader.SetBuffer(computeBoidsKernel, "targetsBuffer", targetsBuffer);
             computeShader.SetBuffer(computeBoidsKernel, "obstaclesBuffer", obstaclesBuffer);
-
-            computeShader.SetBuffer(computeBoidsKernel, "cellCount", zerosBufferA);
-            computeShader.SetBuffer(computeBoidsKernel, "prefixSum", zerosBufferB);
-            computeShader.SetBuffer(computeBoidsKernel, "sortedCells", zerosBufferC);
-            computeShader.SetBuffer(computeBoidsKernel, "sortedCellsIds", zerosBufferD);
 
             computeShader.SetInt("totalBoids", numBoids);
             computeShader.SetInt("totalTargets", targets.Length);
@@ -264,16 +230,6 @@ namespace BoidsCompute
 
             targetsBuffer.SetData(targetsPos);
             obstaclesBuffer.SetData(obstaclesPos);
-        }
-
-        /// <summary>
-        /// Fill the given array with zeros
-        /// </summary>
-        /// <param name="arr"></param>
-        private static void FillArrayWithZeros(uint[] arr)
-        {
-            for (int i = 0; i < arr.Length; i++)
-                arr[i] = 0;
         }
 
         #endregion
