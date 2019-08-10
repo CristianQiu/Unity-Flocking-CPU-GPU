@@ -13,10 +13,10 @@
 #define LARGE_PRIME2 19349663
 #define LARGE_PRIME3 83492791
 
-#define CELL_RADIUS 8
+#define CELL_RADIUS 3
 
 // RenderDoc needs this, otherwise it wouldn't capture anything. Praise RenderDoc for its awesomeness ! \|/
-#pragma enable_d3d11_debug_symbols
+//#pragma enable_d3d11_debug_symbols
 
 #pragma kernel ComputeCells
 #pragma kernel ComputeBoids
@@ -102,7 +102,6 @@ void ComputeCells (uint3 id : SV_DispatchThreadID)
     int fwdZ = round(boid.fwd.z * (float) FLOAT_INT_FWDK);
 
     // We store accumulated pos, fwds and boids for each given cell
-
     // InterlockedAdd only supports uint or int, which is why we convert floats to ints
     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
     InterlockedAdd(cellsBuffer[cellHash].boidsInside, 1);

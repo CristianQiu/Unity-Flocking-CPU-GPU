@@ -83,31 +83,15 @@ namespace BoidsCompute
         {
             BufferUpdateObstaclesAndTargetsNewPos();
             computeShader.SetFloat(dtId, Time.deltaTime);
-
-            // System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            // sw.Start();
-            // boidBuffer.GetData(boids);
-
             cellsBuffer.SetData(cells);
 
+            // dispatches are executed sequentially and serve as a global synchronization point, which cannot be done inside a single kernel
+            // only a barrier for one thread group is allowed
             computeShader.Dispatch(computeCellsKernel, (numBoids / 256) + 1, 1, 1);
             computeShader.Dispatch(computeBoidsKernel, (numBoids / 256) + 1, 1, 1);
 
-            // for (int i = 0; i < 100000; i++)
-            // {
-            //     // some random maths
-            //     Vector3 a = Vector3.up;
-            //     Vector3 b = Vector3.forward;
-            //     Vector3 cross = Vector3.Cross(a, b);
-
-            //     float dot = Vector3.Dot(a, b);
-            //     dot = Vector3.Dot(a, cross);
-            // }
-
-            // Debug.Log("mselapsed" + sw.ElapsedMilliseconds);
-
             // https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html
-            Graphics.DrawMeshInstancedIndirect(boidMesh, 0, boidMat, new Bounds(transform.position, Vector3.one * 100.0f), argsBuffer,
+            Graphics.DrawMeshInstancedIndirect(boidMesh, 0, boidMat, new Bounds(transform.position, Vector3.one * 150.0f), argsBuffer,
                 0, null, UnityEngine.Rendering.ShadowCastingMode.Off, false);
         }
 
