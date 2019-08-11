@@ -54,16 +54,9 @@ Shader "Custom/Wiggle"
 		float _Amount;
 		float _Distance;
 
-        #ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
-       	StructuredBuffer<Boid> boidBuffer;
-        #endif
-
-        UNITY_INSTANCING_BUFFER_START (FishInstanceProperties)
-            UNITY_DEFINE_INSTANCED_PROP (float, _InstanceCycleOffset)
-
-#define _InstanceCycleOffset_arr FishInstanceProperties
-
-        UNITY_INSTANCING_BUFFER_END(FishInstanceProperties)
+#ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
+        StructuredBuffer<Boid> boidBuffer;
+#endif
 
         // look at matrix https://i.stack.imgur.com/LV0gi.png (column major)
         float4x4 lookAtMatrix(float3 target, float3 eye, float3 up)
@@ -88,11 +81,11 @@ Shader "Custom/Wiggle"
 
 		void vert(inout appdata_full v)
 		{
-            // Unity left the "wiggle" cycle offset prepared but afaik they don't actually use it
-			float cycleOffset = UNITY_ACCESS_INSTANCED_PROP(_InstanceCycleOffset_arr, _InstanceCycleOffset);
-			float4 offs = sin((cycleOffset + _Time.y) * _TimeScale + v.vertex.z * _Amount) * _Distance;
+            float4 offs = float4(0.0, 0.0, 0.0, 0.0);
 
-            #ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
+#ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
+            // IDK how to pass an array of randomized, different offsets from the CPU so just use the instance
+			offs = sin((unity_InstanceID + _Time.y) * _TimeScale + v.vertex.z * _Amount) * _Distance;
 
             // from where +
             float3 pos = boidBuffer[unity_InstanceID].pos;
@@ -103,21 +96,30 @@ Shader "Custom/Wiggle"
             float4x4 lookAt = lookAtMatrix(target, pos, float3(0.0, 1.0, 0.0));
        		v.vertex = mul(lookAt, v.vertex);
             v.vertex.xyz += pos.xyz;
-
-            #endif
+#else
+			offs = sin((_Time.y) * _TimeScale + v.vertex.z * _Amount) * _Distance;
+#endif
 
 			v.vertex.x += offs;
 		}
 
 		void surf (Input IN, inout SurfaceOutputStandard o)
 		{
-			fixed4 c = tex2D (_MainTex, IN.uv_MainTex);
+            fixed4 c = tex2D (_MainTex, IN.uv_MainTex);
 			fixed4 g = tex2D (_Gloss, IN.uv_MainTex);
-			fixed4 tintColour = tex2D (_Tints, float2(UNITY_ACCESS_INSTANCED_PROP(_InstanceCycleOffset_arr, _InstanceCycleOffset), 0));
-			o.Albedo = lerp(c.rgb, c.rgb * tintColour, c.a) * _Color;
+
+            fixed4 tintColour = tex2D (_Tints, float2(0.0, 0.0));
+
+#ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
+            int id = unity_InstanceID;
+            while (id >= 1.0)
+                id /= 10.0;
+
+            tintColour = tex2D (_Tints, float2(id, 0.0));
+#endif
+       	    o.Albedo = lerp(c.rgb, c.rgb * tintColour, c.a) * _Color;
 			o.Metallic =  _Metallic;
 			o.Smoothness = g.a * _Glossiness;
-			//o.Alpha = c.a;
 		}
 		ENDCG
 	}
