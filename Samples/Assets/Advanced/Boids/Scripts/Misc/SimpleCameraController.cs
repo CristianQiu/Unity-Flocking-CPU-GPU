@@ -90,6 +90,12 @@ namespace UnityTemplateProjects
         [Tooltip("Whether or not to invert our Y axis for mouse input to rotation.")]
         public bool invertY = false;
 
+        void Awake()
+        {
+            m_TargetCameraState.SetDefaults(transform.position, transform.eulerAngles);
+            m_InterpolatingCameraState.SetDefaults(transform.position, transform.eulerAngles);
+        }
+
         void OnEnable()
         {
             m_TargetCameraState.SetFromTransform(transform);
