@@ -80,6 +80,9 @@ namespace BoidsCompute
 
         private void Start()
         {
+            if (numBoids <= 0)
+                return;
+
             SpawnBoids();
             CreateCells();
             SetupCompute();
