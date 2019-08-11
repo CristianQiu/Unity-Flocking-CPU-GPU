@@ -13,6 +13,26 @@ namespace UnityTemplateProjects
             public float y;
             public float z;
 
+            private Vector3 defaultPos;
+            private Vector3 defaultEulers;
+
+            public void Reset()
+            {
+                yaw = defaultEulers.y;
+                pitch = defaultEulers.x;
+                roll = defaultEulers.z;
+
+                x = defaultPos.x;
+                y = defaultPos.y;
+                z = defaultPos.z;
+            }
+
+            public void SetDefaults(Vector3 defaultPos, Vector3 defaultEulers)
+            {
+                this.defaultPos = defaultPos;
+                this.defaultEulers = defaultEulers;
+            }
+
             public void SetFromTransform(Transform t)
             {
                 pitch = t.eulerAngles.x;
@@ -108,6 +128,17 @@ namespace UnityTemplateProjects
 
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                m_InterpolatingCameraState.Reset();
+                m_TargetCameraState.Reset();
+
+                m_InterpolatingCameraState.UpdateTransform(transform);
+                m_TargetCameraState.UpdateTransform(transform);
+
+                return;
+            }
+
             // Exit Sample
             if (Input.GetKey(KeyCode.Escape))
             {
