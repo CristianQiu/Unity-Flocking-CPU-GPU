@@ -13,7 +13,7 @@
 #define LARGE_PRIME2 19349663
 #define LARGE_PRIME3 83492791
 
-#define CELL_RADIUS 3
+#define CELL_RADIUS 8
 
 // RenderDoc needs this, otherwise it wouldn't capture anything. Praise RenderDoc for its awesomeness ! \|/
 //#pragma enable_d3d11_debug_symbols

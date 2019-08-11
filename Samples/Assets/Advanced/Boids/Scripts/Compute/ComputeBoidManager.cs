@@ -51,6 +51,7 @@ namespace BoidsCompute
         private const int BoidStructSize = 24;
         private const int CellStructSize = 28;
         private const int Vector3StructSize = 12;
+        private static readonly Vector3 GraphicsIndirectBounds = new Vector3(1000.0f, 1000.0f, 1000.0f);
 
         private static readonly int dtId = Shader.PropertyToID("dt");
         private static readonly int separationWeightId = Shader.PropertyToID("separationWeight");
@@ -86,17 +87,22 @@ namespace BoidsCompute
 
         private void Update()
         {
+            if (numBoids <= 0)
+                return;
+
             cellsBuffer.SetData(cells);
             BufferUpdateObstaclesAndTargetsNewPos();
             UpdateCBufferParams();
 
-            // dispatches are executed sequentially and serve as a global synchronization point, which cannot be done inside a single kernel
-            // only a barrier for one thread group is allowed
-            computeShader.Dispatch(computeCellsKernel, (numBoids / 256) + 1, 1, 1);
-            computeShader.Dispatch(computeBoidsKernel, (numBoids / 256) + 1, 1, 1);
+            // if the number of boids is a power of two we do not need 1 group more
+            int threadsX = (numBoids / 256);
+            threadsX = (IsPowerOfTwo(numBoids) && threadsX > 0) ? threadsX : threadsX + 1;
+
+            computeShader.Dispatch(computeCellsKernel, threadsX, 1, 1);
+            computeShader.Dispatch(computeBoidsKernel, threadsX, 1, 1);
 
             // https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html
-            Graphics.DrawMeshInstancedIndirect(boidMesh, 0, boidMat, new Bounds(transform.position, Vector3.one * 150.0f), argsBuffer,
+            Graphics.DrawMeshInstancedIndirect(boidMesh, 0, boidMat, new Bounds(transform.position, GraphicsIndirectBounds), argsBuffer,
                 0, null, UnityEngine.Rendering.ShadowCastingMode.Off, false);
         }
 
@@ -112,6 +118,21 @@ namespace BoidsCompute
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Get whether an integer is power of 2
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        private static bool IsPowerOfTwo(int num)
+        {
+            float numF = (float) num;
+
+            while (numF > 1.0f)
+                numF /= 2.0f;
+
+            return numF == 1.0f;
+        }
 
         /// <summary>
         /// Spawn the boids

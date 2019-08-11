@@ -94,7 +94,7 @@ public class UnderwaterDistortTween : MonoBehaviour
             }
 
             SetLens(newIntensity, newCenterX, newCenterY);
-            
+
             if (perc < 1.0f)
                 yield return null;
             else

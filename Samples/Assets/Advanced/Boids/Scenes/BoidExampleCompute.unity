@@ -213,7 +213,7 @@ PrefabInstance:
     - target: {fileID: 5948633663735151104, guid: 20c507618b46f614cb6432bc817a31c0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -7
       objectReference: {fileID: 0}
     - target: {fileID: 5948633663735151104, guid: 20c507618b46f614cb6432bc817a31c0,
         type: 3}
@@ -254,6 +254,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5948633663735151105, guid: 20c507618b46f614cb6432bc817a31c0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20c507618b46f614cb6432bc817a31c0, type: 3}
@@ -2103,8 +2108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boidMesh: {fileID: 4300000, guid: 49a87e3402ce60f4eba9b0498164bdd5, type: 3}
   boidMat: {fileID: 2100000, guid: a775bbb190ee2594d99a10542e99e940, type: 2}
-  numBoids: 262144
-  radius: 30
+  numBoids: 131072
+  radius: 75
   spawnPoint: {fileID: 893754152}
   targets:
   - {fileID: 1132870165}
@@ -2115,7 +2120,7 @@ MonoBehaviour:
   alignmentWeight: 1
   targetWeight: 2
   obstacleAversionDistance: 40
-  moveSpeed: 25
+  moveSpeed: 20
   computeShader: {fileID: 7200000, guid: 990f7fb8d0a61024f85f2c2a67ac8bcc, type: 3}
 --- !u!4 &730865970
 Transform:

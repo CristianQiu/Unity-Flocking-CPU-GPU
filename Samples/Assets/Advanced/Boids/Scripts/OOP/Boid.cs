@@ -7,7 +7,7 @@ namespace BoidsOOP
     {
         #region Private attributes
 
-        private static float CellRadius = 8.0f;
+        private const float CellRadius = 8.0f;
 
         private int outerBatchesIndex = -1;
         private int innerBatchIndex = -1;
