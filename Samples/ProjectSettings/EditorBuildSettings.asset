@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Advanced/Boids/Scenes/BoidExampleCompute.unity
     guid: a2b00b9782003974a9d4045be59a3367
+  - enabled: 1
+    path: Assets/Advanced/Boids/Scenes/BoidExampleECS.unity
+    guid: d5f3505c0b377452db53363d84547627
+  - enabled: 1
+    path: Assets/Advanced/Boids/Scenes/BoidExampleHybrid.unity
+    guid: 62e7f1d226ceef749b81784376bf0245
+  - enabled: 1
+    path: Assets/Advanced/Boids/Scenes/BoidExampleOOP.unity
+    guid: 6bc9575962c804248a66fdf9f0739b0b
   m_configObjects: {}

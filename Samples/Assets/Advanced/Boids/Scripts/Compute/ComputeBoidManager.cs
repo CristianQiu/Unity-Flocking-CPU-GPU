@@ -51,6 +51,7 @@ namespace BoidsCompute
         private const int BoidStructSize = 24;
         private const int CellStructSize = 28;
         private const int Vector3StructSize = 12;
+        private const int ThreadGroupX = 256;
         private static readonly Vector3 GraphicsIndirectBounds = new Vector3(1000.0f, 1000.0f, 1000.0f);
 
         private static readonly int dtId = Shader.PropertyToID("dt");
@@ -97,9 +98,10 @@ namespace BoidsCompute
             BufferUpdateObstaclesAndTargetsNewPos();
             UpdateCBufferParams();
 
-            // if the number of boids is a power of two we do not need 1 group more
-            int threadsX = (numBoids / 256);
-            threadsX = (IsPowerOfTwo(numBoids) && threadsX > 0) ? threadsX : threadsX + 1;
+            int threadsX = numBoids / ThreadGroupX;
+            float rest = numBoids % ThreadGroupX;
+
+            threadsX = rest == 0.0f ? threadsX : threadsX + 1;
 
             computeShader.Dispatch(computeCellsKernel, threadsX, 1, 1);
             computeShader.Dispatch(computeBoidsKernel, threadsX, 1, 1);
