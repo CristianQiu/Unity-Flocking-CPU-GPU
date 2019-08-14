@@ -84,6 +84,9 @@ namespace BoidsCompute
             if (numBoids <= 0)
                 return;
 
+            if (BenchmarkSystem.Instance.IsBenchmarkRunning)
+                numBoids = BenchmarkSystem.Instance.numberOfBoids;
+
             SpawnBoids();
             CreateCells();
             SetupCompute();
