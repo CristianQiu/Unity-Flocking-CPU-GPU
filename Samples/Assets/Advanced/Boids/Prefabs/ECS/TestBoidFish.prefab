@@ -83,7 +83,7 @@ MonoBehaviour:
     AlignmentWeight: 1
     TargetWeight: 2
     ObstacleAversionDistance: 40
-    MoveSpeed: 25
+    MoveSpeed: 20
 --- !u!114 &4485290777275828651
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,16 +10,14 @@ public abstract class SceneBenchmark
     protected const float Frequency = 4.0f;
     protected const float SampleInterval = 1.0f / Frequency;
 
-    protected bool isRunning = false;
-    protected float timePassedSinceBenchmarkStart = 0.0f;
-    protected float ignoredFirstSeconds;
-    protected float duration;
+    private bool isRunning = false;
+    private float timePassedSinceBenchmarkStart = 0.0f;
+    private float ignoredFirstSeconds;
+    private float duration;
 
-    protected int frame = 0;
-    protected float averageFps = 0.0f;
-    protected float accumFps = 0.0f;
-
-    protected Stopwatch sw = new Stopwatch();
+    private int frames = 0;
+    private float averageFps = 0.0f;
+    private float accumFps = 0.0f;
 
     #endregion
 
@@ -50,12 +48,13 @@ public abstract class SceneBenchmark
     /// <summary>
     /// Start the benchmarking
     /// </summary>
-    public virtual void StartBenchmark()
+    public virtual void StartBenchmark(bool doLoadScene)
     {
-        SceneManager.LoadScene(AssociatedSceneName, LoadSceneMode.Single);
+        if (doLoadScene)
+            SceneManager.LoadScene(AssociatedSceneName, LoadSceneMode.Single);
+
         ResetBenchmarkData();
         isRunning = true;
-        sw.Start();
     }
 
     /// <summary>
@@ -78,13 +77,13 @@ public abstract class SceneBenchmark
         if (timePassedSinceBenchmarkStart < ignoredFirstSeconds)
             return;
 
+        frames++;
         float frameFps = 1.0f / dt;
         accumFps += frameFps;
-        frame++;
-        averageFps = accumFps / frame;
-        Debug.Log("stopwatch0 " + frame / ((sw.ElapsedMilliseconds / 1000.0f) / frame));
-        // Debug.Log("avg " + averageFps);
-        // Debug.Log("time.time " + Time.frameCount / Time.timeSinceLevelLoad);
+        averageFps = accumFps / frames;
+
+        float avgRounded = (float) System.Math.Round(averageFps, 2);
+        BenchmarkSystem.Instance.AvgFPS = avgRounded + " avg FPS";
     }
 
     /// <summary>
@@ -93,7 +92,6 @@ public abstract class SceneBenchmark
     /// <param name="doResetData"></param>
     public virtual void ForceEndBenchmark(bool doResetData)
     {
-        sw.Stop();
         isRunning = false;
 
         if (doResetData)
@@ -106,18 +104,19 @@ public abstract class SceneBenchmark
     public virtual void ResetBenchmarkData()
     {
         timePassedSinceBenchmarkStart = 0.0f;
-        frame = 0;
+        frames = 0;
         averageFps = 0.0f;
         accumFps = 0.0f;
-        sw.Reset();
     }
+
+    private class Math {}
 
     #endregion
 }
 
 public abstract class OOPSceneBenchmark : SceneBenchmark
 {
-    private const string sceneName = "BoidExampleOOP";
+    protected const string sceneName = "BoidExampleOOP";
 
     public OOPSceneBenchmark(float duration, float ignoredFirstSeconds) : base(duration, ignoredFirstSeconds)
     {
@@ -134,6 +133,12 @@ public class OOPSTSceneBenchmark : OOPSceneBenchmark
 
     }
 
+    public override void StartBenchmark(bool doLoadScene)
+    {
+        base.StartBenchmark(doLoadScene);
+        BenchmarkSystem.Instance.SceneTitle = sceneName + " Single thread";
+    }
+
     public override SceneBenchmarkType SceneBenchType { get { return SceneBenchmarkType.OOPST; } }
     public override SceneBenchmarkType NextSceneBenchType { get { return SceneBenchmarkType.OOPMT; } }
 }
@@ -145,23 +150,37 @@ public class OOPMTSceneBenchmark : OOPSceneBenchmark
 
     }
 
+    public override void StartBenchmark(bool doLoadScene)
+    {
+        base.StartBenchmark(doLoadScene);
+        BenchmarkSystem.Instance.SceneTitle = sceneName + " Multithread";
+    }
+
     public override SceneBenchmarkType SceneBenchType { get { return SceneBenchmarkType.OOPMT; } }
-    public override SceneBenchmarkType NextSceneBenchType { get { return SceneBenchmarkType.ECS; } }
+    //public override SceneBenchmarkType NextSceneBenchType { get { return SceneBenchmarkType.ECS; } }
+    public override SceneBenchmarkType NextSceneBenchType { get { return SceneBenchmarkType.Compute; } }
 }
 
 public class ECSSceneBenchmark : SceneBenchmark
 {
-    private const string sceneName = "BoidExampleECS";
+    private const string sceneName = "BENCHMARK_ECS";
 
     public ECSSceneBenchmark(float duration, float ignoredFirstSeconds) : base(duration, ignoredFirstSeconds)
     {
 
     }
 
+    public override void StartBenchmark(bool doLoadScene)
+    {
+        base.StartBenchmark(doLoadScene);
+        BenchmarkSystem.Instance.SceneTitle = sceneName;
+    }
+
     public override string AssociatedSceneName { get { return sceneName; } }
 
     public override SceneBenchmarkType SceneBenchType { get { return SceneBenchmarkType.ECS; } }
-    public override SceneBenchmarkType NextSceneBenchType { get { return SceneBenchmarkType.Compute; } }
+    //public override SceneBenchmarkType NextSceneBenchType { get { return SceneBenchmarkType.Compute; } }
+    public override SceneBenchmarkType NextSceneBenchType { get { return SceneBenchmarkType.Invalid; } }
 }
 
 public class ComputeSceneBenchmark : SceneBenchmark
@@ -171,6 +190,12 @@ public class ComputeSceneBenchmark : SceneBenchmark
     public ComputeSceneBenchmark(float duration, float ignoredFirstSeconds) : base(duration, ignoredFirstSeconds)
     {
 
+    }
+
+    public override void StartBenchmark(bool doLoadScene)
+    {
+        base.StartBenchmark(doLoadScene);
+        BenchmarkSystem.Instance.SceneTitle = sceneName;
     }
 
     public override string AssociatedSceneName { get { return sceneName; } }

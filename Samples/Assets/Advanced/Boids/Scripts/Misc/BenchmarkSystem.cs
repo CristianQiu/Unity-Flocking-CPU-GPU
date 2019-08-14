@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using TMPro;
 
 public enum SceneBenchmarkType
 {
@@ -6,7 +7,7 @@ public enum SceneBenchmarkType
 
     OOPST,
     OOPMT,
-    ECS,
+    ECS, // < ECS is giving me errors due to scene loads so may do it in a isolated benchmark...
     Compute,
 
     Count
@@ -17,25 +18,74 @@ public class BenchmarkSystem : MonoBehaviourSingleton<BenchmarkSystem>
     #region Public Attributes
 
     [Header("Parameters")]
-    public int numberOfBoids = 4096;
-    public float timePerSceneInSeconds = 60.0f;
-    public float ignoreSecondsAfterSceneLoad = 3.0f;
+    public int numberOfBoids = 8192;
+    public float timePerSceneInSeconds = 32.0f;
+    public float ignoreSecondsAfterSceneLoad = 2.0f;
+
+    [Header("Text labels")]
+    public TextMeshProUGUI sceneTitle = null;
+    public TextMeshProUGUI currNumBoids = null;
+    public TextMeshProUGUI avgFPS = null;
+    public UnityEngine.UI.Text numBoids = null;
+
+    [Header("ECS benchmark exclusive")]
+    public SpawnRandomInSphereProxy spawner1;
+    public SpawnRandomInSphereProxy spawner2;
 
     #endregion
 
     #region Private Attributes
 
+    public string SceneTitle { set { sceneTitle.text = value; } }
+    public string AvgFPS { set { avgFPS.text = value; } }
+
     private readonly SceneBenchmark[] benchmarks = new SceneBenchmark[(int) SceneBenchmarkType.Count];
     private SceneBenchmark currRunningBenchmark = null;
 
-    protected override bool DestroyOnLoad { get { return false; } }
-
     #endregion
+
+    public bool IsBenchmarkRunning { get { return currRunningBenchmark != null && !currRunningBenchmark.IsDone; } }
+    public SceneBenchmark CurrRunningBenchmark
+    {
+        get { return currRunningBenchmark; }
+        set { currRunningBenchmark = value; }
+    }
+    protected override bool DestroyOnLoad { get { return false; } }
 
     #region MonoBehaviour Methods
 
+    private void Start()
+    {
+        // lazy but fast way to control this: ECS scene gave me issues when swapping scenes, so if we're in the standalone version of the ECS benchmark, launch the benchmark as soon as it starts...
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("BENCHMARK_ECS"))
+        {
+            int spawned = spawner1.Value.count + spawner2.Value.count;
+            currNumBoids.text = spawned.ToString();
+            CreateBenchmarks();
+            currRunningBenchmark = benchmarks[(int) SceneBenchmarkType.ECS];
+            benchmarks[(int) SceneBenchmarkType.ECS].StartBenchmark(false);
+        }
+    }
+
     private void Update()
     {
+        // kind of ugly but: someone provoked singleton to automatically instantiate itself but if we did not launch from the benchmark scene we do not want it
+        if (sceneTitle == null || currNumBoids == null || avgFPS == null || numBoids == null)
+            return;
+
+        string s = numBoids.text;
+        bool okNumBoids = int.TryParse(s, out numberOfBoids);
+
+        if (Input.GetKeyDown(KeyCode.Space) && okNumBoids)
+        {
+            currNumBoids.text = numBoids.text;
+            currRunningBenchmark?.ForceEndBenchmark(false);
+            currRunningBenchmark = null;
+            CreateBenchmarks();
+            currRunningBenchmark = benchmarks[0];
+            benchmarks[0].StartBenchmark(true);
+        }
+
         if (currRunningBenchmark == null)
             return;
 
@@ -46,9 +96,12 @@ public class BenchmarkSystem : MonoBehaviourSingleton<BenchmarkSystem>
         if (currRunningBenchmark.IsDone)
         {
             int nextBench = (int) currRunningBenchmark.NextSceneBenchType;
-            currRunningBenchmark = benchmarks[nextBench];
 
-            currRunningBenchmark.StartBenchmark();
+            if (nextBench < benchmarks.Length && currRunningBenchmark.NextSceneBenchType != SceneBenchmarkType.Invalid)
+            {
+                currRunningBenchmark = benchmarks[nextBench];
+                currRunningBenchmark.StartBenchmark(true);
+            }
         }
     }
 
@@ -71,6 +124,8 @@ public class BenchmarkSystem : MonoBehaviourSingleton<BenchmarkSystem>
             Application.targetFrameRate = int.MaxValue;
             QualitySettings.vSyncCount = 0;
         }
+
+        currNumBoids.text = numberOfBoids.ToString();
 
         return didInitAgain;
     }
@@ -102,16 +157,6 @@ public class BenchmarkSystem : MonoBehaviourSingleton<BenchmarkSystem>
 
             benchmarks[i] = bench;
         }
-    }
-
-    /// <summary>
-    /// Called when the user clicks the button to start the benchmark
-    /// </summary>
-    public void OnClickStartBenchmarkButton()
-    {
-        CreateBenchmarks();
-        currRunningBenchmark = benchmarks[0];
-        benchmarks[0].StartBenchmark();
     }
 
     #endregion

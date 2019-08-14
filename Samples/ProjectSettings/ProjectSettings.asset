@@ -552,6 +552,7 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend:
     PS4: 1
+    Standalone: 1
   il2cppCompilerConfiguration: {}
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}

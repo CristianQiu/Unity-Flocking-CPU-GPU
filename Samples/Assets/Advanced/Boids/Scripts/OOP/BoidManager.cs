@@ -65,6 +65,13 @@ namespace BoidsOOP
 
         private void Start()
         {
+            if (BenchmarkSystem.Instance.IsBenchmarkRunning)
+            {
+                numBoidsSpawned = BenchmarkSystem.Instance.numberOfBoids;
+                SceneBenchmarkType sbt = BenchmarkSystem.Instance.CurrRunningBenchmark.SceneBenchType;
+                runMode = sbt == SceneBenchmarkType.OOPMT ? RunMode.MultiThread : RunMode.SingleThread;
+            }
+
             CreateMatrices();
             SpawnBoids();
             parallelAddToDictFunc = ParallelAddToDict;
@@ -101,6 +108,9 @@ namespace BoidsOOP
 
         private void OnGUI()
         {
+            if (BenchmarkSystem.Instance.IsBenchmarkRunning)
+                return;
+
             switch (runMode)
             {
                 case RunMode.SingleThread:
