@@ -109,8 +109,6 @@ public abstract class SceneBenchmark
         accumFps = 0.0f;
     }
 
-    private class Math {}
-
     #endregion
 }
 
