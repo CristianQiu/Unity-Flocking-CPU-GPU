@@ -109,6 +109,12 @@ namespace BoidsCompute
             computeShader.Dispatch(computeCellsKernel, threadsX, 1, 1);
             computeShader.Dispatch(computeBoidsKernel, threadsX, 1, 1);
 
+            // for (int i = 0; i < 500000; i++)
+            // {
+            //     Vector3 a = Vector3.one;
+            //     Vector3 b = a * 2;
+            // }
+
             // https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html
             Graphics.DrawMeshInstancedIndirect(boidMesh, 0, boidMat, new Bounds(transform.position, GraphicsIndirectBounds), argsBuffer,
                 0, null, UnityEngine.Rendering.ShadowCastingMode.Off, false);

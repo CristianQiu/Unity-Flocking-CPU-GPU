@@ -116,6 +116,9 @@ public class BenchmarkSystem : MonoBehaviourSingleton<BenchmarkSystem>
     /// <returns></returns>
     protected override bool Init(bool force)
     {
+        if (sceneTitle == null || currNumBoids == null || avgFPS == null || numBoids == null)
+            return false;
+
         // if already initialized and not force won't init again
         bool didInitAgain = base.Init(force);
 

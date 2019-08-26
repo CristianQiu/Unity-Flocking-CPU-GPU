@@ -2113,7 +2113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boidMesh: {fileID: 4300000, guid: 49a87e3402ce60f4eba9b0498164bdd5, type: 3}
   boidMat: {fileID: 2100000, guid: a775bbb190ee2594d99a10542e99e940, type: 2}
-  numBoids: 131072
+  numBoids: 262144
   radius: 75
   spawnPoint: {fileID: 893754152}
   targets:
