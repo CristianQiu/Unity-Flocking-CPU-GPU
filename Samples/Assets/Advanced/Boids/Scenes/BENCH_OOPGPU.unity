@@ -2658,7 +2658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 1792781045}
-  numBoidsSpawned: 1024
+  numBoidsSpawned: 4096
   radius: 75
   boidMesh: {fileID: 4300000, guid: 49a87e3402ce60f4eba9b0498164bdd5, type: 3}
   boidMat: {fileID: 2100000, guid: a775bbb190ee2594d99a10542e99e940, type: 2}
