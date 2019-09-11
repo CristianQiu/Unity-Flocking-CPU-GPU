@@ -54,12 +54,12 @@ namespace BoidsCompute
         private const int ThreadGroupX = 256;
         private static readonly Vector3 GraphicsIndirectBounds = new Vector3(1000.0f, 1000.0f, 1000.0f);
 
-        private static readonly int dtId = Shader.PropertyToID("dt");
-        private static readonly int separationWeightId = Shader.PropertyToID("separationWeight");
-        private static readonly int alignmentWeightId = Shader.PropertyToID("alignmentWeight");
-        private static readonly int targetWeightId = Shader.PropertyToID("targetWeight");
-        private static readonly int obstacleAversionDistanceId = Shader.PropertyToID("obstacleAversionDistance");
-        private static readonly int moveSpeedId = Shader.PropertyToID("moveSpeed");
+        private static readonly int DtId = Shader.PropertyToID("dt");
+        private static readonly int SeparationWeightId = Shader.PropertyToID("separationWeight");
+        private static readonly int AlignmentWeightId = Shader.PropertyToID("alignmentWeight");
+        private static readonly int TargetWeightId = Shader.PropertyToID("targetWeight");
+        private static readonly int ObstacleAversionDistanceId = Shader.PropertyToID("obstacleAversionDistance");
+        private static readonly int MoveSpeedId = Shader.PropertyToID("moveSpeed");
 
         private int computeBoidsKernel = -1;
         private int computeCellsKernel = -1;
@@ -109,12 +109,6 @@ namespace BoidsCompute
             computeShader.Dispatch(computeCellsKernel, threadsX, 1, 1);
             computeShader.Dispatch(computeBoidsKernel, threadsX, 1, 1);
 
-            // for (int i = 0; i < 500000; i++)
-            // {
-            //     Vector3 a = Vector3.one;
-            //     Vector3 b = a * 2;
-            // }
-
             // https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html
             Graphics.DrawMeshInstancedIndirect(boidMesh, 0, boidMat, new Bounds(transform.position, GraphicsIndirectBounds), argsBuffer,
                 0, null, UnityEngine.Rendering.ShadowCastingMode.Off, false);
@@ -132,21 +126,6 @@ namespace BoidsCompute
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Get whether an integer is power of 2
-        /// </summary>
-        /// <param name="num"></param>
-        /// <returns></returns>
-        private static bool IsPowerOfTwo(int num)
-        {
-            float numF = (float) num;
-
-            while (numF > 1.0f)
-                numF /= 2.0f;
-
-            return numF == 1.0f;
-        }
 
         /// <summary>
         /// Spawn the boids
@@ -198,7 +177,7 @@ namespace BoidsCompute
             uint[] args = new uint[5];
             args[0] = (uint) boidMesh.GetIndexCount(0); //  number of triangles in the mesh multiplied by 3
             args[1] = (uint) numBoids;
-            args[2] = (uint) boidMesh.GetIndexStart(0); // last 3 are offsets
+            args[2] = (uint) boidMesh.GetIndexStart(0);
             args[3] = (uint) boidMesh.GetBaseVertex(0);
             args[4] = (uint) 0;
 
@@ -255,12 +234,12 @@ namespace BoidsCompute
         /// </summary>
         private void UpdateCBufferParams()
         {
-            computeShader.SetFloat(dtId, Time.deltaTime);
-            computeShader.SetFloat(separationWeightId, separationWeight);
-            computeShader.SetFloat(alignmentWeightId, alignmentWeight);
-            computeShader.SetFloat(targetWeightId, targetWeight);
-            computeShader.SetFloat(obstacleAversionDistanceId, obstacleAversionDistance);
-            computeShader.SetFloat(moveSpeedId, moveSpeed);
+            computeShader.SetFloat(DtId, Time.deltaTime);
+            computeShader.SetFloat(SeparationWeightId, separationWeight);
+            computeShader.SetFloat(AlignmentWeightId, alignmentWeight);
+            computeShader.SetFloat(TargetWeightId, targetWeight);
+            computeShader.SetFloat(ObstacleAversionDistanceId, obstacleAversionDistance);
+            computeShader.SetFloat(MoveSpeedId, moveSpeed);
         }
 
         #endregion

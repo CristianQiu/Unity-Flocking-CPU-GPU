@@ -103,15 +103,11 @@ namespace Samples.Boids
             {
                 var position = cellSeparation[index] / cellCount[index];
 
-                int obstaclePositionIndex;
-                float obstacleDistance;
-                NearestPosition(obstaclePositions, position, out obstaclePositionIndex, out obstacleDistance);
+                NearestPosition(obstaclePositions, position, out int obstaclePositionIndex, out float obstacleDistance);
                 cellObstaclePositionIndex[index] = obstaclePositionIndex;
                 cellObstacleDistance[index] = obstacleDistance;
 
-                int targetPositionIndex;
-                float targetDistance;
-                NearestPosition(targetPositions, position, out targetPositionIndex, out targetDistance);
+                NearestPosition(targetPositions, position, out int targetPositionIndex, out float targetDistance);
                 cellTargetPositionIndex[index] = targetPositionIndex;
 
                 cellIndices[index] = index;
@@ -157,11 +153,15 @@ namespace Samples.Boids
                 var nearestTargetPosition = targetPositions[nearestTargetPositionIndex];
 
                 var obstacleSteering = currentPosition - nearestObstaclePosition;
-                var avoidObstacleHeading = (nearestObstaclePosition + math.normalizesafe(obstacleSteering) * settings.ObstacleAversionDistance) - currentPosition;
-                var targetHeading = settings.TargetWeight * math.normalizesafe(nearestTargetPosition - currentPosition);
                 var nearestObstacleDistanceFromRadius = nearestObstacleDistance - settings.ObstacleAversionDistance;
+                var avoidObstacleHeading = (nearestObstaclePosition + math.normalizesafe(obstacleSteering) *
+                    settings.ObstacleAversionDistance) - currentPosition;
+
+                var targetHeading = settings.TargetWeight * math.normalizesafe(nearestTargetPosition - currentPosition);
+
                 var alignmentResult = settings.AlignmentWeight * math.normalizesafe((alignment / neighborCount) - forward);
                 var separationResult = settings.SeparationWeight * math.normalizesafe((currentPosition * neighborCount) - separation);
+
                 var normalHeading = math.normalizesafe(alignmentResult + separationResult + targetHeading);
                 var targetForward = math.select(normalHeading, avoidObstacleHeading, nearestObstacleDistanceFromRadius < 0);
                 var nextHeading = math.normalizesafe(forward + dt * (targetForward - forward));
@@ -343,18 +343,30 @@ namespace Samples.Boids
         {
             m_BoidGroup = GetComponentGroup(new EntityArchetypeQuery
             {
-                All = new [] { ComponentType.ReadOnly<Boid>(), ComponentType.ReadWrite<LocalToWorld>() },
+                All = new []
+                    {
+                        ComponentType.ReadOnly<Boid>(),
+                            ComponentType.ReadWrite<LocalToWorld>()
+                    },
                     Options = EntityArchetypeQueryOptions.FilterWriteGroup
             });
 
             m_TargetGroup = GetComponentGroup(new EntityArchetypeQuery
             {
-                All = new [] { ComponentType.ReadOnly<BoidTarget>(), ComponentType.ReadOnly<LocalToWorld>() },
+                All = new []
+                {
+                    ComponentType.ReadOnly<BoidTarget>(),
+                        ComponentType.ReadOnly<LocalToWorld>()
+                },
             });
 
             m_ObstacleGroup = GetComponentGroup(new EntityArchetypeQuery
             {
-                All = new [] { ComponentType.ReadOnly<BoidObstacle>(), ComponentType.ReadOnly<LocalToWorld>() },
+                All = new []
+                {
+                    ComponentType.ReadOnly<BoidObstacle>(),
+                        ComponentType.ReadOnly<LocalToWorld>()
+                },
             });
         }
     }

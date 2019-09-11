@@ -78,7 +78,7 @@ public class UnderwaterDistortTween : MonoBehaviour
             float newCenterY = 0.0f;
 
             // it could be a lot more randomized for each different cycle, and independant interpolations too
-            // but anyways, the effect is not even going to be noticed so I don't care
+            // but anyways, the effect is not even going to be noticed for the current purpose of the project so I don't care
             switch (state)
             {
                 case TweenState.Up:

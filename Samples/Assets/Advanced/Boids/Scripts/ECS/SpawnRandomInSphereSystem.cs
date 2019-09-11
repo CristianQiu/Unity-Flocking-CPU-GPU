@@ -99,16 +99,16 @@ namespace Samples.Common
                 int spawnerIndex = spawnInstances[spawnIndex].spawnerIndex;
                 var spawner = uniqueTypes[spawnerIndex];
                 int count = spawner.count;
-                var entities = new NativeArray<Entity>(count, Allocator.Temp);
                 var prefab = spawner.prefab;
                 float radius = spawner.radius;
-                var spawnPositions = new NativeArray<float3>(count, Allocator.TempJob);
                 float3 center = spawnInstances[spawnIndex].position;
                 var sourceEntity = spawnInstances[spawnIndex].sourceEntity;
 
-                // prepare the positions to spawn the fishes
-                GeneratePoints.RandomPointsInUnitSphere(spawnPositions);
+                var spawnPositions = new NativeArray<float3>(count, Allocator.TempJob);
+                var entities = new NativeArray<Entity>(count, Allocator.Temp);
 
+                // prepare the positions to spawn the fishes and instantiate them
+                GeneratePoints.RandomPointsInUnitSphere(spawnPositions);
                 EntityManager.Instantiate(prefab, entities);
 
                 for (int i = 0; i < count; i++)
@@ -116,6 +116,8 @@ namespace Samples.Common
                     // set the fishes entities data
                     EntityManager.SetComponentData(entities[i], new LocalToWorld
                     {
+                        // the center is the spawner GameObject center
+                        // radius is the sphere radius
                         Value = float4x4.TRS(
                             center + (spawnPositions[i] * radius),
                             quaternion.LookRotationSafe(spawnPositions[i], math.up()),
@@ -123,7 +125,7 @@ namespace Samples.Common
                     });
                 }
 
-                // guess since the system does not need it anymore, we can just get rid of it
+                // the system does not need it anymore, get rid of it
                 EntityManager.RemoveComponent<SpawnRandomInSphere>(sourceEntity);
 
                 spawnPositions.Dispose();

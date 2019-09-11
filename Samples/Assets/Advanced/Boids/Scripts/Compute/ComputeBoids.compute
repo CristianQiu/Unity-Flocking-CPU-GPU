@@ -106,8 +106,6 @@ void ComputeCells (uint3 id : SV_DispatchThreadID)
     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
     InterlockedAdd(cellsBuffer[cellHash].boidsInside, 1);
 
-    // don't know if isolated ints would be more performant than grouped ones in int3
-    // there's most likely no difference at all but I haven't tested it
     InterlockedAdd(cellsBuffer[cellHash].pos.x, posX);
     InterlockedAdd(cellsBuffer[cellHash].pos.y, posY);
     InterlockedAdd(cellsBuffer[cellHash].pos.z, posZ);

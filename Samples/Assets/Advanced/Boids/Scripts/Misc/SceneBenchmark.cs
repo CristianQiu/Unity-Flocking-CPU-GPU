@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using UnityEngine.SceneManagement;
-using Debug = UnityEngine.Debug;
-using RunMode = BoidsOOP.BoidManager.RunMode;
+﻿using UnityEngine.SceneManagement;
 
 public abstract class SceneBenchmark
 {

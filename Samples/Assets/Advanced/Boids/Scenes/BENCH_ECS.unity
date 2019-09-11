@@ -1125,7 +1125,7 @@ MonoBehaviour:
   m_SerializedData:
     prefab: {fileID: 1501737747371270, guid: 3a6f4469994b24240b1e5ebd9ce22aab, type: 3}
     radius: 75
-    count: 45000
+    count: 262144
 --- !u!114 &335197935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2289,7 +2289,7 @@ MonoBehaviour:
   m_SerializedData:
     prefab: {fileID: 1501737747371270, guid: 009834b439a0e455b843299085c2fbff, type: 3}
     radius: 75
-    count: 45000
+    count: 262144
 --- !u!114 &614494513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6503,7 +6503,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfBoids: 4096
-  timePerSceneInSeconds: 62
+  timePerSceneInSeconds: 22
   ignoreSecondsAfterSceneLoad: 2
   sceneTitle: {fileID: 1110667124}
   currNumBoids: {fileID: 1240780813}

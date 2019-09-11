@@ -7,7 +7,7 @@ public enum SceneBenchmarkType
 
     OOPST,
     OOPMT,
-    ECS, // < ECS is giving me errors due to scene loads so may do it in a isolated benchmark...
+    ECS, // < ECS is giving me errors due to scene loads so will do it in a isolated benchmark
     Compute,
 
     Count
@@ -56,8 +56,8 @@ public class BenchmarkSystem : MonoBehaviourSingleton<BenchmarkSystem>
 
     private void Start()
     {
-        // lazy but fast way to control this: ECS scene gave me issues when swapping scenes, so if we're in the standalone version of the ECS benchmark, launch the benchmark as soon as it starts...
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("BENCHMARK_ECS"))
+        // lazy but fast way to control this: ECS scene gave me issues when swapping scenes, so if we're in the standalone version of the ECS benchmark, launch the benchmark as soon as it starts
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("BENCH_ECS"))
         {
             int spawned = spawner1.Value.count + spawner2.Value.count;
             currNumBoids.text = spawned.ToString();
@@ -69,7 +69,7 @@ public class BenchmarkSystem : MonoBehaviourSingleton<BenchmarkSystem>
 
     private void Update()
     {
-        // kind of ugly but: someone provoked singleton to automatically instantiate itself but if we did not launch from the benchmark scene we do not want it
+        // someone provoked singleton to automatically instantiate itself but if we did not launch from the benchmark scene we do not want it
         if (sceneTitle == null || currNumBoids == null || avgFPS == null || numBoids == null)
             return;
 
@@ -119,7 +119,7 @@ public class BenchmarkSystem : MonoBehaviourSingleton<BenchmarkSystem>
         if (sceneTitle == null || currNumBoids == null || avgFPS == null || numBoids == null)
             return false;
 
-        // if already initialized and not force won't init again
+        // if already initialized and not forced won't init again
         bool didInitAgain = base.Init(force);
 
         if (didInitAgain)

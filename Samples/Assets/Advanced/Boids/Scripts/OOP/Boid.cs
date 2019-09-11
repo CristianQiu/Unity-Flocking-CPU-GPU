@@ -70,7 +70,7 @@ namespace BoidsOOP
             float3 floatPos = new float3(pos.x, pos.y, pos.z);
 
             // https://github.com/Unity-Technologies/Unity.Mathematics/blob/master/src/Unity.Mathematics/int3.gen.cs
-            // implementation at line 1478
+            // implementation at line 1478?
             // found this too, older? https://forum.unity.com/threads/question-about-mike-actons-boids-example.586963/
 
             // this is from the mathematics unity library, I do not know how they do the hash atm so just let's use the same

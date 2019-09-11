@@ -1,5 +1,3 @@
-// Upgrade NOTE: upgraded instancing buffer 'FishInstanceProperties' to new syntax.
-
 Shader "Custom/Wiggle"
 {
 	Properties
@@ -27,8 +25,6 @@ Shader "Custom/Wiggle"
 		#pragma multi_compile_instancing
 
         // https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html
-        // idk if I really need this, but is the only way I've found to be able to access unity_InstanceID in the vertex shader
-        // trying to find info from hidden unity shader utilities, macros, etc, is so painful
         #pragma instancing_options procedural:setup
 
 		sampler2D _MainTex;
@@ -73,7 +69,7 @@ Shader "Custom/Wiggle"
             );
         }
 
-        // this belongs to the pragma instancing_options setup function defined, see comment above
+        // this belongs to the pragma instancing_options setup function defined
 		void setup()
         {
 
@@ -84,8 +80,7 @@ Shader "Custom/Wiggle"
             float4 offs = float4(0.0, 0.0, 0.0, 0.0);
 
 #ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
-            // IDK how to pass an array of randomized, different offsets from the CPU so just use the instance
-			offs = sin((unity_InstanceID + _Time.y) * _TimeScale + v.vertex.z * _Amount) * _Distance;
+            offs = sin((unity_InstanceID + _Time.y) * _TimeScale + v.vertex.z * _Amount) * _Distance;
 
             // from where +
             float3 pos = boidBuffer[unity_InstanceID].pos;

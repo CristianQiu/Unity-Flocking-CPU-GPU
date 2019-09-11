@@ -128,32 +128,6 @@ namespace BoidsOOP
 
         #region Methods
 
-        /*
-
-        Other approach idea, but a bit too different to compare it directly to the ECS version IMO.
-        Current implementation is as close as I can get to replicate the algorithms in OOP.
-
-        First frame:
-        Have a dictionary for the hashed cells (could even implement my own like in Compute).
-        Iterate over the boids: calculate the hash and start accumulating the cell information in the dictionary (pos, fwd, number of boids).
-
-        Other frames:
-        Iterate over the boids: get the hash again, read the dictionary cell data and compute flocking.
-        Hash again each boid at the same time (after) the new position is computed, accumulating the cell data.
-        Use a second dictionary and alternate each frame to use one or another.
-        Clear the one no longer needed at the end of the frame.
-
-        If I implemented my own dictionary I could clear it on the fly (still need two): each time a boid reads a cell,
-        decrease a replica of the number of boids inside (other boids may still be reading)
-        when it reaches 0 no other boid needs it, so just reset pos and fwd.
-
-        I could add a list with the indices that are occuppied, but this is probably not worth too much or even at all.
-        If reading linearly is (say x3 x4) faster then I can have 3 or 4 spots empty and still be as fast as directly accessing occuppied indices.
-
-        I'm almost 100% sure this would be faster in single thread, but the question is how multithreading would perform.
-
-        */
-
         /// <summary>
         /// Create the TRS matrices
         /// </summary>
@@ -289,7 +263,7 @@ namespace BoidsOOP
                 }
 
                 // it seems Unity does this just finding the nearest to the first element found in a cell, if I understood correctly
-                // however, I need to iterate twice over the list of boids to aproximate the code to the ECS version, I guess i can take the average pos
+                // I guess i can take the average pos
                 Vector3 avgCellPos = cellSeparation / numBoidsInCell;
 
                 FindNearest(obstacles, avgCellPos, out BoidInterestPos nearestObstacle, out float nearestObstacleDist);

@@ -1,7 +1,7 @@
 using System;
 using Unity.Entities;
 
-public struct BoidTarget : IComponentData { }
+public struct BoidTarget : IComponentData {}
 
 [UnityEngine.DisallowMultipleComponent]
-public class BoidTargetProxy : ComponentDataProxy<BoidTarget> { }
+public class BoidTargetProxy : ComponentDataProxy<BoidTarget> {}

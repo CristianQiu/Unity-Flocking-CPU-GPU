@@ -1,7 +1,7 @@
 using System;
 using Unity.Entities;
 
-public struct BoidObstacle : IComponentData { }
+public struct BoidObstacle : IComponentData {}
 
 [UnityEngine.DisallowMultipleComponent]
-public class BoidObstacleProxy : ComponentDataProxy<BoidObstacle> { }
+public class BoidObstacleProxy : ComponentDataProxy<BoidObstacle> {}
