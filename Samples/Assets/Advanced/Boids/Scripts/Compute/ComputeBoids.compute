@@ -101,7 +101,7 @@ void ComputeCells (uint3 id : SV_DispatchThreadID)
     int fwdY = round(boid.fwd.y * (float) FLOAT_INT_FWDK);
     int fwdZ = round(boid.fwd.z * (float) FLOAT_INT_FWDK);
 
-    // We store accumulated pos, fwds and boids for each given cell
+    // store accumulated pos, fwds and boids for each given cell
     // InterlockedAdd only supports uint or int, which is why we convert floats to ints
     // https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/interlockedadd
     InterlockedAdd(cellsBuffer[cellHash].boidsInside, 1);

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace BoidsCompute
 {
@@ -26,7 +27,7 @@ namespace BoidsCompute
         [Header("Spawn parameters")]
         public Mesh boidMesh = null;
         public Material boidMat = null;
-        public int numBoids = 15000;
+        public int numBoids = 8192;
         public float radius = 75.0f;
         public Transform spawnPoint = null;
 
@@ -84,9 +85,6 @@ namespace BoidsCompute
             if (numBoids <= 0)
                 return;
 
-            if (BenchmarkSystem.Instance.IsBenchmarkRunning)
-                numBoids = BenchmarkSystem.Instance.numberOfBoids;
-
             SpawnBoids();
             CreateCells();
             SetupCompute();
@@ -110,8 +108,7 @@ namespace BoidsCompute
             computeShader.Dispatch(computeBoidsKernel, threadsX, 1, 1);
 
             // https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html
-            Graphics.DrawMeshInstancedIndirect(boidMesh, 0, boidMat, new Bounds(transform.position, GraphicsIndirectBounds), argsBuffer,
-                0, null, UnityEngine.Rendering.ShadowCastingMode.Off, false);
+            Graphics.DrawMeshInstancedIndirect(boidMesh, 0, boidMat, new Bounds(transform.position, GraphicsIndirectBounds), argsBuffer, 0, null, ShadowCastingMode.Off, false);
         }
 
         private void OnDestroy()
@@ -175,7 +172,7 @@ namespace BoidsCompute
             targetsPos = new Vector3[targets.Length];
 
             uint[] args = new uint[5];
-            args[0] = (uint) boidMesh.GetIndexCount(0); //  number of triangles in the mesh multiplied by 3
+            args[0] = (uint) boidMesh.GetIndexCount(0);
             args[1] = (uint) numBoids;
             args[2] = (uint) boidMesh.GetIndexStart(0);
             args[3] = (uint) boidMesh.GetBaseVertex(0);
