@@ -6,12 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Advanced/Boids/Scenes/BENCH_OOPGPU.unity
-    guid: 8d12280889ba9934da019850fbe4f7f3
-  - enabled: 1
-    path: Assets/Advanced/Boids/Scenes/BENCH_ECS.unity
-    guid: 448fc90e4d7f0474fb50fcde41d711ab
-  - enabled: 1
     path: Assets/Advanced/Boids/Scenes/BoidExampleOOP.unity
     guid: 6bc9575962c804248a66fdf9f0739b0b
   - enabled: 1
