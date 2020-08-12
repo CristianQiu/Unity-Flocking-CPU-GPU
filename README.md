@@ -8,10 +8,20 @@ This project requires a specific version of the engine in order to work. It is h
 Go to https://unity3d.com/es/get-unity/download/archive to find older releases of Unity.
 
 # Preview
+The following gif showcases 524288 boids being simulated in the compute shader.
+
 ![alt-text](./GithubImgs/TeaserGif.gif)
 
 # My system
 The tests I did to get to the results below were made on an i7 4790k and 980ti, in a build, and at a resolution of 2560x1440. I was also using an SSD and 16gb of RAM.
 
 # Some results
+I used the default fish mesh asset from Unity to make the comparisons, made of 312 triangles.
+Additionally, I swapped it for a quad (2 tris) to see how mesh complexity could affect performance.
+
+  - ST: single thread.
+  - MT: multi-threaded, OOP.
+  - DOTS: Unity's implementation.
+  - CS: compute shader.
+  
 ![alt-text](./GithubImgs/ResultsSpeedup.png)
