@@ -3019,7 +3019,7 @@ Light:
   serializedVersion: 9
   m_Type: 1
   m_Color: {r: 0.66176474, g: 0.9720081, b: 1, a: 1}
-  m_Intensity: 1.5
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.802082
@@ -5187,16 +5187,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5948633663735151105, guid: 20c507618b46f614cb6432bc817a31c0,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5948633663735151106, guid: 20c507618b46f614cb6432bc817a31c0,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20c507618b46f614cb6432bc817a31c0, type: 3}

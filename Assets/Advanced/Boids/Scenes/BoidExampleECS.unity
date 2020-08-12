@@ -811,7 +811,7 @@ MonoBehaviour:
   m_SerializedData:
     prefab: {fileID: 1501737747371270, guid: 3a6f4469994b24240b1e5ebd9ce22aab, type: 3}
     radius: 75
-    count: 65536
+    count: 16384
 --- !u!114 &335197935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1909,7 +1909,7 @@ MonoBehaviour:
   m_SerializedData:
     prefab: {fileID: 1501737747371270, guid: 009834b439a0e455b843299085c2fbff, type: 3}
     radius: 75
-    count: 65536
+    count: 16384
 --- !u!114 &614494513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3111,7 +3111,7 @@ Light:
   serializedVersion: 9
   m_Type: 1
   m_Color: {r: 0.66176474, g: 0.9720081, b: 1, a: 1}
-  m_Intensity: 1.5
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.802082

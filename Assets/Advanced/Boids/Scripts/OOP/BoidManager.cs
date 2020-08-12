@@ -23,6 +23,7 @@ namespace BoidsOOP
 
         [Header("Spawn params")]
         public Transform spawnPoint = null;
+
         public int numBoidsSpawned = 8192;
         public float radius = 75.0f;
         public Mesh boidMesh = null;
@@ -30,6 +31,7 @@ namespace BoidsOOP
 
         [Header("Boid params")]
         public float separationWeight = 1.0f;
+
         public float alignmentWeight = 1.0f;
         public float targetWeight = 2.0f;
         public float obstacleAversionDistance = 30.0f;
@@ -37,6 +39,7 @@ namespace BoidsOOP
 
         [Header("Boid interests")]
         public BoidObstacle[] obstacles = null;
+
         public BoidTarget[] targets = null;
 
         #endregion
@@ -88,9 +91,11 @@ namespace BoidsOOP
                 case RunMode.SingleThread:
                     UpdateBoidsSingleThread();
                     break;
+
                 case RunMode.MultiThread:
                     UpdateBoidsMultithread();
                     break;
+
                 default:
                     break;
             }
@@ -99,16 +104,23 @@ namespace BoidsOOP
                 Graphics.DrawMeshInstanced(boidMesh, 0, boidMat, matrices[i], matrices[i].Length, null, UnityEngine.Rendering.ShadowCastingMode.Off, false);
         }
 
+        private GUIStyle style = new GUIStyle();
+
         private void OnGUI()
         {
+            style.fontSize = 27;
+            style.normal.textColor = Color.white;
+
             switch (runMode)
             {
                 case RunMode.SingleThread:
-                    GUI.Label(new Rect(20.0f, 25.0f, 200.0f, 120.0f), "SingleThread - F1 to switch");
+                    GUI.Label(new Rect(20.0f, 25.0f, 300.0f, 220.0f), "SingleThread - F1 to switch", style);
                     break;
+
                 case RunMode.MultiThread:
-                    GUI.Label(new Rect(20.0f, 25.0f, 200.0f, 120.0f), "MultiThread - F1 to switch");
+                    GUI.Label(new Rect(20.0f, 25.0f, 300.0f, 220.0f), "MultiThread - F1 to switch", style);
                     break;
+
                 default:
                     break;
             }
@@ -125,7 +137,7 @@ namespace BoidsOOP
         {
             matrices = new List<Matrix4x4[]>(64);
 
-            int numBatches = Mathf.FloorToInt((float) numBoidsSpawned / (float) MaxBatchSize);
+            int numBatches = Mathf.FloorToInt((float)numBoidsSpawned / (float)MaxBatchSize);
             int rest = numBoidsSpawned - (numBatches * MaxBatchSize);
 
             for (int i = 0; i < numBatches; i++)
@@ -159,7 +171,7 @@ namespace BoidsOOP
         {
             for (int i = 0; i < numBoidsSpawned; i++)
             {
-                int outerIndex = Mathf.FloorToInt((float) i / (float) MaxBatchSize);
+                int outerIndex = Mathf.FloorToInt((float)i / (float)MaxBatchSize);
                 int innerIndex = i % MaxBatchSize;
 
                 Vector3 pos = UnityEngine.Random.insideUnitSphere * radius;
@@ -241,9 +253,9 @@ namespace BoidsOOP
                 Vector3 cellAlignment = Vector3.zero;
                 Vector3 cellSeparation = Vector3.zero;
 
-                // each list has the boids that are within the same cell
-                // Unity is using a different approach from what I previously did in my first test
-                // avoiding to compute local avoidance between boids themselves is probably boosting performance significantly
+                // each list has the boids that are within the same cell Unity is using a different
+                // approach from what I previously did in my first test avoiding to compute local
+                // avoidance between boids themselves is probably boosting performance significantly
                 // they probable went for that to have a more "impressive" numbers on their demo...
                 for (int i = 0; i < numBoidsInCell; i++)
                 {
@@ -252,8 +264,8 @@ namespace BoidsOOP
                     cellSeparation += b.Pos;
                 }
 
-                // it seems Unity does this just finding the nearest to the first element found in a cell, if I understood correctly
-                // I guess i can take the average pos
+                // it seems Unity does this just finding the nearest to the first element found in a
+                // cell, if I understood correctly I guess i can take the average pos
                 Vector3 avgCellPos = cellSeparation / numBoidsInCell;
 
                 FindNearest(obstacles, avgCellPos, out BoidInterestPos nearestObstacle, out float nearestObstacleDist);
@@ -386,6 +398,11 @@ namespace BoidsOOP
         /// </summary>
         private void DoSteeringMultithread()
         {
+            // Note: this is allocating too much garbage each frame, I haven't gone into de depths
+            // of whats happening, but honestly, i'd rather implement my own way to deal with
+            // parallel fors. Anyways, it serves its purpose in order to have an estimation of the
+            // different implementations, but is certainly not something I would use if this was
+            // going to become a real videogame. I believe the same applies to the parallel hashing
             Parallel.ForEach(boidsDictConcurrent.DictLists, parallelOpts, parallelSteeringFunc);
         }
 
