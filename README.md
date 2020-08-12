@@ -19,7 +19,7 @@ The tests I did to get to the results below were made on a release build with an
 I used the default fish mesh asset from Unity to make the comparisons, made of 312 triangles.
 Additionally, I swapped it for a quad (2 tris) to see how mesh complexity could affect performance.
 
-Abbreviantions:
+Abbreviations:
 
   - ST: single thread (OOP).
   - MT: multi-threaded (OOP).
