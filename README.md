@@ -11,19 +11,3 @@ Go to https://unity3d.com/es/get-unity/download/archive to find older releases o
 The following gif showcases 524288 boids being simulated in the compute shader.
 
 ![alt-text](./GithubImgs/TeaserGif.gif)
-
-# System
-The tests I did to get to the results below were made on a release build with an i7 4790k and 980ti, at a resolution of 2560x1440, with default, ultra settings. I was also using an SSD and 16gb of RAM.
-
-# Results
-I used the default fish mesh asset from Unity to make the comparisons, made of 312 triangles.
-Additionally, I swapped it for a quad (2 tris) to see how mesh complexity could affect the comparisons.
-
-Abbreviations:
-
-  - ST: single thread (OOP).
-  - MT: multi-threaded (OOP).
-  - DOTS: Unity's implementation.
-  - CS: compute shader.
-  
-![alt-text](./GithubImgs/ResultsSpeedup.png)
