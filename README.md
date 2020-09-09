@@ -8,6 +8,6 @@ This project requires a specific version of the engine in order to work. It is h
 Go to https://unity3d.com/es/get-unity/download/archive to find older releases of Unity.
 
 # Preview
-The following gif showcases 524288 boids being simulated in the compute shader.
+The following gif showcases 524288 boids being simulated in compute shaders.
 
 ![alt-text](./GithubImgs/TeaserGif.gif)
