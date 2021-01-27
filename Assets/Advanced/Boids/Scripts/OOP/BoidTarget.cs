@@ -11,7 +11,7 @@ namespace BoidsOOP
 
         public Vector3 Pos
         {
-            get { return pos;}
+            get { return pos; }
             set { pos = value; }
         }
 
@@ -28,6 +28,5 @@ namespace BoidsOOP
 
     public class BoidTarget : BoidInterestPos
     {
-        
     }
 }

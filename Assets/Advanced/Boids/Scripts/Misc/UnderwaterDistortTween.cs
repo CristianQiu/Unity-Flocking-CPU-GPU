@@ -3,8 +3,8 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
 /// <summary>
-/// Some practising with coroutines and compressed states code
-/// The effect might be nice to to look at too
+/// Some practising with coroutines and compressed states code The effect might be nice to to look
+/// at too
 /// </summary>
 public class UnderwaterDistortTween : MonoBehaviour
 {
@@ -16,15 +16,19 @@ public class UnderwaterDistortTween : MonoBehaviour
 
     [Range(-50.0f, 0.0f)]
     public float minIntensity;
+
     [Range(0.0f, 50.0f)]
     public float maxIntensity;
 
     [Range(-1.0f, 0.0f)]
     public float minCenterX;
+
     [Range(0.0f, 1.0f)]
     public float maxCenterX;
+
     [Range(-1.0f, 0.0f)]
     public float minCenterY;
+
     [Range(0.0f, 1.0f)]
     public float maxCenterY;
 
@@ -77,8 +81,9 @@ public class UnderwaterDistortTween : MonoBehaviour
             float newCenterX = 0.0f;
             float newCenterY = 0.0f;
 
-            // it could be a lot more randomized for each different cycle, and independant interpolations too
-            // but anyways, the effect is not even going to be noticed for the current purpose of the project so I don't care
+            // it could be a lot more randomized for each different cycle, and independant
+            // interpolations too but anyways, the effect is not even going to be noticed for the
+            // current purpose of the project so I don't care
             switch (state)
             {
                 case TweenState.Up:
@@ -86,6 +91,7 @@ public class UnderwaterDistortTween : MonoBehaviour
                     newCenterX = EaseInOutSine(minCenterX, maxCenterX, perc);
                     newCenterY = EaseInOutSine(minCenterY, maxCenterY, perc);
                     break;
+
                 case TweenState.Down:
                     newIntensity = EaseInOutSine(maxIntensity, minIntensity, perc);
                     newCenterX = EaseInOutSine(maxCenterX, minCenterX, perc);

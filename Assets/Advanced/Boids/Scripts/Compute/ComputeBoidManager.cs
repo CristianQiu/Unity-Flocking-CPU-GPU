@@ -26,6 +26,7 @@ namespace BoidsCompute
 
         [Header("Spawn parameters")]
         public Mesh boidMesh = null;
+
         public Material boidMat = null;
         public int numBoids = 8192;
         public float radius = 75.0f;
@@ -33,10 +34,12 @@ namespace BoidsCompute
 
         [Header("Targets & Obstacles")]
         public Transform[] targets = null;
+
         public Transform[] obstacles = null;
 
         [Header("Boid Configuration")]
         public float separationWeight = 1;
+
         public float alignmentWeight = 1;
         public float targetWeight = 2;
         public float obstacleAversionDistance = 30;
@@ -100,9 +103,9 @@ namespace BoidsCompute
             UpdateCBufferParams();
 
             int threadsX = numBoids / ThreadGroupX;
-            float rest = numBoids % ThreadGroupX;
+            int rest = numBoids % ThreadGroupX;
 
-            threadsX = rest == 0.0f ? threadsX : threadsX + 1;
+            threadsX = rest == 0 ? threadsX : threadsX + 1;
 
             computeShader.Dispatch(computeCellsKernel, threadsX, 1, 1);
             computeShader.Dispatch(computeBoidsKernel, threadsX, 1, 1);
@@ -172,11 +175,11 @@ namespace BoidsCompute
             targetsPos = new Vector3[targets.Length];
 
             uint[] args = new uint[5];
-            args[0] = (uint) boidMesh.GetIndexCount(0);
-            args[1] = (uint) numBoids;
-            args[2] = (uint) boidMesh.GetIndexStart(0);
-            args[3] = (uint) boidMesh.GetBaseVertex(0);
-            args[4] = (uint) 0;
+            args[0] = (uint)boidMesh.GetIndexCount(0);
+            args[1] = (uint)numBoids;
+            args[2] = (uint)boidMesh.GetIndexStart(0);
+            args[3] = (uint)boidMesh.GetBaseVertex(0);
+            args[4] = (uint)0;
 
             argsBuffer = new ComputeBuffer(1, args.Length * sizeof(uint), ComputeBufferType.IndirectArguments);
             argsBuffer.SetData(args);
@@ -191,8 +194,8 @@ namespace BoidsCompute
             obstaclesBuffer = new ComputeBuffer(obstacles.Length, Vector3StructSize);
             BufferUpdateObstaclesAndTargetsNewPos();
 
-            computeCellsKernel = computeShader.FindKernel("ComputeCells");
             computeBoidsKernel = computeShader.FindKernel("ComputeBoids");
+            computeCellsKernel = computeShader.FindKernel("ComputeCells");
 
             computeShader.SetBuffer(computeCellsKernel, "boidBuffer", boidBuffer);
             computeShader.SetBuffer(computeCellsKernel, "cellsBuffer", cellsBuffer);
@@ -212,7 +215,8 @@ namespace BoidsCompute
         }
 
         /// <summary>
-        /// Update the position of the targets and obstacles so that the buffer in the GPU uses the correct data
+        /// Update the position of the targets and obstacles so that the buffer in the GPU uses the
+        /// correct data
         /// </summary>
         private void BufferUpdateObstaclesAndTargetsNewPos()
         {

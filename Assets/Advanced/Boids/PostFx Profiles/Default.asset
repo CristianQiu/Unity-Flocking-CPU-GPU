@@ -98,7 +98,7 @@ MonoBehaviour:
     value: 200
   kernelSize:
     overrideState: 1
-    value: 1
+    value: 0
 --- !u!114 &-3654670544467407573
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -123,8 +123,8 @@ MonoBehaviour:
     overrideState: 1
     value: 0.15
   fastMode:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 1
 --- !u!114 &-2967173392100004610
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -188,8 +188,8 @@ MonoBehaviour:
     overrideState: 1
     value: {r: 0, g: 0, b: 0, a: 1}
   ambientOnly:
-    overrideState: 1
-    value: 1
+    overrideState: 0
+    value: 0
   noiseFilterTolerance:
     overrideState: 1
     value: 0
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
-  m_Name: Lots FX
+  m_Name: Default
   m_EditorClassIdentifier: 
   settings:
   - {fileID: -828800969610821678}
@@ -269,16 +269,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d65e486e4de6e5448a8fbb43dc8756a0, type: 3}
   m_Name: Grain
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
   colored:
-    overrideState: 1
+    overrideState: 0
     value: 0
   intensity:
     overrideState: 1
-    value: 0.085
+    value: 0.1
   size:
     overrideState: 1
     value: 0.35
@@ -1678,8 +1678,8 @@ MonoBehaviour:
     overrideState: 1
     value: {r: 1, g: 1, b: 1, a: 1}
   fastMode:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 1
   dirtTexture:
     overrideState: 1
     value: {fileID: 2800000, guid: 3884f7a2d04ffe8409ad9200b275896f, type: 3}

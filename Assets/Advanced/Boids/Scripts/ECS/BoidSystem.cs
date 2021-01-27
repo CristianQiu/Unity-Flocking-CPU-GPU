@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Samples.Boids
 {
@@ -20,7 +20,7 @@ namespace Samples.Boids
         private List<Boid> m_UniqueTypes = new List<Boid>(10);
         private List<PrevCells> m_PrevCells = new List<PrevCells>();
 
-        struct PrevCells
+        private struct PrevCells
         {
             public NativeMultiHashMap<int, int> hashMap;
             public NativeArray<int> cellIndices;
@@ -35,7 +35,7 @@ namespace Samples.Boids
         }
 
         [BurstCompile]
-        struct CopyPositions : IJobProcessComponentDataWithEntity<LocalToWorld>
+        private struct CopyPositions : IJobProcessComponentDataWithEntity<LocalToWorld>
         {
             public NativeArray<float3> positions;
 
@@ -46,7 +46,7 @@ namespace Samples.Boids
         }
 
         [BurstCompile]
-        struct CopyHeadings : IJobProcessComponentDataWithEntity<LocalToWorld>
+        private struct CopyHeadings : IJobProcessComponentDataWithEntity<LocalToWorld>
         {
             public NativeArray<float3> headings;
 
@@ -58,20 +58,20 @@ namespace Samples.Boids
 
         [BurstCompile]
         [RequireComponentTag(typeof(Boid))]
-        struct HashPositions : IJobProcessComponentDataWithEntity<LocalToWorld>
+        private struct HashPositions : IJobProcessComponentDataWithEntity<LocalToWorld>
         {
             public NativeMultiHashMap<int, int>.Concurrent hashMap;
             public float cellRadius;
 
             public void Execute(Entity entity, int index, [ReadOnly] ref LocalToWorld localToWorld)
             {
-                var hash = (int) math.hash(new int3(math.floor(localToWorld.Position / cellRadius)));
+                var hash = (int)math.hash(new int3(math.floor(localToWorld.Position / cellRadius)));
                 hashMap.Add(hash, index);
             }
         }
 
         [BurstCompile]
-        struct MergeCells : IJobNativeMultiHashMapMergedSharedKeyIndices
+        private struct MergeCells : IJobNativeMultiHashMapMergedSharedKeyIndices
         {
             public NativeArray<int> cellIndices;
             public NativeArray<float3> cellAlignment;
@@ -83,7 +83,7 @@ namespace Samples.Boids
             [ReadOnly] public NativeArray<float3> targetPositions;
             [ReadOnly] public NativeArray<float3> obstaclePositions;
 
-            void NearestPosition(NativeArray<float3> targets, float3 position, out int nearestPositionIndex, out float nearestDistance)
+            private void NearestPosition(NativeArray<float3> targets, float3 position, out int nearestPositionIndex, out float nearestDistance)
             {
                 nearestPositionIndex = 0;
                 nearestDistance = math.lengthsq(position - targets[0]);
@@ -124,7 +124,7 @@ namespace Samples.Boids
 
         [BurstCompile]
         [RequireComponentTag(typeof(Boid))]
-        struct Steer : IJobProcessComponentDataWithEntity<LocalToWorld>
+        private struct Steer : IJobProcessComponentDataWithEntity<LocalToWorld>
         {
             [ReadOnly] public NativeArray<int> cellIndices;
             [ReadOnly] public Boid settings;
@@ -343,17 +343,17 @@ namespace Samples.Boids
         {
             m_BoidGroup = GetComponentGroup(new EntityArchetypeQuery
             {
-                All = new []
+                All = new[]
                     {
                         ComponentType.ReadOnly<Boid>(),
                             ComponentType.ReadWrite<LocalToWorld>()
                     },
-                    Options = EntityArchetypeQueryOptions.FilterWriteGroup
+                Options = EntityArchetypeQueryOptions.FilterWriteGroup
             });
 
             m_TargetGroup = GetComponentGroup(new EntityArchetypeQuery
             {
-                All = new []
+                All = new[]
                 {
                     ComponentType.ReadOnly<BoidTarget>(),
                         ComponentType.ReadOnly<LocalToWorld>()
@@ -362,7 +362,7 @@ namespace Samples.Boids
 
             m_ObstacleGroup = GetComponentGroup(new EntityArchetypeQuery
             {
-                All = new []
+                All = new[]
                 {
                     ComponentType.ReadOnly<BoidObstacle>(),
                         ComponentType.ReadOnly<LocalToWorld>()

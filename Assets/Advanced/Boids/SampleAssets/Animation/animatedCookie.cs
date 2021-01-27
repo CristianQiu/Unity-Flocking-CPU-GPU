@@ -5,19 +5,18 @@ public class animatedCookie : MonoBehaviour
 {
     public Texture[] cookies;
     public float framesPerSecond = 15;
-	Light m_light;
-	int m_index = 0;
+    private Light m_light;
+    private int m_index = 0;
 
-
-	void Awake ()
+    private void Awake()
     {
         m_light = GetComponent<Light>();
         StartCoroutine(animateCookies());
     }
-	
-	IEnumerator animateCookies ()
+
+    private IEnumerator animateCookies()
     {
-        while(true)
+        while (true)
         {
             m_light.cookie = cookies[m_index];
             m_index++;
@@ -26,8 +25,7 @@ public class animatedCookie : MonoBehaviour
                 m_index = 0;
             }
 
-            yield return new WaitForSeconds (1/ framesPerSecond);
+            yield return new WaitForSeconds(1 / framesPerSecond);
         }
-       
     }
 }

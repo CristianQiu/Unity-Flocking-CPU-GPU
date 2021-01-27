@@ -30,7 +30,6 @@ public class DictionaryOfLists<T> where T : IHasheable
     /// <returns></returns>
     public DictionaryOfLists() : this(DefaultCapacity)
     {
-
     }
 
     /// <summary>

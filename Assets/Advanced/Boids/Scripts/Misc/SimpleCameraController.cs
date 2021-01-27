@@ -4,7 +4,7 @@ namespace UnityTemplateProjects
 {
     public class SimpleCameraController : MonoBehaviour
     {
-        class CameraState
+        private class CameraState
         {
             public float yaw;
             public float pitch;
@@ -70,8 +70,8 @@ namespace UnityTemplateProjects
             }
         }
 
-        CameraState m_TargetCameraState = new CameraState();
-        CameraState m_InterpolatingCameraState = new CameraState();
+        private CameraState m_TargetCameraState = new CameraState();
+        private CameraState m_InterpolatingCameraState = new CameraState();
 
         [Header("Movement Settings")]
         [Tooltip("Exponential boost factor on translation, controllable by mouse wheel.")]
@@ -90,19 +90,19 @@ namespace UnityTemplateProjects
         [Tooltip("Whether or not to invert our Y axis for mouse input to rotation.")]
         public bool invertY = false;
 
-        void Awake()
+        private void Awake()
         {
             m_TargetCameraState.SetDefaults(transform.position, transform.eulerAngles);
             m_InterpolatingCameraState.SetDefaults(transform.position, transform.eulerAngles);
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             m_TargetCameraState.SetFromTransform(transform);
             m_InterpolatingCameraState.SetFromTransform(transform);
         }
 
-        Vector3 GetInputTranslationDirection()
+        private Vector3 GetInputTranslationDirection()
         {
             Vector3 direction = new Vector3();
             if (Input.GetKey(KeyCode.W))
@@ -132,7 +132,7 @@ namespace UnityTemplateProjects
             return direction;
         }
 
-        void Update()
+        private void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
@@ -187,14 +187,15 @@ namespace UnityTemplateProjects
                 translation *= 10.0f;
             }
 
-            // Modify movement by a boost factor (defined in Inspector and modified in play mode through the mouse scroll wheel)
+            // Modify movement by a boost factor (defined in Inspector and modified in play mode
+            // through the mouse scroll wheel)
             boost += Input.mouseScrollDelta.y * 0.2f;
             translation *= Mathf.Pow(2.0f, boost);
 
             m_TargetCameraState.Translate(translation);
 
-            // Framerate-independent interpolation
-            // Calculate the lerp amount, such that we get 99% of the way to our target in the specified time
+            // Framerate-independent interpolation Calculate the lerp amount, such that we get 99%
+            // of the way to our target in the specified time
             var positionLerpPct = 1f - Mathf.Exp((Mathf.Log(1f - 0.99f) / positionLerpTime) * Time.deltaTime);
             var rotationLerpPct = 1f - Mathf.Exp((Mathf.Log(1f - 0.99f) / rotationLerpTime) * Time.deltaTime);
             m_InterpolatingCameraState.LerpTowards(m_TargetCameraState, positionLerpPct, rotationLerpPct);
@@ -202,5 +203,4 @@ namespace UnityTemplateProjects
             m_InterpolatingCameraState.UpdateTransform(transform);
         }
     }
-
 }

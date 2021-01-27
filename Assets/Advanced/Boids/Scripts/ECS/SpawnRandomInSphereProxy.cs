@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine;
 using Unity.Entities;
+using UnityEngine;
 
 [Serializable]
 public struct SpawnRandomInSphere : ISharedComponentData
@@ -10,4 +10,4 @@ public struct SpawnRandomInSphere : ISharedComponentData
     public int count;
 }
 
-public class SpawnRandomInSphereProxy : SharedComponentDataProxy<SpawnRandomInSphere> {}
+public class SpawnRandomInSphereProxy : SharedComponentDataProxy<SpawnRandomInSphere> { }

@@ -10,14 +10,14 @@ namespace Samples.Common
     [UpdateAfter(typeof(TransformSystemGroup))]
     public class SpawnRandomInSphereSystem : ComponentSystem
     {
-        struct SpawnRandomInSphereInstance
+        private struct SpawnRandomInSphereInstance
         {
             public int spawnerIndex;
             public Entity sourceEntity;
             public float3 position;
         }
 
-        ComponentGroup m_MainGroup;
+        private ComponentGroup m_MainGroup;
 
         protected override void OnCreateManager()
         {
@@ -26,19 +26,24 @@ namespace Samples.Common
                 ComponentType.ReadOnly<LocalToWorld>());
         }
 
-        // This is (most times) a trigger: see https://forum.unity.com/threads/onupdate-method-in-componentsystems.541647/ for when it's called
+        // This is (most times) a trigger: see
+        // https://forum.unity.com/threads/onupdate-method-in-componentsystems.541647/ for when it's called
         protected override void OnUpdate()
         {
             var uniqueTypes = new List<SpawnRandomInSphere>(10);
 
-            // We have (by default) 2 BoidFishSpawners in the scene (if not modified). These have 3 attributes. If both spawners have EXACTLY the same values (whether its reference or value type)
-            // they will be "fused" in uniqueTypes.Count, so uniqueTypes.Count will be 2, otherwise it'll be 3. The reason is that the first seems to be a default one (see link below)
+            // We have (by default) 2 BoidFishSpawners in the scene (if not modified). These have 3
+            // attributes. If both spawners have EXACTLY the same values (whether its reference or
+            // value type) they will be "fused" in uniqueTypes.Count, so uniqueTypes.Count will be
+            // 2, otherwise it'll be 3. The reason is that the first seems to be a default one (see
+            // link below)
             EntityManager.GetAllUniqueSharedComponentData(uniqueTypes);
 
             int spawnInstanceCount = 0;
 
             // https://forum.unity.com/threads/question-about-getalluniquesharedcomponentdata.545945/
-            // Since the 0 is the default, why not start at 1, does not make any difference since when filtering by the 0 uniqueType, it's being ignored
+            // Since the 0 is the default, why not start at 1, does not make any difference since
+            // when filtering by the 0 uniqueType, it's being ignored
             for (int sharedIndex = 0 /* 1 */ ; sharedIndex != uniqueTypes.Count; sharedIndex++)
             {
                 var spawner = uniqueTypes[sharedIndex];
@@ -116,8 +121,7 @@ namespace Samples.Common
                     // set the fishes entities data
                     EntityManager.SetComponentData(entities[i], new LocalToWorld
                     {
-                        // the center is the spawner GameObject center
-                        // radius is the sphere radius
+                        // the center is the spawner GameObject center radius is the sphere radius
                         Value = float4x4.TRS(
                             center + (spawnPositions[i] * radius),
                             quaternion.LookRotationSafe(spawnPositions[i], math.up()),

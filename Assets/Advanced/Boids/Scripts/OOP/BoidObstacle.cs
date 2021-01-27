@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-
-namespace BoidsOOP
+﻿namespace BoidsOOP
 {
     public class BoidObstacle : BoidInterestPos
     {
-        
     }
 }

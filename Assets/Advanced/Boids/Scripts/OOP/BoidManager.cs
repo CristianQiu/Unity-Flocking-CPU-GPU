@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Profiling;
+using UnityEngine.Rendering;
 
 namespace BoidsOOP
 {
@@ -47,20 +49,22 @@ namespace BoidsOOP
         #region Private Attributes
 
         private const int MaxBatchSize = 1023;
+        private List<Matrix4x4[]> matrices = null;
 
         private RunMode runMode = RunMode.SingleThread;
 
         private List<Boid> boidsList = new List<Boid>();
         private DictionaryOfLists<Boid> boidsDict = new DictionaryOfLists<Boid>();
 
-        private List<Matrix4x4[]> matrices = null;
         private ConcurrentDictOfLists<Boid> boidsDictConcurrent = null;
-        private ParallelOptions parallelOpts = new ParallelOptions();
-
         private Action<Boid> parallelAddToDictFunc = null;
         private Action<KeyValuePair<int, List<Boid>>> parallelSteeringFunc = null;
+        private ParallelOptions parallelOpts = new ParallelOptions();
 
         private float dt = 0.0f;
+
+        private GUIStyle guiStyle;
+        private CustomSampler boidsSampler;
 
         #endregion
 
@@ -70,6 +74,7 @@ namespace BoidsOOP
         {
             CreateMatrices();
             SpawnBoids();
+
             parallelAddToDictFunc = ParallelAddToDict;
             parallelSteeringFunc = ParallelSteering;
 
@@ -77,6 +82,11 @@ namespace BoidsOOP
             boidsDictConcurrent = new ConcurrentDictOfLists<Boid>(ConcurrencyLevel);
             parallelOpts.MaxDegreeOfParallelism = ConcurrencyLevel;
             Debug.Log("System has " + SystemInfo.processorCount + " hardware threads, setting concurrency level...");
+
+            guiStyle = new GUIStyle();
+            guiStyle.fontSize = 27;
+            guiStyle.normal.textColor = Color.white;
+            boidsSampler = CustomSampler.Create("BoidsSimulation");
         }
 
         private void Update()
@@ -101,24 +111,19 @@ namespace BoidsOOP
             }
 
             for (int i = 0; i < matrices.Count; i++)
-                Graphics.DrawMeshInstanced(boidMesh, 0, boidMat, matrices[i], matrices[i].Length, null, UnityEngine.Rendering.ShadowCastingMode.Off, false);
+                Graphics.DrawMeshInstanced(boidMesh, 0, boidMat, matrices[i], matrices[i].Length, null, ShadowCastingMode.Off, false);
         }
-
-        private GUIStyle style = new GUIStyle();
 
         private void OnGUI()
         {
-            style.fontSize = 27;
-            style.normal.textColor = Color.white;
-
             switch (runMode)
             {
                 case RunMode.SingleThread:
-                    GUI.Label(new Rect(20.0f, 25.0f, 300.0f, 220.0f), "SingleThread - F1 to switch", style);
+                    GUI.Label(new Rect(20.0f, 25.0f, 300.0f, 220.0f), "Singlethreaded - F1 to switch", guiStyle);
                     break;
 
                 case RunMode.MultiThread:
-                    GUI.Label(new Rect(20.0f, 25.0f, 300.0f, 220.0f), "MultiThread - F1 to switch", style);
+                    GUI.Label(new Rect(20.0f, 25.0f, 300.0f, 220.0f), "Multithreaded - F1 to switch", guiStyle);
                     break;
 
                 default:
@@ -135,7 +140,7 @@ namespace BoidsOOP
         /// </summary>
         private void CreateMatrices()
         {
-            matrices = new List<Matrix4x4[]>(64);
+            matrices = new List<Matrix4x4[]>(1024);
 
             int numBatches = Mathf.FloorToInt((float)numBoidsSpawned / (float)MaxBatchSize);
             int rest = numBoidsSpawned - (numBatches * MaxBatchSize);
@@ -253,7 +258,7 @@ namespace BoidsOOP
                 Vector3 cellAlignment = Vector3.zero;
                 Vector3 cellSeparation = Vector3.zero;
 
-                // each list has the boids that are within the same cell Unity is using a different
+                // each list has the boids that are within the same cell. Unity is using a different
                 // approach from what I previously did in my first test avoiding to compute local
                 // avoidance between boids themselves is probably boosting performance significantly
                 // they probable went for that to have a more "impressive" numbers on their demo...
@@ -296,6 +301,7 @@ namespace BoidsOOP
                     Quaternion rot = Quaternion.LookRotation(nextHeading, Vector3.up);
                     matrices[b.OuterBatchesIndex][b.InnerBatchesIndex].SetTRS(nextPos, rot, Vector3.one);
 
+                    // clear the list on the fly so we can return it to the pool
                     list.RemoveAt(i);
                 }
 
@@ -312,8 +318,13 @@ namespace BoidsOOP
         /// </summary>
         private void UpdateBoidsMultithread()
         {
+            boidsSampler.Begin();
+
             StoreHashedBoidsMultithread();
             DoSteeringMultithread();
+
+            boidsSampler.End();
+
             boidsDictConcurrent.Clear();
         }
 

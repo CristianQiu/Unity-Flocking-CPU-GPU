@@ -29,7 +29,6 @@ namespace BoidsOOP
         /// <returns></returns>
         public ConcurrentDictOfLists(int concurrencyLevel) : this(DefaultCapacity, concurrencyLevel)
         {
-
         }
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace BoidsOOP
         /// <param name="l"></param>
         public void PushList(List<T> l)
         {
-            lock(listPool)
+            lock (listPool)
             {
                 listPool.Push(l);
             }
@@ -71,7 +70,7 @@ namespace BoidsOOP
 
             if (!alreadyIn)
             {
-                lock(listPool)
+                lock (listPool)
                 {
                     list = listPool.Pop();
                 }
@@ -80,7 +79,7 @@ namespace BoidsOOP
 
                 if (!added)
                 {
-                    lock(listPool)
+                    lock (listPool)
                     {
                         listPool.Push(list);
                     }
@@ -89,7 +88,7 @@ namespace BoidsOOP
                 }
             }
 
-            lock(list)
+            lock (list)
             {
                 list.Add(item);
             }

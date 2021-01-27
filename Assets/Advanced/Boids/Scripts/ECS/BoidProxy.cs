@@ -14,4 +14,4 @@ public struct Boid : ISharedComponentData
     public float MoveSpeed;
 }
 
-public class BoidProxy : SharedComponentDataProxy<Boid> {}
+public class BoidProxy : SharedComponentDataProxy<Boid> { }
