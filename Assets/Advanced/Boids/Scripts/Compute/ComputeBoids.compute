@@ -1,7 +1,5 @@
-﻿#define THREADSX 256
-
-#define MAX_FLOAT 3.402823466e+38
-#define MAX_UINT 4294967295
+﻿#define MAX_FLOAT 3.402823466e+38
+#define THREADSX 256
 
 // Avoid overflow: maximum int (2.146.483.647) / maximum (expected) boids per cell / maximum world position of a boid in x y or z
 // for 100k boids per cell and 150 of abs value its about 140 (tunned down a bit for extra safety)

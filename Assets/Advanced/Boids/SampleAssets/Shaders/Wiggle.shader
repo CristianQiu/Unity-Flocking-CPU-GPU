@@ -116,7 +116,9 @@ Shader "Custom/Wiggle"
 			o.Metallic =  _Metallic;
 			o.Smoothness = g.a * _Glossiness;
 		}
+
 		ENDCG
 	}
+
 	FallBack "Diffuse"
 }

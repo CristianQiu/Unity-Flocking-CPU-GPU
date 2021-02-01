@@ -8,37 +8,47 @@ using UnityEngine.Rendering.PostProcessing;
 /// </summary>
 public class UnderwaterDistortTween : MonoBehaviour
 {
+    #region Defs
+
     private enum TweenState
     {
         Up,
         Down
     }
 
+    #endregion
+
+    #region Public Attributes
+
     [Range(-50.0f, 0.0f)]
     public float minIntensity;
-
     [Range(0.0f, 50.0f)]
     public float maxIntensity;
 
     [Range(-1.0f, 0.0f)]
     public float minCenterX;
-
     [Range(0.0f, 1.0f)]
     public float maxCenterX;
 
     [Range(-1.0f, 0.0f)]
     public float minCenterY;
-
     [Range(0.0f, 1.0f)]
     public float maxCenterY;
 
     [Range(0.0f, 10.0f)]
     public float tweenTime;
-
     public PostProcessVolume vol;
+
+    #endregion
+
+    #region Private Attributes
 
     private LensDistortion lens;
     private TweenState state = TweenState.Up;
+
+    #endregion
+
+    #region MononBehaviour Methods
 
     private void Start()
     {
@@ -50,6 +60,10 @@ public class UnderwaterDistortTween : MonoBehaviour
         SetLens(minIntensity, minCenterX, minCenterY);
         StartCoroutine(TweenForever());
     }
+
+    #endregion
+
+    #region Coroutines
 
     /// <summary>
     /// Coroutine that starts the actual process of tweening and keeps it running
@@ -108,6 +122,10 @@ public class UnderwaterDistortTween : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Methods
+
     /// <summary>
     /// Set the lens params
     /// </summary>
@@ -130,4 +148,6 @@ public class UnderwaterDistortTween : MonoBehaviour
 
         return -end * 0.5f * (Mathf.Cos(Mathf.PI * value) - 1.0f) + start;
     }
+
+    #endregion
 }

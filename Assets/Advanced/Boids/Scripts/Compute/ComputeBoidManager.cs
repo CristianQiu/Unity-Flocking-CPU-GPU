@@ -26,7 +26,6 @@ namespace BoidsCompute
 
         [Header("Spawn parameters")]
         public Mesh boidMesh = null;
-
         public Material boidMat = null;
         public int numBoids = 8192;
         public float radius = 75.0f;
@@ -34,12 +33,10 @@ namespace BoidsCompute
 
         [Header("Targets & Obstacles")]
         public Transform[] targets = null;
-
         public Transform[] obstacles = null;
 
         [Header("Boid Configuration")]
         public float separationWeight = 1;
-
         public float alignmentWeight = 1;
         public float targetWeight = 2;
         public float obstacleAversionDistance = 30;

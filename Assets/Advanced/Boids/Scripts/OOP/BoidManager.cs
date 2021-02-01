@@ -25,7 +25,6 @@ namespace BoidsOOP
 
         [Header("Spawn params")]
         public Transform spawnPoint = null;
-
         public int numBoidsSpawned = 8192;
         public float radius = 75.0f;
         public Mesh boidMesh = null;
@@ -33,7 +32,6 @@ namespace BoidsOOP
 
         [Header("Boid params")]
         public float separationWeight = 1.0f;
-
         public float alignmentWeight = 1.0f;
         public float targetWeight = 2.0f;
         public float obstacleAversionDistance = 30.0f;
@@ -41,7 +39,6 @@ namespace BoidsOOP
 
         [Header("Boid interests")]
         public BoidObstacle[] obstacles = null;
-
         public BoidTarget[] targets = null;
 
         #endregion
