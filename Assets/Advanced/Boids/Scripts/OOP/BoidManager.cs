@@ -107,7 +107,7 @@ namespace BoidsOOP
                     break;
             }
 
-            for (int i = 0; i < matrices.Count; i++)
+            for (int i = 0; i < matrices.Count; ++i)
                 Graphics.DrawMeshInstanced(boidMesh, 0, boidMat, matrices[i], matrices[i].Length, null, ShadowCastingMode.Off, false);
         }
 
@@ -142,11 +142,11 @@ namespace BoidsOOP
             int numBatches = Mathf.FloorToInt((float)numBoidsSpawned / (float)MaxBatchSize);
             int rest = numBoidsSpawned - (numBatches * MaxBatchSize);
 
-            for (int i = 0; i < numBatches; i++)
+            for (int i = 0; i < numBatches; ++i)
             {
                 Matrix4x4[] batch = new Matrix4x4[MaxBatchSize];
 
-                for (int j = 0; j < MaxBatchSize; j++)
+                for (int j = 0; j < MaxBatchSize; ++j)
                 {
                     Matrix4x4 m = new Matrix4x4();
                     batch[j] = m;
@@ -157,7 +157,7 @@ namespace BoidsOOP
 
             Matrix4x4[] batchRest = new Matrix4x4[rest];
 
-            for (int i = 0; i < rest; i++)
+            for (int i = 0; i < rest; ++i)
             {
                 Matrix4x4 m = new Matrix4x4();
                 batchRest[i] = m;
@@ -171,7 +171,7 @@ namespace BoidsOOP
         /// </summary>
         private void SpawnBoids()
         {
-            for (int i = 0; i < numBoidsSpawned; i++)
+            for (int i = 0; i < numBoidsSpawned; ++i)
             {
                 int outerIndex = Mathf.FloorToInt((float)i / (float)MaxBatchSize);
                 int innerIndex = i % MaxBatchSize;
@@ -199,7 +199,7 @@ namespace BoidsOOP
             nearest = positions[0];
             distance = (nearest.Pos - fromPos).sqrMagnitude;
 
-            for (int i = 1; i < positions.Length; i++)
+            for (int i = 1; i < positions.Length; ++i)
             {
                 float newDist = (positions[i].Pos - fromPos).sqrMagnitude;
                 if (newDist < distance)
@@ -231,7 +231,7 @@ namespace BoidsOOP
         /// </summary>
         private void StoreHashedBoidsSingleThread()
         {
-            for (int i = 0; i < boidsList.Count; i++)
+            for (int i = 0; i < boidsList.Count; ++i)
             {
                 Boid b = boidsList[i];
                 boidsDict.Add(b);
@@ -259,7 +259,7 @@ namespace BoidsOOP
                 // approach from what I previously did in my first test avoiding to compute local
                 // avoidance between boids themselves is probably boosting performance significantly
                 // they probable went for that to have a more "impressive" numbers on their demo...
-                for (int i = 0; i < numBoidsInCell; i++)
+                for (int i = 0; i < numBoidsInCell; ++i)
                 {
                     Boid b = list[i];
                     cellAlignment += b.Fwd;
@@ -358,7 +358,7 @@ namespace BoidsOOP
             Vector3 cellAlignment = Vector3.zero;
             Vector3 cellSeparation = Vector3.zero;
 
-            for (int i = 0; i < numBoidsInCell; i++)
+            for (int i = 0; i < numBoidsInCell; ++i)
             {
                 Boid b = list[i];
                 cellAlignment += b.Fwd;
@@ -370,7 +370,7 @@ namespace BoidsOOP
             FindNearest(obstacles, avgCellPos, out BoidInterestPos nearestObstacle, out float nearestObstacleDist);
             FindNearest(targets, avgCellPos, out BoidInterestPos nearestTarget, out float nearestTargetDist);
 
-            for (int i = numBoidsInCell - 1; i >= 0; i--)
+            for (int i = numBoidsInCell - 1; i >= 0; --i)
             {
                 Boid b = list[i];
                 Vector3 fwd = b.Fwd;

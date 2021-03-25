@@ -131,7 +131,7 @@ namespace BoidsCompute
         {
             boids = new Boid[numBoids];
 
-            for (int i = 0; i < numBoids; i++)
+            for (int i = 0; i < numBoids; ++i)
             {
                 Vector3 pos = Random.insideUnitSphere * radius;
                 pos += spawnPoint.position;
@@ -152,7 +152,7 @@ namespace BoidsCompute
         {
             cells = new Cell[numBoids];
 
-            for (int i = 0; i < numBoids; i++)
+            for (int i = 0; i < numBoids; ++i)
             {
                 cells[i] = new Cell
                 {
@@ -217,10 +217,10 @@ namespace BoidsCompute
         /// </summary>
         private void BufferUpdateObstaclesAndTargetsNewPos()
         {
-            for (int i = 0; i < targets.Length; i++)
+            for (int i = 0; i < targets.Length; ++i)
                 targetsPos[i] = targets[i].position;
 
-            for (int i = 0; i < obstacles.Length; i++)
+            for (int i = 0; i < obstacles.Length; ++i)
                 obstaclesPos[i] = obstacles[i].position;
 
             targetsBuffer.SetData(targetsPos);

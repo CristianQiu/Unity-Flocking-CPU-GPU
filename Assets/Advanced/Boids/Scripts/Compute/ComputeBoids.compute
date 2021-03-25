@@ -54,7 +54,7 @@ float FindDistToNearestFromPos(StructuredBuffer<float3> interestPoints, uint tot
 {
     float dist = MAX_FLOAT;
 
-    for (uint i = 0; i < totalInterestPoints; i++)
+    for (uint i = 0; i < totalInterestPoints; ++i)
     {
         float3 interestPoint = interestPoints[i];
         float newDist = distance(fromPos, interestPoint);

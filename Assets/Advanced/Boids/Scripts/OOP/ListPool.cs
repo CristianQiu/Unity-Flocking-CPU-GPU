@@ -43,7 +43,7 @@ public class ListPool<T>
     {
         lists = new List<List<T>>(listQuantity);
 
-        for (int i = 0; i < listQuantity; i++)
+        for (int i = 0; i < listQuantity; ++i)
         {
             List<T> nl = new List<T>(listCapacity);
             lists.Add(nl);
