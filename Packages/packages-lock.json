@@ -13,7 +13,7 @@
       "dependencies": {}
     },
     "com.unity.burst": {
-      "version": "1.5.0",
+      "version": "1.5.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -192,7 +192,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.4",
+      "version": "3.0.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {

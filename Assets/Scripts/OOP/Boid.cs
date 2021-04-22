@@ -69,13 +69,11 @@ namespace BoidsOOP
         public int Hash()
         {
             Vector3 pos = this.pos / CellRadius;
-            float3 f3Pos = (float3)pos;
 
             // https://github.com/Unity-Technologies/Unity.Mathematics/blob/master/src/Unity.Mathematics/int3.gen.cs
             // implementation at line 1478? found this too, older? https://forum.unity.com/threads/question-about-mike-actons-boids-example.586963/
 
-            // this is from the mathematics unity library
-            return (int)math.hash(new int3(math.floor(f3Pos)));
+            return (int)math.hash(new int3(math.floor(pos)));
         }
 
         #endregion

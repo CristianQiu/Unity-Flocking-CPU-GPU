@@ -7,7 +7,6 @@ public class ListPool<T>
 
     // kind of overkill numbers here but I don't want to see it break when changing the number of boids
     private const int DefaultListQuantity = 16384;
-
     private const int DefaultListCapacity = 2048;
 
     private List<List<T>> lists = null;

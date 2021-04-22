@@ -2,9 +2,6 @@
 
 namespace BoidsOOP
 {
-    /// <summary>
-    /// Need this for multithreading
-    /// </summary>
     public abstract class BoidInterestPos : MonoBehaviour
     {
         protected Vector3 pos = Vector3.zero;
@@ -22,6 +19,7 @@ namespace BoidsOOP
 
         protected virtual void Update()
         {
+            // need this for multithreading
             pos = transform.position;
         }
     }

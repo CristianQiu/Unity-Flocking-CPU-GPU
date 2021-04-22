@@ -273,7 +273,7 @@ namespace BoidsOOP
                 FindNearest(obstacles, avgCellPos, out BoidInterestPos nearestObstacle, out float nearestObstacleDist);
                 FindNearest(targets, avgCellPos, out BoidInterestPos nearestTarget, out float nearestTargetDist);
 
-                for (int i = numBoidsInCell - 1; i >= 0; i--)
+                for (int i = numBoidsInCell - 1; i >= 0; --i)
                 {
                     Boid b = list[i];
                     Vector3 fwd = b.Fwd;
